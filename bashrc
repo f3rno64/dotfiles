@@ -197,8 +197,8 @@ fi
 
 if xf_has_cmd 'nvim'; then
   alias vim="nvim -u ~/.vimrc"
-  alias nvim="nvim -u ~/.vimrc"
-  alias nvim-gtk="nvim-gtk -- -u ~/.vimrc"
+  alias nvim="nvim -u ~/.config/nvim/init.nvim"
+  alias nvim-gtk="nvim-gtk -- -u ~/.config/nvim/init.nvim"
 fi
 
 # }}}

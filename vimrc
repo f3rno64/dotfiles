@@ -5,7 +5,7 @@
 "
 " TODO: Update intro.
 "
-" https://github.com/mf3rno/dotfiles/vimrc
+" https://github.com/f3rno/dotfiles/vimrc
 
 " {{{ 1. terminal setup
 
@@ -351,7 +351,7 @@ let g:ale_open_list = 0
 let g:coc#snippet#next = '<c-j>'
 let g:coc#snippet#prev = '<c-k>'
 
-let g:coc#node#path = '/home/mf3rno/.nvm/versions/node/v16.8.0/bin/node'
+let g:coc#node#path = '/home/f3rno/.nvm/versions/node/v16.8.0/bin/node'
 let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
 
 " Helper to handle complex tab behavior, allowing for elegant snippet expansion
@@ -430,7 +430,7 @@ let g:echodoc#type = 'virtual'
 " {{{ fzf
 
 set rtp+=/usr/bin/fzf
-set rtp+=/home/mf3rno/.cargo/bin
+set rtp+=/home/f3rno/.cargo/bin
 
 let g:fzf#command#prefix = 'FZF'
 let g:fzf#buffers#jump = 1
@@ -547,7 +547,7 @@ let g:UltiSnipsListSnippets = '<c-space><c-space>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 " let g:UltiSnipsSnippetDirectories = [
-"       \   '/home/mf3rno/.src/github/mf3rno/vim-snippets/ultisnips',
+"       \   '/home/f3rno/.src/github/f3rno/vim-snippets/ultisnips',
 "       \ ]
 
 " }}}
@@ -1132,8 +1132,8 @@ augroup END
 
 let g:vimwiki_list = [{
   \ 'name': 'Personal Wiki',
-  \ 'path': $HOME . '/.src/github/mf3rno/vim-wiki/src',
-  \ 'path_html': $HOME . '/.src/github/mf3rno/vim-wiki/html',
+  \ 'path': $HOME . '/.src/github/f3rno/vim-wiki/src',
+  \ 'path_html': $HOME . '/.src/github/f3rno/vim-wiki/html',
   \ 'ext': '.wiki',
   \ 'links_space_char': '_',
   \ 'cycle_bullets': 1,
@@ -1230,7 +1230,7 @@ let g:table_mode_verbose = 1
 " }}}
 " {{{ wakatime
 
-let g:wakatime#OverrideCommandPrefix = '/home/mf3rno/.local/bin/wakatime'
+let g:wakatime#OverrideCommandPrefix = '/home/f3rno/.local/bin/wakatime'
 
 " }}}
 
@@ -1239,7 +1239,7 @@ let g:wakatime#OverrideCommandPrefix = '/home/mf3rno/.local/bin/wakatime'
 " }}}
 " {{{ 3. configuration
 
-" {{{ 3.b mf3rno function library
+" {{{ 3.b f3rno function library
 
 " {{{ - functions
 
@@ -1795,7 +1795,7 @@ endfunc
 " }}}
 " {{{ 7.b autocommands
 
-augroup mf3rno_dynamic_search_hl
+augroup f3rno_dynamic_search_hl
   autocmd!
   autocmd InsertEnter * call <SID>xf_hlsearch_disable()
   autocmd InsertLeave * call <SID>xf_hlsearch_enable()

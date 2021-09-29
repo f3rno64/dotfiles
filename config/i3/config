@@ -168,7 +168,7 @@ bar {
   position bottom
   status_command i3status
   tray_output none
-  output eDP-1
+  output LVDS-1
   mode hide
 
   colors {

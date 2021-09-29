@@ -76,3 +76,5 @@ documents/xia/*
 gnupg/*
 !gnupg/.keep
 !gnupg/gpg-agent.conf
+
+bin/*
