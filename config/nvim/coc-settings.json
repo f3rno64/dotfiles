@@ -35,7 +35,7 @@
     "default": "\uf29c"
   },
 
-  "javascript.suggest.autoImports": true,
+  "jabvascript.suggest.autoImports": true,
   "javascript.referencesCodeLens.enable": false,
   "javascript.suggestionActions.enabled": false,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
@@ -55,8 +55,9 @@
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
 
   "codeLens.enable": true,
-  "npm.binPath": "/home/f3rno/.nvm/versions/node/v16.8.0/bin/npm",
-  "tsserver.npm": "/home/f3rno/.nvm/versions/node/v16.8.0/bin/npm",
+  "npm.binPath": "/data/data/com.termux.nix/files/home/.nix-profile/bin/npm",
+  "tsserver.npm": "/data/data/com.termux.nix/files/home/.nix-profile/bin/npm",
+  "tsserver.enableJavascript": true,
 
   "suggest.languageSourcePriority": 10,
 
