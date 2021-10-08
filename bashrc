@@ -29,7 +29,11 @@ export USER_LOCAL_BIN_DIR='/usr/local/bin'
 export NVM_PATH="$HOME/.nvm"
 
 # shellcheck disable=1090
-source "$XF_BASH_LIB_PATH/xf_bash_lib.sh"
+XF_BASH_LIB_ENTRY_PATH="$XF_BASH_LIB_PATH/xf_bash_lib.sh"
+
+if [[ -x "$XF_BASH_LIB_ENTRY_PATH" ]]; then
+  source "$XF_BASH_LIB_ENTRY_PATH"
+fi
 
 export EDITOR="$(xf_resolve_editor)"
 export HOME_SRC_DIR="$(xf_ensure_home_subdir '.src')"
