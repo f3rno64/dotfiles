@@ -231,3 +231,14 @@ if [[ -f "$WEBPASS_CLI_PATH" ]]; then
 fi
 
 # }}}
+# {{{ nix-on-droid
+
+NIX_ON_DRIOD_SCRIPT_DIR="$HOME/.nix-profile/etc/profile.d"
+
+xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/gawk.sh"
+xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/hm-session-vars.sh"
+xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/nix-daemon.sh"
+xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/nix-on-droid-session-init.sh"
+xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/nix.sh"
+
+# }}}
