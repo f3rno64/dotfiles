@@ -1,11 +1,9 @@
 #! /usr/bin/env bash
 
 nix-env -iA \
-  nixpkgs.htop \
   nixpkgs.neovim \
   nixpkgs.unzip \
   nixpkgs.git \
-  nixpkgs.tmux \
   nixpkgs.coreutils \
   nixpkgs.binutils \
   nixpkgs.findutils \
@@ -14,12 +12,9 @@ nix-env -iA \
   nixpkgs.python3 \
   nixpkgs.python3Packages.pip \
   nixpkgs.python3Packages.setuptools \
+  nixpkgs.python2Packages.setuptools \
   nixpkgs.tree \
-  nixpkgs.htop \
-  nixpkgs.weechat \
-  nixpkgs.redis \
   nixpkgs.curl \
-  nixpkgs.ctags \
   nixpkgs.shellcheck \
   nixpkgs.ripgrep-all \
   nixpkgs.nmap \
@@ -30,13 +25,11 @@ nix-env -iA \
   nixpkgs.ag \
   nixpkgs.acpi \
   nixpkgs.bat \
-  nixpkgs.tor \
   nixpkgs.openssh \
   nixpkgs.automake \
   nixpkgs.autoconf \
   nixpkgs.cmake \
   nixpkgs.nix-index \
-  nixpkgs.python2Packages.setuptools \
   nixpkgs.gzip \
   nixpkgs.gnugrep \
   nixpkgs.ack \
@@ -45,16 +38,9 @@ nix-env -iA \
   nixpkgs.gnused \
   nixpkgs.ps \
   nixpkgs.gnutar \
-  nixpkgs.powertop \
-  nixpkgs.telnet \
   nixpkgs.sudo \
   nixpkgs.su \
-  nixpkgs.mcfly \
-  nixpkgs.nginx \
-  nixpkgs.postgresql \
   nixpkgs.bzip2 \
-  nixpkgs.iw \
-  nixpkgs.iwd \
   nixpkgs.rustc \
   nixpkgs.cargo \
   nixpkgs.killall \
@@ -79,4 +65,5 @@ nix-env -iA \
   nixpkgs.unibilium \
   nixpkgs.libmsgpack \
   nixpkgs.libtermkey \
+  nixpkgs.mount \
   nixpkgs.shfmt
