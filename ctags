@@ -1,4 +1,4 @@
---options=/home/xf3rno/.src/github/romainl/ctags-patterns-for-javascript/ctagsrc
+--options=/home/f3rno64/.src/github/romainl/ctags-patterns-for-javascript/ctagsrc
 --exclude=node_modules
 --exclude=.git
 --exclude=dist
