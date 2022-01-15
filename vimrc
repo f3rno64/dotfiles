@@ -221,7 +221,6 @@ endif
 
 Plug 'reedes/vim-colors-pencil'
 " Plug 'aonemd/kuroi.vim'
-Plug 'swalladge/paper.vim'
 " Plug 'vim-scripts/summerfruit256.vim'
 " Plug 'habamax/vim-colors-defminus'
 " Plug 'notpratheek/vim-sol'
