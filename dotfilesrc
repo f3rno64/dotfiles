@@ -1,4 +1,4 @@
 [dotfiles]
-repository = /data/data/com.termux.nix/files/home/.src/github/mf3rnol/dotfiles
+repository = /home/f3rno64/.src/github/f3rno64/dotfiles
 ignore = ['.git', '.gitignore', 'id_rsa*', '*_history', 'fishd*']
 packages = ['config', 'ssh', 'weechat']
