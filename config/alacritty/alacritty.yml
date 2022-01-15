@@ -4,13 +4,14 @@
 key_bindings:
   - {key: Paste, action: Paste}
   - {key: V, mods: Control, action: Paste}
-  - {key: F12, action: ToggleFullscreen}
+  - {key: F11, action: ToggleFullscreen}
+  - {key: F12, action: SpawnNewInstance}
 
 # }}}
 # {{{ fonts
 
 font:
-  size: 7
+  size: 9
   normal:
     # family: Anonymice Nerd Font
     # family: Fira Code Nerd Font
