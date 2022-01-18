@@ -55,8 +55,8 @@
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
 
   "codeLens.enable": true,
-  "npm.binPath": "/data/data/com.termux.nix/files/home/.nix-profile/bin/npm",
-  "tsserver.npm": "/data/data/com.termux.nix/files/home/.nix-profile/bin/npm",
+  "npm.binPath": "/home/f3rno64/.nvm/versions/node/v16.13.2/bin/npm",
+  "tsserver.npm": "/home/f3rno64/.nvm/versions/node/v16.13.2/bin/npm",
   "tsserver.enableJavascript": true,
 
   "suggest.languageSourcePriority": 10,
@@ -74,7 +74,7 @@
 
   "solargraph.diagnostics": true,
 
-  "diagnostic.enable": false,
+  "diagnostic.enable": true,
   "diagnostic.virtualText": true,
   "diagnostic.refreshOnInsertMode": true,
   "diagnostic.refreshAfterSave": true,
