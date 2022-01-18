@@ -309,7 +309,7 @@ let g:ale_enabled = 1
 let g:ale_linters = {
 \ 'sh': ['shellcheck'],
 \ 'javascript': ['eslint'],
-\ 'typescript': ['eslint'],
+\ 'typescript': ['tslint'],
 \ 'json': ['eslint'],
 \ 'ruby': ['rubocop'],
 \ 'scss': ['stylelint'],
@@ -321,6 +321,7 @@ let g:ale_linters = {
 let g:ale_fixers = {
 \ 'sh': ['shfmt'],
 \ 'javascript': ['eslint'],
+\ 'typescript': ['prettier'],
 \ 'json': ['fixjson'],
 \ 'ruby': ['rubocop'],
 \ 'scss': ['stylelint'],
@@ -345,7 +346,7 @@ let g:ale_open_list = 0
 let g:coc#snippet#next = '<c-j>'
 let g:coc#snippet#prev = '<c-k>'
 
-let g:coc#node#path = $HOME . '/.nix-profile/bin/node'
+let g:coc#node#path = $HOME . '.nvm/versions/node/v16.13.2/bin/node'
 let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
 
 " Helper to handle complex tab behavior, allowing for elegant snippet expansion
@@ -571,7 +572,7 @@ let g:grepper.open = 1
 let g:grepper.switch = 1
 let g:grepper.dir = 'repo,file'
 let g:grepper.ag = {
-\ 'grepprg': 'ag --ignore-dir={modules,node_modules,.undodir,docs/dist,bower_components,dist,build}'
+\ 'grepprg': 'ag --ignore-dir=modules --ignore-dir=node_modules --ignore-dir=.undodir --ignore-dir=docs/dist --ignore-dir=bower_components --ignore-dir=dist --ignore-dir=build'
 \ }
 
 " }}}
@@ -1301,7 +1302,7 @@ set colorcolumn=80
 set cmdheight=2
 set signcolumn=yes
 set tags=./tags;,tags;$HOME;
-set regexpengine=1
+set regexpengine=0
 set backspace=indent,eol,start
 set autoread
 set showtabline=2
@@ -1408,9 +1409,8 @@ autocmd FileType snippets setlocal foldmethod=marker
 " hacky fix for syntax highlighting in large files
 autocmd WinEnter,Filetype * syntax sync fromstart
 
-au BufNewFile,BufRead ~/.config/nvim/init.nvim setf vim
-au BufNewFile,BufRead ~/.config/i3/config setf i3config
-au BufNewFile,BufRead ~/.leptonrc setf json
+au BufNewFile,BufRead *.nvim setf vim
+au BufNewFile,BufRead */i3/config setf i3config
 
 " disable cursorline in insert mode
 " autocmd InsertLeave,WinEnter * set cursorline
@@ -1646,7 +1646,7 @@ set background=dark
 " base16-github
 " ayu
 " tequila-sunrise
-colorscheme base16-irblack
+colorscheme tequila-sunrise 
 
 
 " }}}
