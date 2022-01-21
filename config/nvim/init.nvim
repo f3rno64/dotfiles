@@ -3,7 +3,7 @@
 " Eventually it will be split up harmoniously
 " If anything, I found enough solid color schemes to last decades.
 "
-" https://github.com/mf3rnol/dotfiles/vimrc
+" https://github.com/f3rno64/dotfiles/config/nvim/init.nvim
 
 " {{{ 1. terminal setup
 
@@ -54,11 +54,23 @@ Plug 'xolox/vim-misc'
 Plug 'godlygeek/tabular'
 
 " }}}
+" {{{ treesitter
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" }}}
+" {{{ telescope
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" }}}
 " {{{ fzf
 
 Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'zackhsi/fzf-tags'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " }}}
 " {{{ search/result highlighting
@@ -74,27 +86,15 @@ Plug 'timakro/vim-searchant'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-" Plug 'justinj/vim-react-snippets'
-" Plug 'zirho/vim-agnostic-react-snippets'
 
 " }}}
 " {{{ syntax/languages
 
-" Plug 'dag/vim-fish'
-" Plug 'fatih/vim-go'
-Plug 'vim-ruby/vim-ruby'
-Plug 'mustache/vim-mustache-handlebars'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'mboughaba/i3config.vim'
-Plug 'smancill/conky-syntax.vim'
-Plug 'sheerun/vim-yardoc'
 Plug 'moll/vim-node'
 Plug 'gisphm/vim-gitignore'
 Plug 'andyk/vim-liquid'
-Plug 'digitaltoad/vim-pug'
-Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'vim-python/python-syntax'
-" Plug 'udalov/kotlin-vim'
 
 " {{{ markdown
 
@@ -127,7 +127,6 @@ Plug 'kristijanhusak/vim-js-file-import', { 'do': 'npm install' }
 " }}}
 " {{{ git integration
 
-" Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'rhysd/committia.vim' " better git commit layout
 Plug 'int3/vim-extradite' " git log
@@ -136,16 +135,9 @@ Plug 'int3/vim-extradite' " git log
 " {{{ visual
 
 Plug 'jbgutierrez/vim-better-comments'
-Plug 'junegunn/goyo.vim'
-" Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'beauwilliams/focus.nvim'
-
-" }}}
-" {{{ testing
-
-" Plug 'janko/vim-test'
-Plug 'google/vroom'
 
 " }}}
 " {{{ misc/general
@@ -168,7 +160,6 @@ Plug 'ternjs/tern_for_vim', { 'do': 'npm i' }
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'ryanoasis/vim-devicons'
 Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
-" Plug 'ludovicchabant/vim-gutentags' " auto tag regen
 Plug 'michaeljsmith/vim-indent-object' " indent-level text object
 Plug 'gcmt/wildfire.vim' " select text objects
 Plug 'mtth/scratch.vim'
@@ -187,32 +178,13 @@ Plug 'Lenovsky/nuake'
 Plug 'tpope/vim-surround'
 Plug 'tyru/open-browser.vim'
 Plug 'tpope/vim-endwise'
-" Plug 'danilamihailov/vim-tips-wiki'
 Plug 'wellle/visual-split.vim'
 Plug 'wellle/targets.vim'
 Plug 'valloric/MatchTagAlways'
-" Plug 'wakatime/vim-wakatime'
-" Plug 'raghur/vim-ghost', { 'do': ':GhostInstall' }
-
-" requires set compatible
-" Plug 'tpope/vim-sleuth' " auto indent adjustment
-
-" if has('nvim')
-"   Plug 'ripxorip/aerojump.nvim', { 'do': ':UpdateRemotePlugins' }
-" endif
 
 if has('gui_running') || exists('g:GtkGuiLoaded')
   Plug 'drmikehenry/vim-fontsize'
 endif
-
-" }}}
-" {{{ wiki
-
-" Plug 'powerman/vim-plugin-AnsiEsc', { 'on': 'AnsiEsc' }
-
-" Plug 'rbgrouleff/bclose.vim'
-" Plug 'mattn/calendar-vim'
-" Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 
 " }}}
 " {{{ colorschemes
@@ -220,23 +192,24 @@ endif
 " {{{ light
 
 Plug 'reedes/vim-colors-pencil'
-" Plug 'aonemd/kuroi.vim'
-" Plug 'vim-scripts/summerfruit256.vim'
-" Plug 'habamax/vim-colors-defminus'
-" Plug 'notpratheek/vim-sol'
-Plug 'kamwitsta/flatwhite-vim'
-" Plug 'vim-scripts/mayansmoke'
-" Plug 'yasukotelin/shirotelin'
+Plug 'aonemd/kuroi.vim'
+Plug 'vim-scripts/summerfruit256.vim'
+Plug 'habamax/vim-colors-defminus'
+Plug 'notpratheek/vim-sol'
+Plug 'vim-scripts/mayansmoke'
+Plug 'yasukotelin/shirotelin'
 
 " }}}
 " {{{ dark
 
+Plug 'mrjones2014/lighthaus.nvim'
+Plug 'catppuccin/nvim', {'as': 'catppuccin'}
 Plug 'ayu-theme/ayu-vim'
 Plug 'toupeira/vim-desertink'
 " Plug 'fcpg/vim-farout'
 " Plug 'fcpg/vim-fahrenheit'
 " Plug 'bluz71/vim-moonfly-colors'
-" Plug 'romainl/Apprentice'
+Plug 'romainl/Apprentice'
 " Plug 'AlessandroYorba/Alduin'
 " Plug 'djjcast/mirodark'
 " Plug 'ajmwagar/vim-deus'
@@ -245,7 +218,7 @@ Plug 'toupeira/vim-desertink'
 " Plug 'cocopon/iceberg.vim'
 " Plug 'itchyny/landscape.vim'
 " Plug 'sstallion/vim-wtf'
-" Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'AlessandroYorba/Sierra'
 " Plug 'srcery-colors/srcery-vim'
 Plug 'tpope/vim-vividchalk'
@@ -255,7 +228,7 @@ Plug 'jacoborus/tender.vim'
 " Plug 'DemonCloud/J'
 Plug 'whatyouhide/vim-gotham'
 " Plug 'bignimbus/pop-punk.vim'
-" Plug 'franbach/miramare'
+Plug 'franbach/miramare'
 Plug 'trevordmiller/nova-vim'
 " Plug 'acepukas/vim-zenburn'
 " Plug 'arcticicestudio/nord-vim'
@@ -272,16 +245,17 @@ Plug 'vim-scripts/vibrantink'
 " }}}
 " {{{ dual/multiple
 
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'chriskempson/base16-vim'
 Plug 'sainnhe/gruvbox-material'
 Plug 'gruvbox-community/gruvbox'
 Plug 'sonph/onehalf', { 'rtp': 'vim/' }
 Plug 'NLKNguyen/papercolor-theme'
-" Plug 'rakr/vim-one'
+Plug 'rakr/vim-one'
 " Plug 'severij/vadelma'
-" Plug 'iKarith/tigrana'
-" Plug 'sainnhe/sonokai'
-" Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git' " amazing
+Plug 'iKarith/tigrana'
+Plug 'sainnhe/sonokai'
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'junegunn/seoul256.vim'
 " Plug 'machakann/vim-colorscheme-tatami'
 Plug 'noahfrederick/vim-hemisu'
@@ -542,7 +516,7 @@ let g:UltiSnipsListSnippets = '<c-space><c-space>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 " let g:UltiSnipsSnippetDirectories = [
-"       \   $HOME . '/.src/github/mf3rnol/vim-snippets/ultisnips',
+"       \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
 "       \ ]
 
 " }}}
