@@ -11,7 +11,7 @@ key_bindings:
 # {{{ fonts
 
 font:
-  size: 9
+  size: 8
   normal:
     # family: Anonymice Nerd Font
     # family: Fira Code Nerd Font
@@ -19,13 +19,14 @@ font:
     # family: Fura Code Nerd Font
     # family: Hack Nerd Font
     # family: Hasklug Nerd Font
+    # family: Hasklig
     # family: Hurmit Nerd Font
     # family: Inconsolata Nerd Font
-    # family: Jet Brains Mono Nerd Font
     # family: Sauce Code Pro Nerd Font
     # family: Literation Mono Nerd Font
     # family: Fira Code Nerd Font
     family: Jet Brains Mono Nerd Font
+    # family: IBM Plex Mono
 
 # }}}
 # {{{ general
@@ -425,6 +426,6 @@ schemes:
 
 # }}}
 
-colors: *ayu-dark
+colors: *tokyo-night
 
 # }}}
