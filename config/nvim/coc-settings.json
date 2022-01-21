@@ -46,7 +46,7 @@
 
   "typescript.suggest.enabled": true,
   "typescript.validate.enable": true,
-  "typescript.referencesCodeLens.enable": true,
+  "typescript.referencesCodeLens.enable": false,
   "typescript.suggestionActions.enabled": true,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
@@ -61,8 +61,6 @@
 
   "suggest.languageSourcePriority": 10,
 
-  "coc.preferences.useQuickfixForLocations": true,
-  "coc.preferences.previewAutoClose": false,
   "coc.preferences.extensionUpdateCheck": "weekly",
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "coc.preferences.jumpCommand": "edit",
@@ -77,7 +75,6 @@
   "diagnostic.enable": true,
   "diagnostic.virtualText": true,
   "diagnostic.refreshOnInsertMode": true,
-  "diagnostic.refreshAfterSave": true,
   "diagnostic.virtualTextPrefix": "!",
   "diagnostic.virtualTextLineSeparator": "-",
   "diagnostic.displayByAle": true
