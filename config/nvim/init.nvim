@@ -1125,8 +1125,9 @@ let g:one#allow#italics = 1
 " {{{ sonokai
 
 " shusia, andromeda, atlantis, maia
-let g:sonokai#style = 'maia'
-let g:sonokai#enable#italic = 1
+let g:sonokai_style = 'andromeda'
+let g:sonokai_enable_italic = 1
+let g:sonokai_better_performance = 1
 
 " }}}
 " {{{ srcery
@@ -1134,10 +1135,16 @@ let g:sonokai#enable#italic = 1
 let g:srcery#italic = 1
 
 " }}}
+" {{{ tokyonight
+
+let g:tokyonight_style = "night"
+let g:tokyonight_italic_functions = 1
 
 " }}}
 
-set background=dark
+" }}}
+
+set background=light
 
 " moonfly
 " vibrantink
@@ -1152,7 +1159,9 @@ set background=dark
 " base16-github
 " ayu
 " tequila-sunrise
-colorscheme tequila-sunrise 
+" tokyonight
+" PaperColor
+colorscheme summerfruit256
 
 
 " }}}
@@ -1206,7 +1215,7 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 " let g:font#features = 'liga, zero, frac'
 let g:font#name = 'Jet Brains Mono Nerd Font'
 let g:font#features = ''
-let g:font#size = 11
+let g:font#size = 10
 
 call SetFont()
 
@@ -1314,11 +1323,6 @@ let mapleader = ','
 
 nnoremap J 2j
 nnoremap K 2k
-
-" }}}
-" {{{ aerojump
-
-nmap <space> <Plug>(AerojumpSpace)
 
 " }}}
 " {{{ ale
@@ -1531,16 +1535,6 @@ map zg/ <Plug>(incsearch-fuzzy-stay)
 " endfunc
 
 " autocmd FileType javascript s:xf_eslint_init()
-
-" }}}
-" {{{ mkdx (markdown)
-
-autocmd FileType markdown nmap <buffer> <leader><cr> <Plug>(mkdx-enter)
-autocmd FileType markdown nmap <buffer> <leader>mt <Plug>(mkdx-gen-or-upd-toc)
-autocmd FileType markdown nmap <buffer> gf <Plug>(mkdx-gf)
-" autocmd FileType markdown nmap <buffer> gx <Plug>(mkdx-gx)
-autocmd FileType markdown nmap <buffer> <leader>m<space> <Plug>(mkdx-checkbox-next-n)
-autocmd FileType markdown vmap <buffer> <leader>m<space> <Plug>(mkdx-checkbox-next-v)
 
 " }}}
 " {{{ netrw
