@@ -138,10 +138,15 @@ Plug 'jbgutierrez/vim-better-comments'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'beauwilliams/focus.nvim'
+Plug 'folke/zen-mode.nvim'
 
 " }}}
 " {{{ misc/general
 
+Plug 'ggandor/lightspeed.nvim'
+Plug 'yamatsum/nvim-cursorline'
+" Plug 'kyazdani42/nvim-web-devicons' " for file icons
+" Plug 'kyazdani42/nvim-tree.lua'
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
 Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'yarn set version 2.4.0 && yarn install --immutable'}
@@ -153,16 +158,15 @@ Plug 'markonm/traces.vim' " live search/sub preview
 Plug 'schickling/vim-bufonly'
 Plug 'tpope/vim-commentary' " fast commenting
 Plug 'Raimondi/delimitMate' " quote/etc autocomplete
-Plug 'AndrewRadev/dsf.vim' " delete surrounding function call
-Plug 'Shougo/echodoc.vim'
+" Plug 'AndrewRadev/dsf.vim' " delete surrounding function call
+" Plug 'Shougo/echodoc.vim'
 Plug 'wincent/terminus' " enhanced terminal integration
 Plug 'ternjs/tern_for_vim', { 'do': 'npm i' }
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'ryanoasis/vim-devicons'
 Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 Plug 'michaeljsmith/vim-indent-object' " indent-level text object
 Plug 'gcmt/wildfire.vim' " select text objects
-Plug 'mtth/scratch.vim'
+" Plug 'mtth/scratch.vim'
 Plug 'rhysd/clever-split.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'yuttie/comfortable-motion.vim' " smooth scrolling
@@ -202,6 +206,9 @@ Plug 'yasukotelin/shirotelin'
 " }}}
 " {{{ dark
 
+Plug 'mangeshrex/uwu.vim'
+Plug 'fenetikm/falcon'
+Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
 Plug 'mrjones2014/lighthaus.nvim'
 Plug 'catppuccin/nvim', {'as': 'catppuccin'}
 Plug 'ayu-theme/ayu-vim'
@@ -224,7 +231,7 @@ Plug 'AlessandroYorba/Sierra'
 Plug 'tpope/vim-vividchalk'
 Plug 'jacoborus/tender.vim'
 " Plug 'artanikin/vim-synthwave84'
-" Plug 'drewtempelmeyer/palenight.vim'
+Plug 'drewtempelmeyer/palenight.vim'
 " Plug 'DemonCloud/J'
 Plug 'whatyouhide/vim-gotham'
 " Plug 'bignimbus/pop-punk.vim'
@@ -245,6 +252,7 @@ Plug 'vim-scripts/vibrantink'
 " }}}
 " {{{ dual/multiple
 
+Plug 'rakr/vim-two-firewatch'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'chriskempson/base16-vim'
 Plug 'sainnhe/gruvbox-material'
@@ -734,6 +742,17 @@ else
 endif
 
 " }}}
+" {{{ zenmode
+
+lua << EOF
+  require("zen-mode").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+EOF
+
+" }}}
 
 " }}}
 
@@ -1141,10 +1160,16 @@ let g:tokyonight_style = "night"
 let g:tokyonight_italic_functions = 1
 
 " }}}
+" {{{ falcon
+
+let g:falcon_background = 1
+let g:falcon_inactive = 1
 
 " }}}
 
-set background=light
+" }}}
+
+set background=dark
 
 " moonfly
 " vibrantink
@@ -1161,7 +1186,8 @@ set background=light
 " tequila-sunrise
 " tokyonight
 " PaperColor
-colorscheme summerfruit256
+" falcon
+colorscheme tequila-sunrise
 
 
 " }}}
@@ -1437,71 +1463,71 @@ nnoremap <silent> <leader><Space> @=(foldlevel('.')?'za':"\<Space>")<cr>
 nnoremap <silent> fff :call <SID>xf_folds_toggle()<cr>
 
 " }}}
-" {{{ fzf
+" " {{{ fzf
 
-nnoremap <silent> <c-p> :FZFShowFileExplorer<cr>
-nnoremap <silent> <leader>ZC :FZFCommands<cr>
-nnoremap <silent> <leader>ZB :FZFBTags<cr>
+" nnoremap <silent> <c-p> :FZFShowFileExplorer<cr>
+" nnoremap <silent> <leader>ZC :FZFCommands<cr>
+" nnoremap <silent> <leader>ZB :FZFBTags<cr>
 
-" {{{ search open buffers
-func! s:xf_buff_list() abort
-  let l:str = ''
+" " {{{ search open buffers
+" func! s:xf_buff_list() abort
+"   let l:str = ''
 
-  redir => l:str
-  silent l:str
-  redir END
+"   redir => l:str
+"   silent l:str
+"   redir END
 
-  return split(l:str, '\n')
-endfunc
+"   return split(l:str, '\n')
+" endfunc
 
-func! s:xf_buff_open_by_index(i) abort
-  let l:i = marktab#ensure#IsNumber(a:i)
-  let l:id = matchstr(l:i, '^[ 0-9]*')
+" func! s:xf_buff_open_by_index(i) abort
+"   let l:i = marktab#ensure#IsNumber(a:i)
+"   let l:id = matchstr(l:i, '^[ 0-9]*')
 
-  exec 'buffer ' . trim(l:id)
-endfunc
+"   exec 'buffer ' . trim(l:id)
+" endfunc
 
-func! s:xf_fzf_open_buff_list() abort
-  exec fzf#run({
-    \   'source':  reverse(<SID>xf_buff_list()),
-    \   'sink':    function(<SID>xf_buff_open_by_index),
-    \   'down':    len(<SID>xf_buff_list()) + 2,
-    \   'options': '+m'
-    \ })
-endfunc
+" func! s:xf_fzf_open_buff_list() abort
+"   exec fzf#run({
+"     \   'source':  reverse(<SID>xf_buff_list()),
+"     \   'sink':    function(<SID>xf_buff_open_by_index),
+"     \   'down':    len(<SID>xf_buff_list()) + 2,
+"     \   'options': '+m'
+"     \ })
+" endfunc
 
-nnoremap <silent> <Leader><Enter> <SID>xf_fzf_open_buff_list()
+" nnoremap <silent> <Leader><Enter> <SID>xf_fzf_open_buff_list()
 
-" }}}
-" {{{ search tags
+" " }}}
+" " {{{ search tags
 
-func! s:tags_sink(line)
-  let parts = split(a:line, '\t\zs')
-  let excmd = matchstr(parts[2:], '^.*\ze;"\t')
+" func! s:tags_sink(line)
+"   let parts = split(a:line, '\t\zs')
+"   let excmd = matchstr(parts[2:], '^.*\ze;"\t')
 
-  execute 'silent e' parts[1][:-2]
+"   execute 'silent e' parts[1][:-2]
 
-  let [magic, &magic] = [&magic, 0]
+"   let [magic, &magic] = [&magic, 0]
 
-  execute excmd
+"   execute excmd
 
-  let &magic = magic
-endfunc
+"   let &magic = magic
+" endfunc
 
-func! s:tags()
-  call fzf#run({
-  'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
-             '| grep -v -a ^!',
-  'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
-  'down':    '40%',
-  'sink':    function('s:tags_sink')})
-endfunc
+" func! s:tags()
+"   call fzf#run({
+"   'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
+"              '| grep -v -a ^!',
+"   'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
+"   'down':    '40%',
+"   'sink':    function('s:tags_sink')})
+" endfunc
 
-command! Tags call <SID>tags()
+" command! Tags call <SID>tags()
 
-" }}}
+" " }}}
 
-" }}}
+" " }}}
 " {{{ goyo
 
 nnoremap <silent> <leader>g :Goyo<cr>
@@ -1579,165 +1605,23 @@ command! -nargs=* T split | terminal <args>
 command! -nargs=* VT vsplit | terminal <args>
 
 " }}}
-" {{{ testing
+" {{{ telescope
 
-nnoremap <leader>tf :call <SID>xf_test_run('TestFile')<cr>
-nnoremap <leader>tn :call <SID>xf_test_run('TestNearest')<cr>
-nnoremap <leader>ts :call <SID>xf_test_run('TestSuite')<cr>
-nnoremap <leader>tl :call <SID>xf_test_run('TestLast')<cr>
-nnoremap <leader>tv :call <SID>xf_test_run('TestVisit')<cr>
-
-" }}}
-" {{{ vimwiki
-
-" {{{ functions
-
-" {{{ GetPathIfExists(path)
-
-func! GetPathIfExists(path) abort
-  return maktba#ensure#pathExists(a:path)
-endfunc
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fc <cmd>Telescope colorscheme<cr>
 
 " }}}
-" {{{ GenVimWikiProjectFilePath(params)
-
-func! GenVimWikiProjectFilePath(params) abort
-  let s:params = maktba#ensure#isDictionary(a:params)
-  let s:base_path = maktba#ensure#isString(a:params.base_path)
-  let s:repo_name = maktba#ensure#isString(a:params.repo_name)
-  let s:repo_scope = maktba#ensure#isString(a:params.repo_scope)
-  let s:file_name = maktba#ensure#isString(a:params.file_name)
-
-  let s:path = maktba#path#Join([s:base_path, s:repo_scope, s:repo_name])
-  let s:get_path_func = maktba#function#Create(GetPathIfExists, [s:path])
-
-  return maktba#error#Try(g:get#path#func, ['.*'], 0)
-endfunc
-
-" }}}
-" {{{ PushVimWikiProjectFileLinkIfExists(params)
-
-func! PushVimWikiProjectFileLinkIfExists(params) abort
-  let s:file_path = GenVimWikiProjectFilePath(a:params)
-  let s:shortcuts = a:params.shortcuts || []
-
-  if len(s:file_path) > 0
-    call add(s:shortcuts, [s:file_path])
-  endif
-
-  return s:shortcuts
-endfunc
-
-" }}}
-" {{{ GenVimWikiLocalFileLink(params, file_name)
-
-func! GenVimWikiLocalFileLink(params, file_name) abort
-  let s:gen_params = copy(a:params)
-  let s:prefix = a:params.prefix || ''
-  let s:suffix = a:params.suffix || ''
-
-  s:gen_params.file_name = a:file_name
-
-  let s:file_path = GenVimWikiProjectFilePath(s:gen_params)
-  let s:label =  s:prefix . s:gen_params.file_name . s:suffix
-
-  return '[[local:' . s:file_path . '|' . s:label . ']]'
-endfunc
-
-" }}}
-" {{{ GenVimWikiProjectTemplate(params)
-
-" TODO: extract username/code folder base path
-func! GenVimWikiProjectTemplate(params) abort
-  let s:repo_tag = getline(0)
-  let s:repo_name = substitute(s:repo_tag, ':', '', 'g')
-  let s:repo_scope = maktaba#ensure#isString(a:params.repo_scope)
-  let s:base_path = maktaba#ensure#isString(a:params.base_path)
-  let s:repo_path = GenVimWikiProjectFilePath(a:params)
-  let s:page_header = '= ' . s:repo_name . ' ='
-  let s:existing_tasks = []
-
-  call maktaba#ensure#PathExists(s:repo_path)
-
-  call setpos('.', [bufnr(), 0, 0, 0])
-
-  while search('/^\(\(\s\+\)?\)\*\s\[.\]\s\S\+$/', 'cW') != 0
-    call add(s:existing_tasks, getline('.'))
-  endwhile
-
-  let s:shortucts = []
-  let s:header_with_links = [s:page_header]
-  let s:shared_repo_file_params = {
-        'repo_name': s:repo_name,
-        'repo_scope': s:repo_scope,
-        'base_path': s:base_path,
-        'shortcuts': s:shortcuts,
-        }
-
-  " TODO: Extract default task list
-  let s:tasks = [
-        '= Tasks =',
-        '* [ ] polish !',
-        '  * [ ] mv docs to `DOCUMENTATION.md`',
-        '  * [ ] add standard-version script for changelog gen',
-        '  * [ ] add `update-version` script',
-        '  * [ ] generate `README.md` from template, embed API Docs if a applicable',
-        '  * [ ] include `yarn docs` and yarn gen-readme` in husky hook',
-        '* [ ] plan next steps',
-        ]
-
-  " Build list of valid shortucts to project files
-  call PushVimWikiProjectFileLinkIfExists(s:shared_repo_file_params, '/')
-  call PushVimWikiProjectFileLinkIfExists(s:shared_repo_file_params, 'README.md')
-  call PushVimWikiProjectFileLinkIfExists(s:shared_repo_file_params, 'CHANGELOG.md')
-  call PushVimWikiProjectFileLinkIfExists(s:shared_repo_file_params, 'DOCUMENTATION.md')
-
-  let s:lines_to_append = []
-
-  if !empty(s:shortcuts)
-    call add(s:lines_to_append, s:shortcuts)
-  endif
-
-  if !empty(s:s:tasks)
-    call add(s:lines_to_append, s:stasks)
-  endif
-
-  if (!empty(s:existing_tasks))
-    call add(s:lines_to_append, [
-      '',
-      '----',
-      '',
-      ])
-  endif
-
-  " Apply changes
-  call setbufline(0, 0, s:repo_tag)
-  call setbufline(0, 2, s:page_header)
-  call appendbufline(0, 3, s:lines_to_append)
-endfunc
-
-" }}}
-
-" }}}
-" {{{ keybindings
-
-nnoremap <silent> <leader>SSS :call UltiSnips#RefreshSnippets()<cr>:echo 'ultisnips refreshed'<cr>
-nnoremap <silent> <leader>vwp :call GenVimWikiProjectTemplate()
-
-" }}}
-
 " {{{ trim trailing spaces
 
 nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
 
 " }}}
-" {{{ vim-js-file-import
+" {{{ ultisnips
 
-nnoremap <silent><leader>ii <Plug>(JsFileImport)
-nnoremap <silent><leader>il <Plug>(JsFileImportList)
-nnoremap <silent><leader>ip <Plug>(PromptJsFileImport)
-nnoremap <silent><leader>is <Plug>(SortJsFileImport)
-nnoremap <silent><leader>ic <Plug>(JsFixImport)
+nnoremap <silent> <leader>SSS :call UltiSnips#RefreshSnippets()<cr>:echo 'ultisnips refreshed'<cr>
 
 " }}}
 " {{{ vimrc
@@ -1760,62 +1644,5 @@ xmap <leader>sb <Plug>(Visual-Split-VSSplitBelow)
 nmap <leader>ss <Plug>(Visual-Split-Split)
 nmap <leader>sa <Plug>(Visual-Split-SplitAbove)
 nmap <leader>sb <Plug>(Visual-Split-SplitBelow)
-
-" }}}
-" {{{ vim-markdown-toc
-
-command! GMTOC GenTocGFM
-command! UMTOC UpdateToc
-command! RMTOC RemoveToc
-
-" }}}
-" {{{ vimwiki
-
-nnoremap <space><space> <Plug>VimwikiToggleListItem
-nnoremap <space>wti <Plug>VimwikiIncrementListItem
-nnoremap <space>wtd <Plug>VimwikiDecrementListItem
-nnoremap <space>wtr <Plug>VimwikiToggleRejectedListItem
-nnoremap <buffer> <space>wl s:xf_wiki_links_generate()
-
-" }}}
-
-" }}}
-
-" {{{
-
-func! s:xf_util_get_line_indent(line) abort
-  let l:line = maktba#ensure#isString(a:line)
-
-  return len(substitue(l:line, '/^\(\s*\)\(\w\)\(.*\)', '\1'))
-endfunc
-
-" TODO: Validation
-func! s:xf_util_mv_indent() abort
-  let l:line_count = getbufinfo(bufname()).linecount
-  let l:cursor_src = getcurpos()
-  let l:start = v:true
-
-  let l:src_col = l:cursor_src[2]
-  let l:src_ln = l:cursor_src[1]
-  let l:src_buff = l:cursor_src[0]
-
-  let l:src = getbufline(l:src_buff, l:src_ln, '$')
-  let l:src_indent = <SID>xf_util_get_line_indent(l:src)
-
-  while l:start || (l:tgt_indent != l:src_indent && l:tgt_ln <= l:line_count)
-    let l:start = v:false
-
-    let l:tgt_ln = l:src_ln + 1
-    let l:tgt = getbufline(bufname(), l:tgt_ln, '$')
-    let l:tgt_indent = <SID>xf_util_get_line_indent(l:tgt)
-  endwhile
-
-  " TODO: Move to nearest indent level instead?
-  if l:tgt_ln > l:line_count || l:tgt_indent !== l:src_indent
-    return
-  endif
-
-  cursor(l:tgt_ln, l:src_col)
-endfunc
 
 " }}}

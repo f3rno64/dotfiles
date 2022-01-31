@@ -196,7 +196,7 @@ alias lt="$LS_BASE_CMD -alt"
 alias read="cat README.md"
 
 if xf_has_cmd 'bat'; then
-  alias cat="bat"
+  alias cat="bat --theme gruvbox-light"
 fi
 
 if xf_has_cmd 'nvim'; then
@@ -206,14 +206,28 @@ if xf_has_cmd 'nvim'; then
 fi
 
 # }}}
-# {{{ plugins/autocomplete
+# {{{ bash powerline (disabled)
 
-BASH_POWERLINE_SH_PATH="$HOME/.bash-powerline.sh"
+# BASH_POWERLINE_SH_PATH="$HOME/.bash-powerline.sh"
 
-if [[ -f "$BASH_POWERLINE_SH_PATH" ]]; then
-  export PROMPT_COMMAND='echo -n "$USER@$HOSTNAME > "'
-  xf_safe_source "$BASH_POWERLINE_SH_PATH"
+# if [[ -f "$BASH_POWERLINE_SH_PATH" ]]; then
+#   export PROMPT_COMMAND='echo -n "$USER@$HOSTNAME > "'
+#   xf_safe_source "$BASH_POWERLINE_SH_PATH"
+# fi
+
+# }}}
+# {{{ powerline-shell
+
+function _update_ps1() {
+  PS1=$(powerline-shell $?)
+}
+
+if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+  PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 fi
+
+# }}}
+# {{{ plugins/autocomplete
 
 xf_safe_source "$HOME/.autojump/share/autojump/autojump.bash"
 xf_safe_source "$(xf_git_repo_path 'alacritty')/extra/completions/alacritty.bash"

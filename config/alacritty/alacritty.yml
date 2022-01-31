@@ -11,11 +11,11 @@ key_bindings:
 # {{{ fonts
 
 font:
-  size: 8
+  size: 9
   normal:
     # family: Anonymice Nerd Font
     # family: Fira Code Nerd Font
-    # family: Blex Mono Nerd Font
+    family: Blex Mono Nerd Font
     # family: Fura Code Nerd Font
     # family: Hack Nerd Font
     # family: Hasklug Nerd Font
@@ -25,7 +25,7 @@ font:
     # family: Sauce Code Pro Nerd Font
     # family: Literation Mono Nerd Font
     # family: Fira Code Nerd Font
-    family: Jet Brains Mono Nerd Font
+    # family: Jet Brains Mono Nerd Font
     # family: IBM Plex Mono
 
 # }}}
