@@ -95,6 +95,7 @@ Plug 'mboughaba/i3config.vim'
 Plug 'moll/vim-node'
 Plug 'gisphm/vim-gitignore'
 Plug 'andyk/vim-liquid'
+Plug 'jparise/vim-graphql'
 
 " {{{ markdown
 
@@ -1187,7 +1188,7 @@ set background=dark
 " tokyonight
 " PaperColor
 " falcon
-colorscheme tequila-sunrise
+colorscheme tokyonight
 
 
 " }}}
