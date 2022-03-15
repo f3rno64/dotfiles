@@ -333,7 +333,7 @@ let g:ale_open_list = 0
 let g:coc#snippet#next = '<c-j>'
 let g:coc#snippet#prev = '<c-k>'
 
-let g:coc#node#path = $HOME . '.nvm/versions/node/v16.17.0/bin/node'
+let g:coc#node#path = $HOME . '.nvm/versions/node/v17.7.1/bin/node'
 let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
 
 " Helper to handle complex tab behavior, allowing for elegant snippet expansion
@@ -1192,7 +1192,7 @@ set background=dark
 " tokyonight
 " PaperColor
 " falcon
-colorscheme desertink
+colorscheme base16-irblack
 
 
 " }}}

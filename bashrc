@@ -8,6 +8,12 @@
 if [[ $- != *i* ]]; then return; fi
 
 # }}}
+# {{{ bash options
+
+shopt -s autocd expand_aliases cdspell checkhash checkjobs complete_fullquote
+shopt -s direxpand dirspell dotglob execfail
+
+# }}}
 # {{{ configuration
 
 export XF_SHELL="bash"
@@ -23,7 +29,7 @@ export XF_VIM_PLUGIN_DIR="$HOME/.vim-plugins"
 export XF_NVIM_PLUGIN_DIR="$HOME/.nvim-plugins"
 
 export XF_NVM_PATH="$HOME/.nvm"
-export XF_LOGGING=0
+export XF_LOGGING=1
 
 # }}}
 # {{{ load xf-bash-lib
@@ -51,25 +57,12 @@ export HOSTNAME="$RESOLVED_HOSTNAME"
 export EDITOR="$RESOLVED_EDITOR"
 
 # }}}
-# {{{ bash options
+# {{{ homebrew bin path
 
-shopt -s autocd expand_aliases cdspell checkhash checkjobs complete_fullquote
-shopt -s direxpand dirspell dotglob execfail
+HOMEBREW_BIN_PATH="/opt/homebrew/bin"
 
-# }}}
-# {{{ vim as man pager
-
-if xf_has_vim; then
-  export MANPAGER="$EDITOR +Man!"
-
-  # vim-superman config
-  complete -o default -o nospace -F _man vman
-
-  if xf_has_nvim; then
-    xf_safe_add_dir_to_path "$XF_NVIM_PLUGIN_DIR/vim-superman/bin"
-  else
-    xf_safe_add_dir_to_path "$XF_VIM_PLUGIN_DIR/vim-superman/bin"
-  fi
+if [[ -d "$HOMEBREW_BIN_PATH" ]]; then
+  xf_safe_add_dir_to_path "$HOMEBREW_BIN_PATH"
 fi
 
 # }}}
@@ -78,10 +71,12 @@ fi
 XF_HOME_SRC_DIR="$HOME/.src"
 XF_HOME_BIN_DIR="$HOME/.bin"
 XF_HOME_LOCAL_BIN_DIR="$HOME/.local/bin"
+XF_HOME_BASH_SCRIPTS_DIR="$HOME/.bash"
 
 xf_ensure_dir "$XF_HOME_SRC_DIR"
 xf_ensure_dir "$XF_HOME_BIN_DIR"
 xf_ensure_dir "$XF_HOME_LOCAL_BIN_DIR"
+xf_ensure_dir "$XF_HOME_BASH_SCRIPTS_DIR"
 
 xf_safe_add_dir_to_path "$XF_HOME_BIN_DIR"
 xf_safe_add_dir_to_path "$XF_HOME_LOCAL_BIN_DIR"
@@ -97,12 +92,19 @@ if [[ -d "$PYTHON_PATH" ]]; then
 fi
 
 # }}}
-# {{{ homebrew bin path
+# {{{ vim as man pager
 
-HOMEBREW_BIN_PATH="/opt/homebrew/bin"
+if xf_has_vim; then
+  export MANPAGER="$EDITOR +Man!"
 
-if [[ -d "$HOMEBREW_BIN_PATH" ]]; then
-  xf_safe_add_dir_to_path "$HOMEBREW_BIN_PATH"
+  # vim-superman config
+  complete -o default -o nospace -F _man vman
+
+  if xf_has_nvim; then
+    xf_safe_add_dir_to_path "$XF_NVIM_PLUGIN_DIR/vim-superman/bin"
+  else
+    xf_safe_add_dir_to_path "$XF_VIM_PLUGIN_DIR/vim-superman/bin"
+  fi
 fi
 
 # }}}
@@ -135,41 +137,28 @@ if [[ -f "$WEBPASS_CLI_PATH" ]]; then
 fi
 
 # }}}
-# {{{ nix-on-droid
+# {{{ custom environment specific bash scripts
 
-NIX_ON_DRIOD_SCRIPT_DIR="$HOME/.nix-profile/etc/profile.d"
+xf_init_custom_scripts() {
+  local -r SRC_TREE="$(tree -a -i -f "$XF_HOME_BASH_SCRIPTS_DIR" | grep '.sh')"
+  local -r SRC_FULL_PATHS="$(echo $SRC_TREE | awk '{ FS=" " } { print $2 }')"
 
-if [[ -f "$NIX_ON_DRIOD_SCRIPT_DIR" ]]; then
-  xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/gawk.sh"
-  xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/hm-session-vars.sh"
-  xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/nix-daemon.sh"
-  xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/nix-on-droid-session-init.sh"
-  xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/nix.sh"
-  xf_safe_source "$NIX_ON_DRIOD_SCRIPT_DIR/command-not-found.sh"
+  local -r OLD_IFS="$IFS"
+  IFS="\n"
+  local -r SCRIPTS_PATHS="$SRC_FULL_PATHS"
+  IFS="$OLD_IFS"
+
+  for SCRIPT in "${SCRIPTS_PATHS}"
+  do
+    local -r SCRIPT_REL_PATH="$(realpath --relative-to="$HOME" "$SCRIPT")"
+
+    xf_safe_source "$SCRIPT"
+    xf_log_success "loaded $SCRIPT_REL_PATH"
+  done
+}
+
+if [[ -d $XF_HOME_BASH_SCRIPTS_DIR ]]; then
+  xf_init_custom_scripts
 fi
 
 # }}}
-
-PATH="/Users/cris.mihalache/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/Users/cris.mihalache/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/cris.mihalache/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/cris.mihalache/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/cris.mihalache/perl5"; export PERL_MM_OPT;
-
-xf_safe_add_dir_to_path "/Users/cris.mihalache/perl5/bin"
-xf_safe_add_dir_to_path "/Users/cris.mihalache/Library/Application Support/Coursier/bin"
-
-xf_safe_source "$HOME/.mavenrc"
-
-# The next line updates PATH for the Google Cloud SDK.
-xf_safe_source "$HOME/google-cloud-sdk/path.bash.inc"
-
-# The next line enables shell command completion for gcloud.
-xf_safe_source "$HOME/google-cloud-sdk/completion.bash.inc"
-
-# TODO: Move elsewhere to not pollute dotfiles
-alias mymocks="cd $HOME/.src/github/f3rno64/tradeshift-mock-servers/; npm start";
-alias goenv="docker start godb; docker start redis; mymocks";
-alias gomigration="cd $HOME/.src/github/f3rno64/tradeshift-go; npm run migrate:mock";
-alias goserver="cd $HOME/.src/github/f3rno64/tradeshift-go; nvm use && export NODE_ENV=mock && node --zero-fill-buffers src/server/entryPoints/server.js";
-alias goclient="cd $HOME/.src/github/f3rno64/tradeshift-go/go-frontend; nvm use && npm i && npm run build:client:watch";
