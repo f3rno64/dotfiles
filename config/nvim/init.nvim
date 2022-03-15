@@ -90,12 +90,14 @@ Plug 'honza/vim-snippets'
 " }}}
 " {{{ syntax/languages
 
+Plug 'a5ob7r/shellcheckrc.vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'mboughaba/i3config.vim'
 Plug 'moll/vim-node'
 Plug 'gisphm/vim-gitignore'
 Plug 'andyk/vim-liquid'
 Plug 'jparise/vim-graphql'
+Plug 'jez/vim-superman'
 
 " {{{ markdown
 
@@ -140,6 +142,7 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'beauwilliams/focus.nvim'
 Plug 'folke/zen-mode.nvim'
+Plug 'junegunn/goyo.vim'
 
 " }}}
 " {{{ misc/general
@@ -452,21 +455,6 @@ func! s:goyo_enter()
   set nonumber
 
   let b:coc_suggest_disable = 1 " popup 'invisible' but hides content
-endfunc
-
-func! s:goyo_leave()
-  set showmode
-  set showcmd
-  set number
-  let b:coc_suggest_disable = 0
-
-  " Workaround for color scheme issue
-  " TODO: Update w/ dynamic config path
-  if has('nvim')
-    silent! source $HOME/.config/nvim/init.nvim
-  else
-    silent! source $HOME/.vimrc
-  endif
 endfunc
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
@@ -1188,7 +1176,7 @@ set background=dark
 " tokyonight
 " PaperColor
 " falcon
-colorscheme tokyonight
+colorscheme desertink
 
 
 " }}}

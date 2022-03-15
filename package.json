@@ -1,0 +1,6 @@
+{
+  "author": "Mircea Cristian Mihalache Mihalache <me@f3rno.com>",
+  "license": "MIT",
+  "name": "@f3rno64/dotfiles",
+  "packageManager": "yarn@3.2.0"
+}
