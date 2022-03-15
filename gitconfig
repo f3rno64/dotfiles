@@ -1,6 +1,7 @@
 [user]
-	name = Mircea Cristian Mihalache
+	name = Cris Mihalache
 	email = cris.mihalache@tradeshift.com
+	signingkey = 8A722BAC8248F6D1D0882D738D2F39094047FC24
 
 [color]
 	ui = auto
@@ -47,3 +48,7 @@
 	rebase = true
 [init]
 	defaultBranch = master
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
