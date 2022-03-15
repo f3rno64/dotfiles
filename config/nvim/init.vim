@@ -3,7 +3,7 @@
 " Eventually it will be split up harmoniously
 " If anything, I found enough solid color schemes to last decades.
 "
-" https://github.com/f3rno64/dotfiles/config/nvim/init.nvim
+" https://github.com/f3rno64/dotfiles/config/nvim/init.vim
 
 " {{{ 1. terminal setup
 
@@ -147,6 +147,7 @@ Plug 'junegunn/goyo.vim'
 " }}}
 " {{{ misc/general
 
+Plug 'junegunn/goyo.vim'
 Plug 'ggandor/lightspeed.nvim'
 Plug 'yamatsum/nvim-cursorline'
 " Plug 'kyazdani42/nvim-web-devicons' " for file icons
@@ -332,7 +333,7 @@ let g:ale_open_list = 0
 let g:coc#snippet#next = '<c-j>'
 let g:coc#snippet#prev = '<c-k>'
 
-let g:coc#node#path = $HOME . '.nvm/versions/node/v16.13.2/bin/node'
+let g:coc#node#path = $HOME . '.nvm/versions/node/v16.17.0/bin/node'
 let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
 
 " Helper to handle complex tab behavior, allowing for elegant snippet expansion
@@ -455,6 +456,21 @@ func! s:goyo_enter()
   set nonumber
 
   let b:coc_suggest_disable = 1 " popup 'invisible' but hides content
+endfunc
+
+func! s:goyo_leave()
+  set showmode
+  set showcmd
+  set number
+  let b:coc_suggest_disable = 0
+
+  " Workaround for color scheme issue
+  " TODO: Update w/ dynamic config path
+  if has('nvim')
+    silent! source $HOME/.config/nvim/init.vim
+  else
+    silent! source $HOME/.vimrc
+  endif
 endfunc
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
@@ -1204,16 +1220,16 @@ if has('gui_running') || exists('g:GtkGuiLoaded')
 " {{{ functions
 
 func! SetFont()
-  if has('nvim')
-    call rpcnotify(1, 'Gui', 'Font', g:font#name . ' ' . g:font#size)
-    call rpcnotify(1, 'Gui', 'FontFeatures', g:font#features)
+  if has('nvim') && !has('gui_vimr')
+    call rpcnotify(1, 'Gui', 'Font', g:font_name . ' ' . g:font_size)
+    call rpcnotify(1, 'Gui', 'FontFeatures', g:font_features)
   else
     let &guifont = g:font_name . " " . g:font_size
   endif
 endfunc
 
 func! AdjustFontSize(delta)
-  let g:font#size += a:delta
+  let g:font_size += a:delta
   call SetFont()
 endfunc
 
@@ -1226,11 +1242,11 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 
 " }}}
 
-" let g:font#name = 'BlexMono Nerd Font'
-" let g:font#features = 'liga, zero, frac'
-let g:font#name = 'Jet Brains Mono Nerd Font'
-let g:font#features = ''
-let g:font#size = 10
+" let g:font_name = 'BlexMono Nerd Font'
+" let g:font_features = 'liga, zero, frac'
+let g:font_name = 'Jet Brains Mono Nerd Font'
+let g:font_features = ''
+let g:font_size = 10
 
 call SetFont()
 
@@ -1242,7 +1258,7 @@ tnoremap <Esc> <C-\><C-n>
 " }}}
 " {{{ Neovim-GTK
 
-if has('nvim')
+if has('nvim') && ! has('gui_vimr')
   " Paste via shift + insert
   map <S-Insert> <MiddleMouse>
   map! <S-Insert> <MiddleMouse>
@@ -1616,8 +1632,8 @@ nnoremap <silent> <leader>SSS :call UltiSnips#RefreshSnippets()<cr>:echo 'ultisn
 " {{{ vimrc
 
 if has("nvim")
-  nnoremap <silent> <leader>R :source ~/.config/nvim/init.nvim<cr>
-  nnoremap <silent> <leader>rr :e ~/.config/nvim/init.nvim<cr>
+  nnoremap <silent> <leader>R :source ~/.config/nvim/init.vim<cr>
+  nnoremap <silent> <leader>rr :e ~/.config/nvim/init.vim<cr>
 else
   nnoremap <silent> <leader>R :source ~/.vimrc<cr>
   nnoremap <silent> <leader>rr :e ~/.vimrc<cr>
