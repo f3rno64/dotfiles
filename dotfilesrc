@@ -1,4 +1,4 @@
 [dotfiles]
-repository = /home/f3rno64/.src/github/f3rno64/dotfiles
+repository = /Users/cris.mihalache/.src/github/f3rno64/dotfiles
 ignore = ['.git', '.gitignore', 'id_rsa*', '*_history', 'fishd*']
 packages = ['config', 'ssh', 'weechat']
