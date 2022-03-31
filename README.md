@@ -89,6 +89,27 @@ Since [xf-bash-lib](xf-bash-lib-url) only enables then features that have the re
 
 ---
 
+## Notes
+
+### Virtual Console Fonts
+
+Fonts are available in `/usr/lib/kbd/consolefonts` and need to be set in
+`/etc/vconsole.conf`. To use `terminus`, install the console terminus font for
+the running distro (`terminus-fonts-console` for fedora) and set it in
+`/etc/vcovconsole.conf`.
+
+To test, use `setfont`:
+`setfont -h12 /usr/lib/kbd/consolefonts/ter-u12n.psf.gz`.
+
+> Example final vconsole.conf
+
+```conf
+KEYMAP="us"
+FONT="ter-u12n.psf.gz"
+```
+
+---
+
 <!-- link slugs -->
 [bat-ur]: https://github.com/sharkdp/bat
 [autojummp-url]: https:/github.com/wting/autojump

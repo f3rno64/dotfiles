@@ -22,7 +22,7 @@ export XF_LIB_DIR="$HOME/.xf-bash-lib"
 export XF_VIM_EDITORS=('nvim-gtk' 'nvim' 'vim' 'vi')
 export XF_DESIRED_EDITORS=("${XF_VIM_EDITORS[@]} nano")
 
-export XF_NVIM_CONFIG_PATH="$HOME/.config/nvim/init.nvim"
+export XF_NVIM_CONFIG_PATH="$HOME/.config/nvim/init.vim"
 export XF_NVIM_GTK_CONFIG_PATH="$HOME/.config/nvim/ginit.vim"
 
 export XF_VIM_PLUGIN_DIR="$HOME/.vim-plugins"
@@ -109,14 +109,36 @@ if xf_has_vim; then
 fi
 
 # }}}
-# {{{ powerline-shell
-
-function _update_ps1() {
-  PS1=$(powerline-shell $?)
-}
+# {{{ powerline-shell for non-vtty
 
 if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+  POWERLINE_SHELL_CONFIG_DIR="$HOME/.config/powerline-shell"
+  POWERLINE_SHELL_PRIMARY_CONFIG_PATH="$POWERLINE_SHELL_CONFIG_DIR/config.json"
+
+  if xf_is_vtty; then
+    POWERLINE_SHELL_CONFIG_PATH="$POWERLINE_SHELL_CONFIG_DIR/config-vtty.json"
+  else
+    POWERLINE_SHELL_CONFIG_PATH="$POWERLINE_SHELL_CONFIG_DIR/config-tty.json"
+  fi
+
+  cat "$POWERLINE_SHELL_CONFIG_PATH" > "$POWERLINE_SHELL_PRIMARY_CONFIG_PATH"
+
   PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+
+  function _update_ps1() {
+    PS1=$(powerline-shell $?)
+  }
+
+fi
+
+# }}}
+# {{{ tty font
+
+XF_TTY_FONT=ter-u12n.psf.gz
+XF_TTY_FONT_HEIGHT=12
+
+if xf_is_vtty; then
+  sudo setfont -h"$XF_TTY_FONT_HEIGHT" "$XF_TTY_FONT"
 fi
 
 # }}}

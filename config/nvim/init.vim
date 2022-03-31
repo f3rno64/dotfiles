@@ -1636,6 +1636,11 @@ command! -nargs=* T split | terminal <args>
 command! -nargs=* VT vsplit | terminal <args>
 
 " }}}
+" {{{ terminal exit shortcut
+
+tnoremap <Esc> <C-\><C-n>
+
+" }}}
 " {{{ telescope
 
 nnoremap <leader>ff <cmd>Telescope find_files<cr>

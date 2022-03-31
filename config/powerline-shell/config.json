@@ -1,0 +1,35 @@
+{
+  "segments": [
+    "time",
+    "battery",
+    "virtual_env",
+    "hostname",
+    "username",
+    "cwd",
+    "git",
+    "root"
+  ],
+
+  "time": {
+    "format": "%H:%M"
+  },
+
+  "battery": {
+    "always_show_percentage": true,
+    "low_threshold": 0.2
+  },
+
+  "hostname": {
+    "colorize": true
+  },
+
+  "vcs": {
+    "show_symbol": true
+  },
+
+  "cwd": {
+    "mode": "dironly"
+  },
+
+  "mode": "compatible"
+}
