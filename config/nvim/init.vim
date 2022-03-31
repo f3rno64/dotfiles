@@ -52,6 +52,7 @@ call plug#begin(g:xf_plugin_path)
 Plug 'google/vim-maktaba'
 Plug 'xolox/vim-misc'
 Plug 'godlygeek/tabular'
+Plug 'nvim-lua/plenary.nvim'
 
 " }}}
 " {{{ treesitter
@@ -136,6 +137,7 @@ Plug 'kristijanhusak/vim-js-file-import', { 'do': 'npm install' }
 " }}}
 " {{{ git integration
 
+Plug 'tanvirtin/vgit.nvim'
 Plug 'airblade/vim-gitgutter'
 Plug 'rhysd/committia.vim' " better git commit layout
 Plug 'int3/vim-extradite' " git log
@@ -143,6 +145,9 @@ Plug 'int3/vim-extradite' " git log
 " }}}
 " {{{ visual
 
+Plug 'p00f/nvim-ts-rainbow'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
 Plug 'jbgutierrez/vim-better-comments'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
@@ -153,6 +158,10 @@ Plug 'junegunn/goyo.vim'
 " }}}
 " {{{ misc/general
 
+Plug 'folke/which-key.nvim'
+Plug 'lewis6991/hover.nvim'
+Plug 'declancm/cinnamon.nvim'
+Plug 'rhysd/conflict-marker.vim'
 Plug 'edluffy/hologram.nvim'
 Plug 'github/copilot.vim'
 Plug 'junegunn/goyo.vim'
@@ -265,6 +274,8 @@ Plug 'vim-scripts/vibrantink'
 " }}}
 " {{{ dual/multiple
 
+Plug 'rose-pine/neovim'
+Plug 'EdenEast/nightfox.nvim'
 Plug 'rakr/vim-two-firewatch'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'chriskempson/base16-vim'
@@ -1172,6 +1183,46 @@ let g:alduin#Shout#Dragon#Aspect = 1
 let g:one#allow#italics = 1
 
 " }}}
+" {{{ rosepine
+
+lua << EOF
+require('rose-pine').setup({
+	---@usage 'main'|'moon'
+	dark_variant = 'main',
+	bold_vert_split = false,
+	dim_nc_background = false,
+	disable_background = false,
+	disable_float_background = false,
+	disable_italics = false,
+	---@usage string hex value or named color from rosepinetheme.com/palette
+	groups = {
+		background = 'base',
+		panel = 'surface',
+		border = 'highlight_med',
+		comment = 'muted',
+		link = 'iris',
+		punctuation = 'subtle',
+
+		error = 'love',
+		hint = 'iris',
+		info = 'foam',
+		warn = 'gold',
+
+		headings = {
+			h1 = 'iris',
+			h2 = 'foam',
+			h3 = 'rose',
+			h4 = 'gold',
+			h5 = 'pine',
+			h6 = 'foam',
+		}
+		-- or set all headings at once
+		-- headings = 'subtle'
+	}
+})
+EOF
+
+" }}}
 " {{{ sonokai
 
 " shusia, andromeda, atlantis, maia
@@ -1218,8 +1269,8 @@ set background=dark
 " tokyonight
 " PaperColor
 " falcon
+" colorscheme rose-pine
 colorscheme falcon
-
 
 " }}}
 " {{{ 5. gui
@@ -1395,6 +1446,50 @@ nnoremap <leader>p :bprev<cr>
 nnoremap <silent> <leader>bo :BufOnly<cr>
 
 " }}}
+" {{{ cinnamon
+
+lua << EOF
+local opts = { noremap = true, silent = true }
+local keymap = vim.api.nvim_set_keymap
+
+-- Half-window movements:
+keymap('', '<C-u>', "<Cmd>lua Cinnamon.Scroll('<C-u>')<CR>", opts)
+keymap('i', '<C-u>', "<Cmd>lua Cinnamon.Scroll('<C-u>')<CR>", opts)
+keymap('', '<C-d>', "<Cmd>lua Cinnamon.Scroll('<C-d>')<CR>", opts)
+keymap('i', '<C-d>', "<Cmd>lua Cinnamon.Scroll('<C-d>')<CR>", opts)
+
+-- Page movements:
+keymap('n', '<C-b>', "<Cmd>lua Cinnamon.Scroll('<C-b>', 1, 1)<CR>", opts)
+keymap('n', '<C-f>', "<Cmd>lua Cinnamon.Scroll('<C-f>', 1, 1)<CR>", opts)
+keymap('n', '<PageUp>', "<Cmd>lua Cinnamon.Scroll('<C-b>', 1, 1)<CR>", opts)
+keymap('n', '<PageDown>', "<Cmd>lua Cinnamon.Scroll('<C-f>', 1, 1)<CR>", opts)
+
+-- Start/end of file and line number movements:
+keymap('n', 'gg', "<Cmd>lua Cinnamon.Scroll('gg', 0, 0, 3)<CR>", opts)
+keymap('x', 'gg', "<Cmd>lua Cinnamon.Scroll('gg', 0, 0, 3)<CR>", opts)
+keymap('n', 'G', "<Cmd>lua Cinnamon.Scroll('G', 0, 1, 3)<CR>", opts)
+keymap('x', 'G', "<Cmd>lua Cinnamon.Scroll('G', 0, 1, 3)<CR>", opts)
+
+-- Paragraph movements:
+keymap('n', '{', "<Cmd>lua Cinnamon.Scroll('{', 0)<dCR>", opts)
+keymap('x', '{', "<Cmd>lua Cinnamon.Scroll('{', 0)<CR>", opts)
+keymap('n', '}', "<Cmd>lua Cinnamon.Scroll('}', 0)<CR>", opts)
+keymap('x', '}', "<Cmd>lua Cinnamon.Scroll('}', 0)<CR>", opts)
+
+-- Previous/next search result:
+keymap('n', 'n', "<Cmd>lua Cinnamon.Scroll('n')<CR>", opts)
+keymap('n', 'N', "<Cmd>lua Cinnamon.Scroll('N')<CR>", opts)
+keymap('n', '*', "<Cmd>lua Cinnamon.Scroll('*')<CR>", opts)
+keymap('n', '#', "<Cmd>lua Cinnamon.Scroll('#')<CR>", opts)
+keymap('n', 'g*', "<Cmd>lua Cinnamon.Scroll('g*')<CR>", opts)
+keymap('n', 'g#', "<Cmd>lua Cinnamon.Scroll('g#')<CR>", opts)
+
+-- Previous/next cursor location:
+keymap('n', '<C-o>', "<Cmd>lua Cinnamon.Scroll('<C-o>')<CR>", opts)
+keymap('n', '<C-i>', "<Cmd>lua Cinnamon.Scroll('1<C-i>')<CR>", opts)
+EOF
+
+" }}}
 " {{{ ctrl+backspace delete word
 
 imap <C-BS> <C-W>
@@ -1429,6 +1524,31 @@ map iN <Plug>(easymotion-prev)
 " {{{ help
 
 nnoremap <leader><s-h> :execute 'vert help ' . expand('<cword>')<cr>
+
+" }}}
+" {{{ hover
+
+lua << EOF
+
+require('hover').setup{
+  init = function()
+    -- Require providers
+    require('hover.providers.lsp')
+    -- require('hover.providers.gh')
+    -- require('hover.providers.man')
+    -- require('hover.providers.dictionary')
+  end,
+  preview_opts = {
+    border = nil
+  },
+  title = true
+}
+
+-- Setup keymaps
+vim.keymap.set('n',  'K', require('hover').hover       , { desc='hover.nvim'         })
+vim.keymap.set('n', 'gK', require('hover').hover_select, { desc='hover.nvim (select)' })
+
+EOF
 
 " }}}
 " {{{ fast quit
@@ -1655,6 +1775,36 @@ nnoremap <leader>fc <cmd>Telescope colorscheme<cr>
 nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
 
 " }}}
+" {{{ ts-rainbox
+
+lua << EOF
+require("nvim-treesitter.configs").setup {
+  sync_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = true
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+  indent = {
+    enable = true
+  }
+}
+EOF
+
+" }}}
 " {{{ ultisnips
 
 nnoremap <silent> <leader>SSS :call UltiSnips#RefreshSnippets()<cr>:echo 'ultisnips refreshed'<cr>
@@ -1680,6 +1830,77 @@ xmap <leader>sb <Plug>(Visual-Split-VSSplitBelow)
 nmap <leader>ss <Plug>(Visual-Split-Split)
 nmap <leader>sa <Plug>(Visual-Split-SplitAbove)
 nmap <leader>sb <Plug>(Visual-Split-SplitBelow)
+
+" }}}
+" {{{ which-key
+
+lua << EOF
+  require("which-key").setup {
+    plugins = {
+      marks = true, -- shows a list of your marks on ' and `
+      registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+      spelling = {
+        enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+        suggestions = 20, -- how many suggestions should be shown in the list?
+      },
+      -- the presets plugin, adds help for a bunch of default keybindings in Neovim
+      -- No actual key bindings are created
+      presets = {
+        operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+        motions = true, -- adds help for motions
+        text_objects = true, -- help for text objects triggered after entering an operator
+        windows = true, -- default bindings on <c-w>
+        nav = true, -- misc bindings to work with windows
+        z = true, -- bindings for folds, spelling and others prefixed with z
+        g = true, -- bindings for prefixed with g
+      },
+    },
+    -- add operators that will trigger motion and text object completion
+    -- to enable all native operators, set the preset / operators plugin above
+    operators = { gc = "Comments" },
+    key_labels = {
+      -- override the label used to display some keys. It doesn't effect WK in any other way.
+      -- For example:
+      -- ["<space>"] = "SPC",
+      -- ["<cr>"] = "RET",
+      -- ["<tab>"] = "TAB",
+    },
+    icons = {
+      breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+      separator = "➜", -- symbol used between a key and it's label
+      group = "+", -- symbol prepended to a group
+    },
+    popup_mappings = {
+      scroll_down = '<c-d>', -- binding to scroll down inside the popup
+      scroll_up = '<c-u>', -- binding to scroll up inside the popup
+    },
+    window = {
+      border = "none", -- none, single, double, shadow
+      position = "bottom", -- bottom, top
+      margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+      padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
+      winblend = 0
+    },
+    layout = {
+      height = { min = 4, max = 25 }, -- min and max height of the columns
+      width = { min = 20, max = 50 }, -- min and max width of the columns
+      spacing = 3, -- spacing between columns
+      align = "left", -- align columns left, center or right
+    },
+    ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+    hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
+    show_help = true, -- show help message on the command line when the popup is visible
+    triggers = "auto", -- automatically setup triggers
+    -- triggers = {"<leader>"} -- or specify a list manually
+    triggers_blacklist = {
+      -- list of mode / prefixes that should never be hooked by WhichKey
+      -- this is mostly relevant for key maps that start with a native binding
+      -- most people should not need to change this
+      i = { "j", "k" },
+      v = { "j", "k" },
+    },
+  }
+EOF
 
 " }}}
 " {{{ workspaces
