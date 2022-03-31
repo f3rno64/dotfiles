@@ -90,6 +90,9 @@ Plug 'honza/vim-snippets'
 " }}}
 " {{{ syntax/languages
 
+Plug 'kchmck/vim-coffee-script'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'digitaltoad/vim-pug'
 Plug 'a5ob7r/shellcheckrc.vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'mboughaba/i3config.vim'
@@ -101,10 +104,13 @@ Plug 'jez/vim-superman'
 
 " {{{ markdown
 
+Plug 'SidOfc/mkdx'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+Plug 'ellisonleao/glow.nvim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown'
 " Plug 'mmai/vim-markdown-wiki'
-" Plug 'rhysd/vim-gfm-syntax'
+Plug 'rhysd/vim-gfm-syntax'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'dhruvasagar/vim-table-mode'
 
@@ -147,9 +153,11 @@ Plug 'junegunn/goyo.vim'
 " }}}
 " {{{ misc/general
 
+Plug 'edluffy/hologram.nvim'
+Plug 'github/copilot.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'ggandor/lightspeed.nvim'
-Plug 'yamatsum/nvim-cursorline'
+" Plug 'yamatsum/nvim-cursorline'
 " Plug 'kyazdani42/nvim-web-devicons' " for file icons
 " Plug 'kyazdani42/nvim-tree.lua'
 Plug 'Shougo/neco-vim'
@@ -507,6 +515,23 @@ let g:mta_filetypes = {
 \}
 
 " }}}
+" {{{ markdown-preview
+
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 1
+let g:mkdp_highlight_css = $HOME . '/.src/github/highlightjs/highlight.js/src/styles/github-dark.css'
+
+" }}}
+" {{{ mkdx
+
+let g:mkdx#settings = { 'highlight': { 'enable': 1 },
+                        \ 'enter': { 'shift': 1 },
+                        \ 'links': { 'external': { 'enable': 1 } },
+                        \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
+                        \ 'fold': { 'enable': 1 } }
+let g:polyglot_disabled = ['markdown']
+
+" }}}
 " {{{ nuake
 
 let g:nuake_start_insert = 0
@@ -595,7 +620,7 @@ let g:vim_jsx_pretty_colorful_config = 1
 " }}}
 " {{{ vim-markdown
 
-let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_folding_disabled = 0
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_folding_level = 2
 let g:vim_markdown_toc_autofit = 1
@@ -606,6 +631,7 @@ let g:vim_markdown_new_list_item_indent = 2
 let g:vim_markdown_no_extensions_in_markdown = 1
 let g:vim_markdown_edit_url_in = 'current' " 'vsplit'
 let g:vim_markdown_autowrite = 1
+let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'c=c', 'python=python', 'coffeescript=coffeescript']
 
 " }}}
 " {{{ vim-markdown-toc
@@ -731,7 +757,7 @@ let g:test#custom#transformations = {
 
 " }}}
 
-call <SID>xf_test_init_strategy()
+" call <SID>xf_test_init_strategy()
 
 " }}}
 " {{{ vim-workspace
@@ -1192,7 +1218,7 @@ set background=dark
 " tokyonight
 " PaperColor
 " falcon
-colorscheme tequila-sunrise
+colorscheme falcon
 
 
 " }}}
@@ -1654,5 +1680,17 @@ nmap <leader>sb <Plug>(Visual-Split-SplitBelow)
 " {{{ workspaces
 
 nnoremap <silent> <leader>WW :ToggleWorkspace<cr>
+
+" }}}
+" {{{ mkdx
+"
+if !has('nvim')
+  augroup MKDX
+    au!
+    au FileType markdown so $HOME/.vim/pack/plugins/start/mkdx/ftplugin/markdown.vim
+  augroup END
+endif
+
+inoremap <buffer><silent><unique> ``` ```<Enter>```<C-o>k<C-o>A
 
 " }}}
