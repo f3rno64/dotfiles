@@ -75,4 +75,4 @@ progressBarStyle: simba
 
 virtualFolder: .yarn/$$virtual
 
-yarnPath: .yarn/releases/yarn-3.2.0.cjs
+yarnPath: .yarn/releases/yarn-2.4.0.cjs

@@ -333,7 +333,7 @@ let g:ale_open_list = 0
 let g:coc#snippet#next = '<c-j>'
 let g:coc#snippet#prev = '<c-k>'
 
-let g:coc#node#path = $HOME . '.nvm/versions/node/v17.7.1/bin/node'
+let g:coc#node#path = $HOME . '.nvm/versions/node/v17.8.0/bin/node'
 let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
 
 " Helper to handle complex tab behavior, allowing for elegant snippet expansion
@@ -1192,7 +1192,7 @@ set background=dark
 " tokyonight
 " PaperColor
 " falcon
-colorscheme base16-irblack
+colorscheme tequila-sunrise
 
 
 " }}}
@@ -1649,5 +1649,10 @@ xmap <leader>sb <Plug>(Visual-Split-VSSplitBelow)
 nmap <leader>ss <Plug>(Visual-Split-Split)
 nmap <leader>sa <Plug>(Visual-Split-SplitAbove)
 nmap <leader>sb <Plug>(Visual-Split-SplitBelow)
+
+" }}}
+" {{{ workspaces
+
+nnoremap <silent> <leader>WW :ToggleWorkspace<cr>
 
 " }}}

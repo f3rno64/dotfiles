@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /usr/bin/env bash
 #
 # shellcheck disable=1090
 # Allow dynamic source
@@ -29,7 +29,7 @@ export XF_VIM_PLUGIN_DIR="$HOME/.vim-plugins"
 export XF_NVIM_PLUGIN_DIR="$HOME/.nvim-plugins"
 
 export XF_NVM_PATH="$HOME/.nvm"
-export XF_LOGGING=1
+export XF_LOGGING=0
 
 # }}}
 # {{{ load xf-bash-lib
@@ -68,10 +68,10 @@ fi
 # }}}
 # {{{ ensure home folder structure
 
-XF_HOME_SRC_DIR="$HOME/.src"
-XF_HOME_BIN_DIR="$HOME/.bin"
-XF_HOME_LOCAL_BIN_DIR="$HOME/.local/bin"
-XF_HOME_BASH_SCRIPTS_DIR="$HOME/.bash"
+export XF_HOME_SRC_DIR="$HOME/.src"
+export XF_HOME_BIN_DIR="$HOME/.bin"
+export XF_HOME_LOCAL_BIN_DIR="$HOME/.local/bin"
+export XF_HOME_BASH_SCRIPTS_DIR="$HOME/.bash"
 
 xf_ensure_dir "$XF_HOME_SRC_DIR"
 xf_ensure_dir "$XF_HOME_BIN_DIR"
@@ -153,7 +153,6 @@ xf_init_custom_scripts() {
     local -r SCRIPT_REL_PATH="$(realpath --relative-to="$HOME" "$SCRIPT")"
 
     xf_safe_source "$SCRIPT"
-    xf_log_success "loaded $SCRIPT_REL_PATH"
   done
 }
 
