@@ -55,6 +55,7 @@ export TERM="$XF_TERM"
 export USER="$RESOLVED_USER"
 export HOSTNAME="$RESOLVED_HOSTNAME"
 export EDITOR="$RESOLVED_EDITOR"
+export GIT_EDITOR="$RESOLVED_EDITOR"
 
 # }}}
 # {{{ homebrew bin path
