@@ -33,8 +33,8 @@
     "setup": "bash -c scripts/install.sh",
     "readme": "rm README.md && node scripts/gen_readme.js",
     "release": "npm run update-version && git push origin master --follow-tags && npm publish --access=public",
-    "update-deps": "npm run run updates -u -g -c",
-    "update-version": "npm run run standard-version"
+    "update-deps": "npm run updates -u -g -c",
+    "update-version": "npm run standard-version"
   },
   "husky": {
     "hooks": {
