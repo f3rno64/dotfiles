@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/f3rno64/dotfiles/compare/v0.0.3...v0.0.4) (2022-04-01)
+
+
+### Bug Fixes
+
+* manifest ([bfaeac8](https://github.com/f3rno64/dotfiles/commit/bfaeac8727c3029a115dab5c1764a39ed6cc81b8))
+* remove yarn ([95a5f26](https://github.com/f3rno64/dotfiles/commit/95a5f266681744c6105f41457bd3e110d2cc2a5f))
+
 ### [0.0.3](https://github.com/f3rno64/dotfiles/compare/v0.0.2...v0.0.3) (2022-04-01)
 
 ### 0.0.2 (2022-04-01)

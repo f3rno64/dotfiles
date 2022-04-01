@@ -1,6 +1,6 @@
 {
   "name": "@f3rno64/dotfiles",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "f3rno64's personal dotfiles",
   "main": "index.js",
   "author": "Mircea Cristian Mihalache <me@f3rno64.com>",
