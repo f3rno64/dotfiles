@@ -78,3 +78,4 @@ gnupg/*
 !gnupg/gpg-agent.conf
 
 bin/*
+npmrc
