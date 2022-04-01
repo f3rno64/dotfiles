@@ -1,0 +1,49 @@
+{
+  "name": "@f3rno64/dotfiles",
+  "version": "0.0.1",
+  "description": "f3rno64's personal dotfiles",
+  "main": "index.js",
+  "author": "Mircea Cristian Mihalache <me@f3rno64.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=17.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/f3rno64/dotfiles.git"
+  },
+  "homepage": "https://github.com/f3rno64/dotfiles",
+  "bugs": {
+    "url": "https://github.com/f3rno64/dotfiles/issues"
+  },
+  "keywords": [
+    "dotfiles",
+    "markdown",
+    "neovim",
+    "vim",
+    "i3",
+    "tmux",
+    "rofi",
+    "dunst",
+    "dmenu",
+    "ncmpcpp",
+    "mpd"
+  ],
+  "scripts": {
+    "readme": "rm README.md && node scripts/gen_readme.js",
+    "release": "npm run update-version && git push origin master --follow-tags && npm publish --access=public",
+    "update-deps": "./node_modules/.bin/updates -u -g -c",
+    "update-version": "./node_modules/.bin/standard-version"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn readme && git add README.md DOCUMENTATION.md"
+    }
+  },
+  "devDependencies": {
+    "lodash": "^4.17.21",
+    "serve-markdown-it-lib": "^1.0.5",
+    "standard-version": "^9.3.2",
+    "updates": "^13.0.4"
+  }
+}

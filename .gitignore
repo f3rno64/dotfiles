@@ -79,3 +79,4 @@ gnupg/*
 
 bin/*
 npmrc
+/node_modules
