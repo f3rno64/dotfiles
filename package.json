@@ -30,6 +30,8 @@
     "mpd"
   ],
   "scripts": {
+    "setup": "bash -c scripts/install.sh",
+    "postinstall": "yarn setup",
     "readme": "rm README.md && node scripts/gen_readme.js",
     "release": "npm run update-version && git push origin master --follow-tags && npm publish --access=public",
     "update-deps": "./node_modules/.bin/updates -u -g -c",
