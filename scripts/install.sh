@@ -5,7 +5,7 @@ git submodule update
 
 if [[ -d "$HOME/.nvm" ]]; then
   nvm use
-  yarn
+  npm i
 fi
 
 pip install --user dotfiles

@@ -31,15 +31,14 @@
   ],
   "scripts": {
     "setup": "bash -c scripts/install.sh",
-    "postinstall": "yarn setup",
     "readme": "rm README.md && node scripts/gen_readme.js",
     "release": "npm run update-version && git push origin master --follow-tags && npm publish --access=public",
-    "update-deps": "./node_modules/.bin/updates -u -g -c",
-    "update-version": "./node_modules/.bin/standard-version"
+    "update-deps": "npm run run updates -u -g -c",
+    "update-version": "npm run run standard-version"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn readme && git add README.md DOCUMENTATION.md"
+      "pre-commit": "npm run readme && git add README.md DOCUMENTATION.md"
     }
   },
   "devDependencies": {
@@ -47,6 +46,5 @@
     "serve-markdown-it-lib": "^1.0.5",
     "standard-version": "^9.3.2",
     "updates": "^13.0.4"
-  },
-  "packageManager": "yarn@3.2.0"
+  }
 }
