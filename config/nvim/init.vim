@@ -1,11 +1,14 @@
-" f3rno's vim/neovim config.
-" Put together with love over time.
-" Eventually it will be split up harmoniously
-" If anything, I found enough solid color schemes to last decades.
+" f3rno64's neovim config
+" Put together with love.
 "
 " https://github.com/f3rno64/dotfiles/config/nvim/init.vim
 
-" {{{ 1. terminal setup
+" {{{ 1. globals
+
+let s:xf_plugin_path = $HOME . '/.nvim-plugins'
+
+" }}}
+" {{{ 2. terminal setup
 
 " {{{ reference
 
@@ -22,7 +25,6 @@
 
 " }}}
 
-" TODO: Break out strings as constants
 if !has('gui_running')
   let &t_SI = "\<Esc>[3 q"
   let &t_SR = "\<Esc>[5 q"
@@ -30,21 +32,13 @@ if !has('gui_running')
 endif
 
 " }}}
-" {{{ 2. plugins
+" {{{ 3. plugins
 
 " {{{ loading
 
 " {{{
 
-if has('nvim')
-  let g:xf_plugin_root = '/.nvim-plugins'
-else
-  let g:xf_plugin_root = '/.vim-plugins'
-end
-
-let g:xf_plugin_path = $HOME . g:xf_plugin_root
-
-call plug#begin(g:xf_plugin_path)
+call plug#begin(s:xf_plugin_path)
 
 " }}}
 " {{{ script libraries
@@ -55,43 +49,20 @@ Plug 'godlygeek/tabular'
 Plug 'nvim-lua/plenary.nvim'
 
 " }}}
-" {{{ treesitter
-
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-" }}}
-" {{{ telescope
-
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-
-" }}}
-" {{{ fzf
-
-Plug 'junegunn/fzf', { 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
-Plug 'zackhsi/fzf-tags'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-
-" }}}
-" {{{ search/result highlighting
-
-Plug 'easymotion/vim-easymotion'
-Plug 'haya14busa/incsearch.vim'
-Plug 'haya14busa/incsearch-fuzzy.vim'
-Plug 'haya14busa/incsearch-easymotion.vim'
-Plug 'timakro/vim-searchant'
-
-" }}}
-" {{{ snipppets
-
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
-" }}}
 " {{{ syntax/languages
 
-Plug 'kchmck/vim-coffee-script'
+" {{{ json/javascript/typescript
+
+Plug 'yuezk/vim-js'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'elzr/vim-json'
+
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'othree/es.next.syntax.vim'
+
+" }}}
+
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'digitaltoad/vim-pug'
 Plug 'a5ob7r/shellcheckrc.vim'
@@ -101,38 +72,62 @@ Plug 'moll/vim-node'
 Plug 'gisphm/vim-gitignore'
 Plug 'andyk/vim-liquid'
 Plug 'jparise/vim-graphql'
-Plug 'jez/vim-superman'
-
-" {{{ markdown
-
-Plug 'SidOfc/mkdx'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
-Plug 'ellisonleao/glow.nvim'
-Plug 'plasticboy/vim-markdown'
-Plug 'suan/vim-instant-markdown'
-" Plug 'mmai/vim-markdown-wiki'
-Plug 'rhysd/vim-gfm-syntax'
-Plug 'mzlogin/vim-markdown-toc'
-Plug 'dhruvasagar/vim-table-mode'
 
 " }}}
-" {{{ typescript
+" {{{ fzf
 
-" Plug 'leafgarland/typescript-vim'
-" Plug 'peitalin/vim-jsx-typescript'
-
-" }}}
-" {{{ javascript
-
-Plug 'yuezk/vim-js'
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'othree/es.next.syntax.vim'
-Plug 'isRuslan/vim-es6', { 'do': 'rm -rf ./snippets' }
-Plug 'elzr/vim-json'
-Plug 'kristijanhusak/vim-js-file-import', { 'do': 'npm install' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'zackhsi/fzf-tags'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " }}}
+" {{{ snipppets
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+" }}}
+" {{{ general
+
+Plug 'thaerkh/vim-workspace'
+Plug 'rhysd/clever-split.vim'
+Plug 'Shougo/neco-vim'
+Plug 'neoclide/coc-neco'
+Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'yarn set version 2.4.0 && yarn install --immutable'}
+Plug 'declancm/cinnamon.nvim' " smooth movements/scrolling
+Plug 'tpope/vim-repeat'
+Plug 'ggandor/leap.nvim'
+Plug 'dense-analysis/ale'
+Plug 'vim-scripts/ZoomWin'
+Plug 'markonm/traces.vim' " live search/sub preview
+Plug 'schickling/vim-bufonly'
+Plug 'tpope/vim-commentary' " fast commenting
+Plug 'Raimondi/delimitMate' " quote/etc autocomplete
+Plug 'wincent/terminus' " enhanced terminal integration
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+Plug 'michaeljsmith/vim-indent-object' " indent-level text object
+Plug 'machakann/vim-highlightedyank'
+Plug 'unblevable/quick-scope' " f jump highlights
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-eunuch' " shell command helpers
+Plug 'fcpg/vim-shore' " mv to 1st non-blank char w/ j/k
+Plug 'danro/rename.vim'
+Plug 'Lenovsky/nuake'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-endwise'
+Plug 'valloric/MatchTagAlways'
+Plug 'nvim-telescope/telescope.nvim'
+
+" }}}
+" {{{ visual
+
+Plug 'junegunn/goyo.vim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
+Plug 'jbgutierrez/vim-better-comments'
+Plug 'beauwilliams/focus.nvim'
 
 " }}}
 " {{{ git integration
@@ -141,76 +136,6 @@ Plug 'tanvirtin/vgit.nvim'
 Plug 'airblade/vim-gitgutter'
 Plug 'rhysd/committia.vim' " better git commit layout
 Plug 'int3/vim-extradite' " git log
-
-" }}}
-" {{{ visual
-
-Plug 'p00f/nvim-ts-rainbow'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'romgrk/barbar.nvim'
-Plug 'jbgutierrez/vim-better-comments'
-Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'majutsushi/tagbar'
-Plug 'beauwilliams/focus.nvim'
-Plug 'folke/zen-mode.nvim'
-Plug 'junegunn/goyo.vim'
-
-" }}}
-" {{{ misc/general
-
-Plug 'folke/which-key.nvim'
-Plug 'lewis6991/hover.nvim'
-Plug 'declancm/cinnamon.nvim'
-Plug 'rhysd/conflict-marker.vim'
-Plug 'edluffy/hologram.nvim'
-Plug 'github/copilot.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'ggandor/lightspeed.nvim'
-" Plug 'yamatsum/nvim-cursorline'
-" Plug 'kyazdani42/nvim-web-devicons' " for file icons
-" Plug 'kyazdani42/nvim-tree.lua'
-Plug 'Shougo/neco-vim'
-Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'yarn set version 2.4.0 && yarn install --immutable'}
-Plug 'dense-analysis/ale'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'vim-scripts/ZoomWin'
-Plug 'tpope/vim-unimpaired'
-Plug 'markonm/traces.vim' " live search/sub preview
-Plug 'schickling/vim-bufonly'
-Plug 'tpope/vim-commentary' " fast commenting
-Plug 'Raimondi/delimitMate' " quote/etc autocomplete
-" Plug 'AndrewRadev/dsf.vim' " delete surrounding function call
-" Plug 'Shougo/echodoc.vim'
-Plug 'wincent/terminus' " enhanced terminal integration
-Plug 'ternjs/tern_for_vim', { 'do': 'npm i' }
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
-Plug 'michaeljsmith/vim-indent-object' " indent-level text object
-Plug 'gcmt/wildfire.vim' " select text objects
-" Plug 'mtth/scratch.vim'
-Plug 'rhysd/clever-split.vim'
-Plug 'machakann/vim-highlightedyank'
-Plug 'yuttie/comfortable-motion.vim' " smooth scrolling
-Plug 'unblevable/quick-scope' " f jump highlights
-Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-eunuch' " shell command helpers
-Plug 'fcpg/vim-shore' " mv to 1st non-blank char w/ j/k
-Plug 'AndrewRadev/bufferize.vim'
-Plug 'danro/rename.vim'
-Plug 'vim-scripts/DrawIt'
-Plug 'thaerkh/vim-workspace'
-Plug 'Lenovsky/nuake'
-Plug 'tpope/vim-surround'
-Plug 'tyru/open-browser.vim'
-Plug 'tpope/vim-endwise'
-Plug 'wellle/visual-split.vim'
-Plug 'wellle/targets.vim'
-Plug 'valloric/MatchTagAlways'
-
-if has('gui_running') || exists('g:GtkGuiLoaded')
-  Plug 'drmikehenry/vim-fontsize'
-endif
 
 " }}}
 " {{{ colorschemes
@@ -223,7 +148,6 @@ Plug 'vim-scripts/summerfruit256.vim'
 Plug 'habamax/vim-colors-defminus'
 Plug 'notpratheek/vim-sol'
 Plug 'vim-scripts/mayansmoke'
-Plug 'yasukotelin/shirotelin'
 
 " }}}
 " {{{ dark
@@ -274,13 +198,12 @@ Plug 'vim-scripts/vibrantink'
 " }}}
 " {{{ dual/multiple
 
+Plug 'ellisonleao/gruvbox.nvim'
 Plug 'rose-pine/neovim'
 Plug 'EdenEast/nightfox.nvim'
 Plug 'rakr/vim-two-firewatch'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'chriskempson/base16-vim'
-Plug 'sainnhe/gruvbox-material'
-Plug 'gruvbox-community/gruvbox'
 Plug 'sonph/onehalf', { 'rtp': 'vim/' }
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'rakr/vim-one'
@@ -347,7 +270,7 @@ let g:ale_virtualtext_cursor = 1
 let g:ale_open_list = 0
 
 " }}}
-" {{{ coc/ultisnips integration (coc as the driver, ultisnips for expansion)
+" {{{ coc
 
 let g:coc#snippet#next = '<c-j>'
 let g:coc#snippet#prev = '<c-k>'
@@ -355,77 +278,24 @@ let g:coc#snippet#prev = '<c-k>'
 let g:coc#node#path = $HOME . '.nvm/versions/node/v17.8.0/bin/node'
 let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
 
-" Helper to handle complex tab behavior, allowing for elegant snippet expansion
-func! s:xf_coc_tab_handler() abort
-  if pumvisible()
-    call coc#_select_confirm()
-  elseif coc#expandableOrJumpable()
-    call coc#rpc#request('doKeymap', ['snippets-expand-jump',''])
-  elseif <SID>xf_util_used_backspace()
-    return "\<TAB>"
-  endif
+" }}}
+" {{{ cinnamon.nvim
 
-  " call coc#refresh()
+lua << EOF
 
-  return ''
-endfunc
+require('cinnamon').setup {
+  extra_keymaps = true,
+  override_keymaps = true,
+  max_length = 500,
+  scroll_limit = 80,
+}
 
-func! s:xf_util_used_backspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunc
-
-inoremap <silent><expr> <tab> <SID>xf_coc_tab_handler()
-
-" {{{   - s:xf_ultisnips_log
-
-let g:xf#ulitisnips#log = maktaba#log#Logger('ultisnips')
-
-" {{{     - s:xf_ultisnips_log_debug(...)
-
-func! s:xf_ultisnips_log_debug(...) abort
-  call g:xf#ultisnips#log.LogDebug(a:000)
-endfunc
+EOF
 
 " }}}
-" {{{     - s:xf_ultisnips_log_info(...)
+" {{{ focus
 
-func! s:xf_ultisnips_log_info(...) abort
-  call g:xf#ultisnips#log.LogInfo(a:000)
-endfunc
-
-" }}}
-" {{{     - s:xf_ultisnips_log_warn(...)
-
-func! s:xf_ultisnips_log_warn(...) abort
-  call g:xf#ultisnips#log.LogWarn(a:000)
-endfunc
-
-" }}}
-" {{{     - s:xf_ultisnips_log_error(...)
-
-func! s:xf_ultisnips_log_error(message, ...) abort
-  call g:xf#ultisnips#log.LogError(a:000)
-endfunc
-
-" }}}
-" {{{     - s:xf_ultisnips_log_severe(...)
-
-func! s:xf_ultisnips_log_severe(...) abort
-  call g:xf#ultisnips#log.LogSevere(a:000)
-endfunc
-
-" }}}
-
-" }}}
-
-autocmd BufNewFile .gitignore CocCommand template.templateTop
-
-" }}}
-" {{{ echodoc
-
-let g:echodoc#enable#at#startup = 1
-let g:echodoc#type = 'virtual'
+lua require('focus').setup()
 
 " }}}
 " {{{ fzf
@@ -496,25 +366,14 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " }}}
-" {{{ incsearch
+" {{{ javascript-libraries-syntax.vim
 
-let g:incsearch#auto#nohlsearch = 1 " disable hlsearch on cursor move
-
-" query completion w/ buffer text
-func! s:incsearch_keymap()
-  IncSearchNoreMap <Tab> <Over>(buffer-complete)
-  IncSearchNoreMap <S-Tab> <Over>(buffer-complete-prev)
-endfunc
-
-augroup incsearch-keymap
-  autocmd!
-  autocmd VimEnter * call <SID>incsearch_keymap()
-augroup END
+let g:used_javascript_libs = 'underscore,react,chai,handlebars'
 
 " }}}
-" {{{ javascript-libraries-syntax
+" {{{ leap
 
-let g:used#javascript#libs = 'underscore,react,chai'
+lua require('leap').set_default_keymaps()
 
 " }}}
 " {{{ MatchTagAlways
@@ -526,33 +385,11 @@ let g:mta_filetypes = {
 \}
 
 " }}}
-" {{{ markdown-preview
-
-let g:mkdp_auto_start = 0
-let g:mkdp_auto_close = 1
-let g:mkdp_highlight_css = $HOME . '/.src/github/highlightjs/highlight.js/src/styles/github-dark.css'
-
-" }}}
-" {{{ mkdx
-
-let g:mkdx#settings = { 'highlight': { 'enable': 1 },
-                        \ 'enter': { 'shift': 1 },
-                        \ 'links': { 'external': { 'enable': 1 } },
-                        \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
-                        \ 'fold': { 'enable': 1 } }
-let g:polyglot_disabled = ['markdown']
-
-" }}}
 " {{{ nuake
 
 let g:nuake_start_insert = 0
 let g:nuake_position = 'bottom'
 let g:nuake_size = 0.4
-
-" }}}
-" {{{ python-syntax
-
-let g:python_highlight_all = 1
 
 " }}}
 " {{{ ultisnips
@@ -569,9 +406,11 @@ let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 "       \ ]
 
 " }}}
-" {{{ vim-better-whitespace
+" {{{ vgit
 
-let g:better_whitespace_enabled = 1
+lua << EOF
+require('vgit').setup()
+EOF
 
 " }}}
 " {{{ vim-better-comments
@@ -579,10 +418,14 @@ let g:better_whitespace_enabled = 1
 let g:bettercomments_included = ['javascript', 'js', 'go', 'ruby', 'python']
 
 " }}}
-" {{{ vim-floaterm
+" {{{ vim-better-whitespace
 
-hi Floaterm guibg=black
-hi FloatermBorder guibg=green guifg=black
+let g:better_whitespace_enabled = 1
+
+" }}}
+" {{{ vim-jsx-pretty
+
+let g:vim_jsx_pretty_colorful_config = 1
 
 " }}}
 " {{{ vim-grepper
@@ -599,243 +442,81 @@ let g:grepper.ag = {
 \ }
 
 " }}}
-" {{{ vim-gutentags
-
-let g:gutentags_ctags_exclude = ['coverage/*', 'node_modules/*', '*%*', 'docs/*']
-let g:gutentags_enabled = 1
-
-" }}}
-" {{{ vim-highlightedyank
-
-let g:highlightedyank_highlight_duration = 300
-
-" }}}
-" {{{ vim-instant-markdown
-
-let g:instant_markdown_autostart = 0
-
-" }}}
-" {{{ vim-js-file-import
-
-let g:js_file_import_sort_after_insert = 1
-let g:js_file_import_prompt_if_no_tag = 0
-let g:js_file_import_omit_semicolon = 1
-let g:js_file_import_use_fzf = 1
-let g:js_file_import_no_mappings = 1
-
-" }}}
-" {{{ vim-jsx-pretty
-
-let g:vim_jsx_pretty_colorful_config = 1
-
-" }}}
-" {{{ vim-markdown
-
-let g:vim_markdown_folding_disabled = 0
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_folding_level = 2
-let g:vim_markdown_toc_autofit = 1
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
-let g:vim_markdown_strikethrough = 1
-let g:vim_markdown_new_list_item_indent = 2
-let g:vim_markdown_no_extensions_in_markdown = 1
-let g:vim_markdown_edit_url_in = 'current' " 'vsplit'
-let g:vim_markdown_autowrite = 1
-let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'c=c', 'python=python', 'coffeescript=coffeescript']
-
-" }}}
-" {{{ vim-markdown-toc
-
-let g:vmt_auto_update_on_save = 1
-let g:vmt_dont_insert_fence = 0
-let g:vmt_fence_hidden_markdown_style = 'GFM'
-let g:vmt_cycle_list_item_markers = 0
-let g:vmt_list_item_char = '-'
-let g:vmt_include_headings_before = 1
-
-" }}}
-" {{{ vim-move
-
-let g:move_key_modifier = 'C'
-
-" }}}
-" {{{ vim-perpetuloc
-
-nnoremap <leader>[ :Lnext<cr>
-nnoremap <leader>] :Lprevious<cr>
-
-" }}}
-" {{{ vim-ripgrep
-
-let g:vim_search_pulse_mode = 'cursor_line'
-
-" }}}
-" {{{ vim-searchant
-
-let g:searchant_all = 0 " only toggle current result highlight
-
-" Disable Searchant highlight when incsearch.vim highlights also disable
-autocmd CursorMoved * call SearchantStop()
-
-func! SearchantStop() abort
-  exec "normal \<Plug>SearchantStop"
-endfunc
-
-" }}}
-" {{{ vim-test
-" TODO: Refactor this; fugly handling of state (killing kitty)
-
-" {{{ functions
-
-" {{{ s:xf_test_mocha_transform()
-
-func! s:xf_test_mocha_transform(cmd) abort
-  if g:test#strategy == 'kitty'
-    call <SID>xf_test_kitty_set_env_vars()
-  endif
-
-  return 'NODE_PATH=lib NODE_ENV=test MOCHA=1 ' . a:cmd
-endfunc
-
-" }}}
-" {{{ s:xf_test_kitty_set_env_vars()
-
-func! s:xf_test_kitty_set_env_vars() abort
-  let s:kitty_socket = 'unix:'
-  let s:kitty_socket .= expand('/tmp/kitty_socket*')
-
-  call setenv('KITTY_LISTEN_ON', s:kitty_socket)
-endfunc
-
-" }}}
-" {{{ s:xf_test_init_strategy()
-
-func! s:xf_test_init_strategy() abort
-  call <SID>xf_test_kitty_set_env_vars()
-
-  if strlen($KITTY_LISTEN_ON) > 0
-    let g:test#strategy = 'kitty'
-
-    echo 'test strategy set to "kitty"'
-  else
-    let g:test#vim#term#position = "belowright"
-    let g:test#strategy = 'neovim'
-
-    echo 'test strategy set to "neovim"'
-  endif
-endfunc
-
-" }}}
-" {{{ s:xf_test_run(cmd)
-" https://github.com/janko/vim-test/issues/272_issuecomment-515749091
-
-func! s:xf_test_run(cmd) abort
-  for marker in g:root#markers
-    let marker_file = findfile(marker, expand('%:p:h') . ';')
-    echomsg marker_file
-    if strlen(marker_file) > 0
-      let g:test#project#root = fnamemodify(marker_file, ":p:h")
-      break
-    endif
-
-    let marker_dir = finddir(marker, expand('%:p:h') . ';')
-    echomsg marker_dir
-
-    if strlen(marker_dir) > 0
-      let g:test#project#root = fnamemodify(marker_dir, ":p:h")
-      break
-    endif
-  endfor
-
-  execute a:cmd
-endfunc
-
-" }}}
-
-" }}}
-" {{{ variables
-
-let g:root#markers = ['.git', 'README.md', 'LICENSE.md']
-let test#strategy = 'neovim'
-let g:test#preserve_screen = 1
-let g:test#javascript#mocha#options = '--verbose'
-let g:test#transformation = 'mocha'
-let g:test#custom#transformations = {
-  \   'javascript': function('<SID>xf_test_mocha_transform'),
-  \   'mocha': function('<SID>xf_test_mocha_transform'),
-  \ }
-
-" }}}
-
-" call <SID>xf_test_init_strategy()
-
-" }}}
 " {{{ vim-workspace
 
+let g:workspace_autocreate = 1
 let g:workspace_create_new_tabs = 0
-let g:workspace_autosave_untrailspaces = 0
+let g:workspace_session_disable_on_args = 1
+let g:workspace_session_directory = $HOME . '/.config/nvim/sessions/'
+let g:workspace_undodir = $HOME . '/.config/nvim/undodir'
+let g:workspace_persist_undo_history = 1
+let g_workspace_autosave_untrailspaces = 0
+let g_workspace_autosave_untrailtabs = 0
 let g:workspace_autosave = 0
 
-if has('nvim')
-  let g:workspace_session_directory = $HOME . '/.config/nvim/sessions/'
-else
-  let g:workspace_session_directory = $HOME . '/.vim/sessions/'
-endif
-
-" }}}
-" {{{ zenmode
-
-lua << EOF
-  require("zen-mode").setup {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  }
-EOF
-
 " }}}
 
 " }}}
 
 " }}}
-" {{{ 3. configuration
+" {{{ 4. configuration
 
-" {{{ 3.b f3rno function library
+" {{{ statusline
 
-" {{{ - functions
+func! StatuslineALE() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
 
-" {{{   - s:xf_folds_toggle()
-
-func! s:xf_folds_toggle() abort
-  if &foldlevel > 0
-    call <SID>xf_folds_collapse()
-  else
-    call <SID>xf_folds_expand()
+  if l:counts.total == 0
+    return 'OK'
   endif
+
+  return printf('%dW %dE', all_non_errors, all_errors)
 endfunc
 
+set laststatus=2
+
+" left
+set statusline=
+set statusline+=%#PmenuSel#
+set statusline+=\ " padding
+" set statusline+=%{FugitiveHead()}
+" set statusline+=\ " padding
+set statusline+=%#CursorColumn#
+set statusline+=\ " padding
+set statusline+=%{StatuslineALE()}
+set statusline+=\ " padding
+set statusline+=%{coc#status()}
+set statusline+=\ " padding
+set statusline+=%#LineNr#
+set statusline+=\ " padding
+set statusline+=%f
+
+" right
+set statusline+=%=
+set statusline+=%#CursorColumn#
+set statusline+=\ " padding
+set statusline+=%y
+set statusline+=\ " padding
+set statusline+=%#PmenuSel#
+set statusline+=\ L%l\ %p%%
+set statusline+=\ " padding
+
 " }}}
-" {{{   - s:xf_folds_collapse()
+" {{{ netrw
 
-func! s:xf_folds_collapse() abort
-  let &foldlevel = 0
-endfunc
-
-" }}}
-" {{{   - s:xf_folds_expand()
-
-func! s:xf_folds_expand() abort
-  let &foldlevel = 99
-endfunc
-
-" }}}
+let g:netrw_banner = 0
+let g:netrw_altv = 1 " split to right
+" let g:netrw_browse_split = 2 " open file in right split
+let g:netrw_sizestyle = "H" " human readable base 1024
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 20
+let g:netrw_nogx = 1
+let g:netrw_browsex_viewer = 'xdg-open'
+let g:netrw_list_hide = netrw_gitignore#Hide()
 
 " }}}
-
-" }}}
-" {{{ 3.a general configuration
-
 " {{{ general
 
 " Disable background erase for kitty
@@ -890,76 +571,15 @@ set conceallevel=3
 " Disable python2 check
 let g:loaded_python_provider=0
 
+" Enabled embedded lua highlighting
+let g:vimsyn_embed = 'l'
+
 " }}}
 " {{{ folding
 
 set foldmethod=marker
 set foldcolumn=1
 set foldlevel=1
-
-" }}}
-" {{{ statusline
-
-" {{{ functions
-
-func! StatuslineALE() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-
-  if l:counts.total == 0
-    return 'OK'
-  endif
-
-  return printf('%dW %dE', all_non_errors, all_errors)
-endfunc
-
-" }}}
-
-set laststatus=2
-
-" left
-set statusline=
-set statusline+=%#PmenuSel#
-set statusline+=\ " padding
-" set statusline+=%{FugitiveHead()}
-" set statusline+=\ " padding
-set statusline+=%#CursorColumn#
-set statusline+=\ " padding
-set statusline+=%{StatuslineALE()}
-set statusline+=\ " padding
-set statusline+=%{coc#status()}
-set statusline+=\ " padding
-set statusline+=%#LineNr#
-set statusline+=\ " padding
-set statusline+=%f
-
-" right
-set statusline+=%=
-set statusline+=%#CursorColumn#
-set statusline+=\ " padding
-set statusline+=%y
-set statusline+=\ " padding
-set statusline+=%#PmenuSel#
-set statusline+=\ L%l\ %p%%
-set statusline+=\ " padding
-
-" }}}
-" {{{ undo history
-
-if has('persistent_undo')
-  set undofile
-
-  if has('nvim')
-    let myUndoDir=$HOME . '/.config/nvim/undodir'
-    let &undodir=myUndoDir
-    execute 'silent !mkdir ' . myUndoDir . ' > /dev/null 2>&1'
-  else
-    let myUndoDir=$HOME . '/.vim/undodir'
-    let &undodir=myUndoDir
-    execute 'silent !mkdir ' . myUndoDir . ' > /dev/null 2>&1'
-  endif
-endif
 
 " }}}
 " {{{ autocommands
@@ -979,44 +599,13 @@ autocmd WinEnter,Filetype * syntax sync fromstart
 au BufNewFile,BufRead *.nvim setf vim
 au BufNewFile,BufRead */i3/config setf i3config
 
-" disable cursorline in insert mode
-" autocmd InsertLeave,WinEnter * set cursorline
-" autocmd InsertEnter,WinLeave * set nocursorline
-
 " autosave
 autocmd InsertLeave,TextChanged * update
 
 " }}}
-" {{{ JS block comment indent fix
-
-func! s:CustomJSIndentExpr()
-  if getline(v:lnum) !~ '^\s*\*'
-    return GetJsxIndent() " Do normal indent
-  else
-    return -1 " Don't indent comments
-  endif
-endfunc
-
-autocmd FileType javascript setlocal indentkeys+==* indentexpr=s:CustomJSIndentExpr()
 
 " }}}
-" {{{ statusline fix
-
-" Fix for https://github.com/itchyny/lightline.vim/issues/448
-" (affects builtin statusline as well)
-func! FixLightlineStartupRender(timer)
-  execute('resize -1')
-  execute('resize +1')
-endfunc
-
-autocmd VimEnter * call timer_start(600, 'FixLightlineStartupRender')
-
-" }}}
-
-" }}}
-
-" }}}
-" {{{ 4. colorscheme
+" {{{ 5. colorscheme
 
 " {{{ reference
 
@@ -1270,10 +859,10 @@ set background=dark
 " PaperColor
 " falcon
 " colorscheme rose-pine
-colorscheme falcon
+colorscheme gruvbox
 
 " }}}
-" {{{ 5. gui
+" {{{ 6. gui
 
 if has('gui_running') || exists('g:GtkGuiLoaded')
 
@@ -1319,8 +908,6 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 
 " }}}
 
-" let g:font_name = 'BlexMono Nerd Font'
-" let g:font_features = 'liga, zero, frac'
 let g:font_name = 'Jet Brains Mono Nerd Font'
 let g:font_features = ''
 let g:font_size = 10
@@ -1348,21 +935,6 @@ if has('nvim') && ! has('gui_vimr')
 endif
 
 " }}}
-" {{{ GVim
-
-if !has('nvim')
-  set guioptions-=T " remove toolbar
-  set guioptions-=m " remove menu bar
-  set guioptions-=e " use terminal tabline
-  set guioptions-=r " remove right scrollbar
-  set guioptions-=L " remove left scrollbar
-
-  " Paste via shift + insert
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
-endif
-
-" }}}
 " {{{ cursor init
 
 if has('nvim') && has('gui_running')
@@ -1377,53 +949,7 @@ endif
 endif
 
 " }}}
-" {{{ 6. netrw
-
-let g:netrw_banner = 0
-let g:netrw_altv = 1 " split to right
-" let g:netrw_browse_split = 2 " open file in right split
-let g:netrw_sizestyle = "H" " human readable base 1024
-let g:netrw_liststyle = 3
-let g:netrw_winsize = 20
-let g:netrw_nogx = 1
-let g:netrw_browsex_viewer = 'xdg-open'
-let g:netrw_list_hide = netrw_gitignore#Hide()
-
-" }}}
-" {{{ 7. search highlight toggle TODO
-
-" TODO: Extract this as own plugin..
-
-" {{{ 7.a functions
-
-" {{{ - s:xf_hlsearch_enable()
-
-func! s:xf_hlsearch_enable()
-  setlocal hlsearch
-endfunc
-
-" }}}
-" {{{ - s:xf_hlsearch_disable()
-
-func! s:xf_hlsearch_disable()
-  setlocal nohlsearch
-endfunc
-
-" }}}
-
-" }}}
-" {{{ 7.b autocommands
-
-augroup f3rno_dynamic_search_hl
-  autocmd!
-  autocmd InsertEnter * call <SID>xf_hlsearch_disable()
-  autocmd InsertLeave * call <SID>xf_hlsearch_enable()
-augroup END
-
-" }}}
-
-" }}}
-" {{{ 8. keybindings
+" {{{ 7. keybindings
 
 let mapleader = ','
 
@@ -1433,63 +959,6 @@ nnoremap J 2j
 nnoremap K 2k
 
 " }}}
-" {{{ ale
-
-nmap <silent> <leader>aj :ALENext<cr>
-nmap <silent> <leader>ak :ALEPrevious<cr>
-
-" }}}
-" {{{ buffer control
-
-nnoremap <leader>n :bnext<cr>
-nnoremap <leader>p :bprev<cr>
-nnoremap <silent> <leader>bo :BufOnly<cr>
-
-" }}}
-" {{{ cinnamon
-
-lua << EOF
-local opts = { noremap = true, silent = true }
-local keymap = vim.api.nvim_set_keymap
-
--- Half-window movements:
-keymap('', '<C-u>', "<Cmd>lua Cinnamon.Scroll('<C-u>')<CR>", opts)
-keymap('i', '<C-u>', "<Cmd>lua Cinnamon.Scroll('<C-u>')<CR>", opts)
-keymap('', '<C-d>', "<Cmd>lua Cinnamon.Scroll('<C-d>')<CR>", opts)
-keymap('i', '<C-d>', "<Cmd>lua Cinnamon.Scroll('<C-d>')<CR>", opts)
-
--- Page movements:
-keymap('n', '<C-b>', "<Cmd>lua Cinnamon.Scroll('<C-b>', 1, 1)<CR>", opts)
-keymap('n', '<C-f>', "<Cmd>lua Cinnamon.Scroll('<C-f>', 1, 1)<CR>", opts)
-keymap('n', '<PageUp>', "<Cmd>lua Cinnamon.Scroll('<C-b>', 1, 1)<CR>", opts)
-keymap('n', '<PageDown>', "<Cmd>lua Cinnamon.Scroll('<C-f>', 1, 1)<CR>", opts)
-
--- Start/end of file and line number movements:
-keymap('n', 'gg', "<Cmd>lua Cinnamon.Scroll('gg', 0, 0, 3)<CR>", opts)
-keymap('x', 'gg', "<Cmd>lua Cinnamon.Scroll('gg', 0, 0, 3)<CR>", opts)
-keymap('n', 'G', "<Cmd>lua Cinnamon.Scroll('G', 0, 1, 3)<CR>", opts)
-keymap('x', 'G', "<Cmd>lua Cinnamon.Scroll('G', 0, 1, 3)<CR>", opts)
-
--- Paragraph movements:
-keymap('n', '{', "<Cmd>lua Cinnamon.Scroll('{', 0)<dCR>", opts)
-keymap('x', '{', "<Cmd>lua Cinnamon.Scroll('{', 0)<CR>", opts)
-keymap('n', '}', "<Cmd>lua Cinnamon.Scroll('}', 0)<CR>", opts)
-keymap('x', '}', "<Cmd>lua Cinnamon.Scroll('}', 0)<CR>", opts)
-
--- Previous/next search result:
-keymap('n', 'n', "<Cmd>lua Cinnamon.Scroll('n')<CR>", opts)
-keymap('n', 'N', "<Cmd>lua Cinnamon.Scroll('N')<CR>", opts)
-keymap('n', '*', "<Cmd>lua Cinnamon.Scroll('*')<CR>", opts)
-keymap('n', '#', "<Cmd>lua Cinnamon.Scroll('#')<CR>", opts)
-keymap('n', 'g*', "<Cmd>lua Cinnamon.Scroll('g*')<CR>", opts)
-keymap('n', 'g#', "<Cmd>lua Cinnamon.Scroll('g#')<CR>", opts)
-
--- Previous/next cursor location:
-keymap('n', '<C-o>', "<Cmd>lua Cinnamon.Scroll('<C-o>')<CR>", opts)
-keymap('n', '<C-i>', "<Cmd>lua Cinnamon.Scroll('1<C-i>')<CR>", opts)
-EOF
-
-" }}}
 " {{{ ctrl+backspace delete word
 
 imap <C-BS> <C-W>
@@ -1497,58 +966,9 @@ noremap! <C-BS> <C-w>
 noremap! <C-h> <C-w>
 
 " }}}
-" {{{ coc
-
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> <leader>rn <Plug>(coc-rename)
-nmap <silent> <leader>rf <Plug>(coc-refactor)
-xmap <silent> if <Plug>(coc-funcobj-i)
-omap <silent> if <Plug>(coc-funcobj-i)
-xmap <silent> af <Plug>(coc-funcobj-a)
-omap <silent> af <Plug>(coc-funcobj-a)
-xmap <silent> ic <Plug>(coc-classobj-i)
-omap <silent> ic <Plug>(coc-classobj-i)
-xmap <silent> ac <Plug>(coc-classobj-a)
-omap <silent> ac <Plug>(coc-classobj-a)
-
-nnoremap <silent> <leader>k :call CocAction('doHover')<cr>
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" }}}
-" {{{ easymotion
-
-map in <Plug>(easymotion-next)
-map iN <Plug>(easymotion-prev)
-
-" }}}
 " {{{ help
 
-nnoremap <leader><s-h> :execute 'vert help ' . expand('<cword>')<cr>
-
-" }}}
-" {{{ hover
-
-lua << EOF
-
-require('hover').setup{
-  init = function()
-    -- Require providers
-    require('hover.providers.lsp')
-    -- require('hover.providers.gh')
-    -- require('hover.providers.man')
-    -- require('hover.providers.dictionary')
-  end,
-  preview_opts = {
-    border = nil
-  },
-  title = true
-}
-
--- Setup keymaps
-vim.keymap.set('n',  'K', require('hover').hover       , { desc='hover.nvim'         })
-vim.keymap.set('n', 'gK', require('hover').hover_select, { desc='hover.nvim (select)' })
-
-EOF
+nnoremap <leader><S-h> :execute 'vert help ' . expand('<cword>')<cr>
 
 " }}}
 " {{{ fast quit
@@ -1559,159 +979,44 @@ nnoremap <silent> <leader>Q :q!<cr>
 " }}}
 " {{{ folds
 
-" {{{ FoldBlockByIndent()
-
-func! s:FoldBlockByIndent() abort
-  let s:orig_loc = getcurpos()
-  let s:buf_num = s:orig_loc[0]
-  let s:buf_info= getbufinfo(bufname())
-
-  if len(s:buf_info) == 0
-    throw 'no buffers open'
+func! s:xf_folds_toggle() abort
+  if &foldlevel > 0
+    call <SID>xf_folds_collapse()
+  else
+    call <SID>xf_folds_expand()
   endif
-
-  let s:buf_len = s:buf_info[0]['linecount']
-
-  let s:col = s:orig_loc[2]
-  let s:indent_step = len(indent('.')) / &tabstop
-  let s:indent_str = ''
-
-  let s:block_start = 0
-  let s:block_end = 0
-
-  while s:block_start == 0 || s:block_end == 0
-    if len(s:indent_str) >= len(getline('.'))
-      throw 'found no block boundary below the cursor column (' . s:col . ')'
-    endif
-
-    let s:search_str = '^' . s:indent_str . '\S'
-    let s:indent_str .= s:indent_step
-
-    let s:block_start = search(s:search_str, 'bnw')
-    let s:block_end = search(s:search_str, 'nw')
-  endwhile
-
-  call append(s:block_start - 1, ['', ''])
-  call append(s:block_end + 2, ['', ''])
-
-  let s:block_start += 2
-  let s:block_end += 2
-
-  call cursor([max([1, s:block_start - 2]), 1])
-  exec 'normal! v' . min([s:buf_len, s:block_end + 2]) . 'G$zf'
-  call cursor([s:orig_loc[1], s:orig_loc[2]])
 endfunc
 
-" }}}
+func! s:xf_folds_collapse() abort
+  let &foldlevel = 0
+endfunc
 
-" Surround visual block in a new fold
-nnoremap <silent><expr> <leader>wf <SID>FoldBlockByIndent()
+func! s:xf_folds_expand() abort
+  let &foldlevel = 99
+endfunc
 
 " Toggle fold
-nnoremap <silent> <leader><Space> @=(foldlevel('.')?'za':"\<Space>")<cr>
+nnoremap <silent> <leader><space> @=(foldlevel('.')?'za':"\<space>")<CR>
 
 " Toggle all folds
-nnoremap <silent> fff :call <SID>xf_folds_toggle()<cr>
+nnoremap <silent> fff :call <SID>xf_folds_toggle()<CR>
 
 " }}}
-" " {{{ fzf
+" {{{ search highlights
 
-" nnoremap <silent> <c-p> :FZFShowFileExplorer<cr>
-" nnoremap <silent> <leader>ZC :FZFCommands<cr>
-" nnoremap <silent> <leader>ZB :FZFBTags<cr>
-
-" " {{{ search open buffers
-" func! s:xf_buff_list() abort
-"   let l:str = ''
-
-"   redir => l:str
-"   silent l:str
-"   redir END
-
-"   return split(l:str, '\n')
-" endfunc
-
-" func! s:xf_buff_open_by_index(i) abort
-"   let l:i = marktab#ensure#IsNumber(a:i)
-"   let l:id = matchstr(l:i, '^[ 0-9]*')
-
-"   exec 'buffer ' . trim(l:id)
-" endfunc
-
-" func! s:xf_fzf_open_buff_list() abort
-"   exec fzf#run({
-"     \   'source':  reverse(<SID>xf_buff_list()),
-"     \   'sink':    function(<SID>xf_buff_open_by_index),
-"     \   'down':    len(<SID>xf_buff_list()) + 2,
-"     \   'options': '+m'
-"     \ })
-" endfunc
-
-" nnoremap <silent> <Leader><Enter> <SID>xf_fzf_open_buff_list()
-
-" " }}}
-" " {{{ search tags
-
-" func! s:tags_sink(line)
-"   let parts = split(a:line, '\t\zs')
-"   let excmd = matchstr(parts[2:], '^.*\ze;"\t')
-
-"   execute 'silent e' parts[1][:-2]
-
-"   let [magic, &magic] = [&magic, 0]
-
-"   execute excmd
-
-"   let &magic = magic
-" endfunc
-
-" func! s:tags()
-"   call fzf#run({
-"   'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
-"              '| grep -v -a ^!',
-"   'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
-"   'down':    '40%',
-"   'sink':    function('s:tags_sink')})
-" endfunc
-
-" command! Tags call <SID>tags()
-
-" " }}}
-
-" " }}}
-" {{{ goyo
-
-nnoremap <silent> <leader>g :Goyo<cr>
+nnoremap <leader>hl :nohl<CR>
 
 " }}}
-" {{{ grepper
+" {{{ splits
 
-nnoremap <silent> <leader>G :Grepper<cr>
-nnoremap <silent> <leader>W :Grepper-cword<cr>
+nnoremap <up> :resize -1<CR>
+nnoremap <down> :resize +1<CR>
+nnoremap <left> :vert resize +1<CR>
+nnoremap <right> :vert resize -1<CR>
 
-" }}}
-" {{{ incsearch
-
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-map i/ <Plug>(incsearch-easymotion-/)
-map i? <Plug>(incsearch-easymotion-?)
-map ig/ <Plug>(incsearch-easymotion-stay)
-map z/ <Plug>(incsearch-fuzzy-/)
-map z? <Plug>(incsearch-fuzzy-?)
-map zg/ <Plug>(incsearch-fuzzy-stay)
-
-" }}}
-" {{{ js eslint (disabled)
-
-" func! s:xf_eslint_init() abort
-"   setlocal makeprg=npm\ run\ lint\ --\ --quiet\ --no-color\ -f\ unix
-"   nnoremap <buffer><silent> <leader>lf :make --fix <cr>:cwindow<cr>:redraw!<cr>
-"   nnoremap <buffer><silent> <leader>l :make <cr>:cwindow<cr>:redraw!<cr>
-" endfunc
-
-" autocmd FileType javascript s:xf_eslint_init()
+nnoremap <leader>ss :CleverSplit<CR>
+nnoremap <leader>sh :CleverHSplit<CR>
+nnoremap <leader>sv :CleverVSplit<CR>
 
 " }}}
 " {{{ netrw
@@ -1719,35 +1024,9 @@ map zg/ <Plug>(incsearch-fuzzy-stay)
 nnoremap <leader>e :Lexplore<cr>
 
 " }}}
-" {{{ nuake
+" {{{ buffers
 
-nnoremap <leader>T :Nuake<cr>
-inoremap <leader>T <C-\><C-n>:Nuake<cr>
-tnoremap <leader>T <C-\><C-n>:Nuake<cr>
-
-" }}}
-" {{{ open-browser.vim
-
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
-
-" }}}
-" {{{ splits
-
-nnoremap <up> :resize -1<cr>
-nnoremap <down> :resize +1<cr>
-nnoremap <left> :vert resize +1<cr>
-nnoremap <right> :vert resize -1<cr>
-
-nnoremap <leader>s :CleverSplit<cr>
-
-" }}}
-" {{{ tab zoom+nav
-
-nnoremap <silent> <leader>zi :tab split<cr>
-nnoremap <silent> <leader>zo :tab close<cr>
-nnoremap <silent> <leader>N :tabnext<cr>
-nnoremap <silent> <leader>P :tabprev<cr>
+nnoremap <leader>bo :BufOnly<CR>
 
 " }}}
 " {{{ terminal splits
@@ -1761,6 +1040,109 @@ command! -nargs=* VT vsplit | terminal <args>
 tnoremap <Esc> <C-\><C-n>
 
 " }}}
+" {{{ trim trailing spaces
+
+nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
+
+" }}}
+
+" {{{ ale
+
+nmap <silent> <leader>aj :ALENext<cr>
+nmap <silent> <leader>ak :ALEPrevious<cr>
+
+" }}}
+" {{{ coc
+
+" Helper to handle complex tab behavior, allowing for elegant snippet expansion
+
+func! s:xf_coc_tab_handler() abort
+  if pumvisible()
+    call coc#_select_confirm()
+  elseif coc#expandableOrJumpable()
+    call coc#rpc#request('doKeymap', ['snippets-expand-jump',''])
+  elseif <SID>xf_util_used_backspace()
+    return "\<TAB>"
+  endif
+
+  " call coc#refresh()
+
+  return ''
+endfunc
+
+func! s:xf_util_used_backspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunc
+
+inoremap <silent><expr> <tab> <SID>xf_coc_tab_handler()
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+" }}}
+" {{{ grepper
+
+nnoremap <silent> <leader>G :Grepper<cr>
+nnoremap <silent> <leader>W :Grepper-cword<cr>
+
+" }}}
+" {{{ goyo
+
+nnoremap <silent> <leader>g :Goyo<cr>
+
+" }}}
+" {{{ nuake
+
+nnoremap <leader>T :Nuake<cr>
+inoremap <leader>T <C-\><C-n>:Nuake<cr>
+tnoremap <leader>T <C-\><C-n>:Nuake<cr>
+
+" }}}
 " {{{ telescope
 
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
@@ -1770,153 +1152,11 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fc <cmd>Telescope colorscheme<cr>
 
 " }}}
-" {{{ trim trailing spaces
+" {{{ vim-workspace
 
-nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
-
-" }}}
-" {{{ ts-rainbox
-
-lua << EOF
-require("nvim-treesitter.configs").setup {
-  sync_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = true
-  },
-  rainbow = {
-    enable = true,
-    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = nil, -- Do not enable for files with more than n lines, int
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
-  indent = {
-    enable = true
-  }
-}
-EOF
+nnoremap <leader>W :ToggleWorkspace<CR>
 
 " }}}
-" {{{ ultisnips
-
-nnoremap <silent> <leader>SSS :call UltiSnips#RefreshSnippets()<cr>:echo 'ultisnips refreshed'<cr>
 
 " }}}
-" {{{ vimrc
 
-if has("nvim")
-  nnoremap <silent> <leader>R :source ~/.config/nvim/init.vim<cr>
-  nnoremap <silent> <leader>rr :e ~/.config/nvim/init.vim<cr>
-else
-  nnoremap <silent> <leader>R :source ~/.vimrc<cr>
-  nnoremap <silent> <leader>rr :e ~/.vimrc<cr>
-endif
-
-" }}}
-" {{{ visual-split.vim
-
-xmap <leader>ss <Plug>(Visual-Split-VSSplit)
-xmap <leader>sa <Plug>(Visual-Split-VSSplitAbove)
-xmap <leader>sb <Plug>(Visual-Split-VSSplitBelow)
-
-nmap <leader>ss <Plug>(Visual-Split-Split)
-nmap <leader>sa <Plug>(Visual-Split-SplitAbove)
-nmap <leader>sb <Plug>(Visual-Split-SplitBelow)
-
-" }}}
-" {{{ which-key
-
-lua << EOF
-  require("which-key").setup {
-    plugins = {
-      marks = true, -- shows a list of your marks on ' and `
-      registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-      spelling = {
-        enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-        suggestions = 20, -- how many suggestions should be shown in the list?
-      },
-      -- the presets plugin, adds help for a bunch of default keybindings in Neovim
-      -- No actual key bindings are created
-      presets = {
-        operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-        motions = true, -- adds help for motions
-        text_objects = true, -- help for text objects triggered after entering an operator
-        windows = true, -- default bindings on <c-w>
-        nav = true, -- misc bindings to work with windows
-        z = true, -- bindings for folds, spelling and others prefixed with z
-        g = true, -- bindings for prefixed with g
-      },
-    },
-    -- add operators that will trigger motion and text object completion
-    -- to enable all native operators, set the preset / operators plugin above
-    operators = { gc = "Comments" },
-    key_labels = {
-      -- override the label used to display some keys. It doesn't effect WK in any other way.
-      -- For example:
-      -- ["<space>"] = "SPC",
-      -- ["<cr>"] = "RET",
-      -- ["<tab>"] = "TAB",
-    },
-    icons = {
-      breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-      separator = "➜", -- symbol used between a key and it's label
-      group = "+", -- symbol prepended to a group
-    },
-    popup_mappings = {
-      scroll_down = '<c-d>', -- binding to scroll down inside the popup
-      scroll_up = '<c-u>', -- binding to scroll up inside the popup
-    },
-    window = {
-      border = "none", -- none, single, double, shadow
-      position = "bottom", -- bottom, top
-      margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
-      padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
-      winblend = 0
-    },
-    layout = {
-      height = { min = 4, max = 25 }, -- min and max height of the columns
-      width = { min = 20, max = 50 }, -- min and max width of the columns
-      spacing = 3, -- spacing between columns
-      align = "left", -- align columns left, center or right
-    },
-    ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-    hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
-    show_help = true, -- show help message on the command line when the popup is visible
-    triggers = "auto", -- automatically setup triggers
-    -- triggers = {"<leader>"} -- or specify a list manually
-    triggers_blacklist = {
-      -- list of mode / prefixes that should never be hooked by WhichKey
-      -- this is mostly relevant for key maps that start with a native binding
-      -- most people should not need to change this
-      i = { "j", "k" },
-      v = { "j", "k" },
-    },
-  }
-EOF
-
-" }}}
-" {{{ workspaces
-
-nnoremap <silent> <leader>WW :ToggleWorkspace<cr>
-
-" }}}
-" {{{ mkdx
-"
-if !has('nvim')
-  augroup MKDX
-    au!
-    au FileType markdown so $HOME/.vim/pack/plugins/start/mkdx/ftplugin/markdown.vim
-  augroup END
-endif
-
-inoremap <buffer><silent><unique> ``` ```<Enter>```<C-o>k<C-o>A
-
-" }}}

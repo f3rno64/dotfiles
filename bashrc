@@ -21,6 +21,7 @@ export XF_TERM="xterm-256color"
 export XF_LIB_DIR="$HOME/.xf-bash-lib"
 export XF_VIM_EDITORS=('nvim-gtk' 'nvim' 'vim' 'vi')
 export XF_DESIRED_EDITORS=("${XF_VIM_EDITORS[@]} nano")
+export XF_HOME_SRC_DIR
 
 export XF_NVIM_CONFIG_PATH="$HOME/.config/nvim/init.vim"
 export XF_NVIM_GTK_CONFIG_PATH="$HOME/.config/nvim/ginit.vim"
@@ -69,12 +70,12 @@ fi
 # }}}
 # {{{ ensure home folder structure
 
-export XF_HOME_SRC_DIR="$HOME/.src"
+export XF_SRC_DIR="$HOME/.src"
 export XF_HOME_BIN_DIR="$HOME/.bin"
 export XF_HOME_LOCAL_BIN_DIR="$HOME/.local/bin"
 export XF_HOME_BASH_SCRIPTS_DIR="$HOME/.bash"
 
-xf_ensure_dir "$XF_HOME_SRC_DIR"
+xf_ensure_dir "$XF_SRC_DIR"
 xf_ensure_dir "$XF_HOME_BIN_DIR"
 xf_ensure_dir "$XF_HOME_LOCAL_BIN_DIR"
 xf_ensure_dir "$XF_HOME_BASH_SCRIPTS_DIR"

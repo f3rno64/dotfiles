@@ -1,7 +1,6 @@
 [user]
 	name = Cris Mihalache
-	email = cris.mihalache@tradeshift.com
-	signingkey = A396B2624CC9AB7655E109BBA057473CBA0A99B8
+	email = f3rno64@gmail.com
 
 [color]
 	ui = auto
@@ -33,8 +32,8 @@
 [core]
 	autocrlf = false
 	filemode = false
-	editor = code --wait
-	sshCommand = ssh -i ~/.ssh/id_rsa -F /dev/null
+	editor = nvim
+	sshCommand = ssh -vvv -i ~/.ssh/id_rsa -F /dev/null
 
 [branch]
 	autosetuprebase = always
@@ -48,7 +47,5 @@
 	rebase = true
 [init]
 	defaultBranch = master
-[commit]
-	gpgsign = true
 [gpg]
 	program = gpg
