@@ -33,7 +33,7 @@
 	autocrlf = false
 	filemode = false
 	editor = nvim
-	sshCommand = ssh -vvv -i ~/.ssh/id_rsa -F /dev/null
+	sshCommand = ssh -i ~/.ssh/id_rsa -F /dev/null
 
 [branch]
 	autosetuprebase = always
