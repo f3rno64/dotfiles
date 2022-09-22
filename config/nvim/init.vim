@@ -82,6 +82,23 @@ Plug 'zackhsi/fzf-tags'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " }}}
+" {{{ lsp
+
+Plug 'anott03/nvim-lspinstall'
+Plug 'neovim/nvim-lspconfig'
+
+" }}}
+" {{{ cmp
+
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+
+" }}}
 " {{{ snipppets
 
 Plug 'SirVer/ultisnips'
@@ -266,7 +283,8 @@ let g:ale_set_quickfix = 0
 let g:ale_set_highlights = 1
 let g:ale_set_signs = 1
 let g:ale_sign_highlight_linenrs = 1
-let g:ale_virtualtext_cursor = 1
+let g:ale_virtualtext_cursor = 2
+let g:ale_sign_column_always = 1
 let g:ale_open_list = 0
 
 " }}}
@@ -344,14 +362,14 @@ func! s:goyo_enter()
   set noshowcmd
   set nonumber
 
-  let b:coc_suggest_disable = 1 " popup 'invisible' but hides content
+  " let b:coc_suggest_disable = 1 " popup 'invisible' but hides content
 endfunc
 
 func! s:goyo_leave()
   set showmode
   set showcmd
   set number
-  let b:coc_suggest_disable = 0
+  " let b:coc_suggest_disable = 0
 
   " Workaround for color scheme issue
   " TODO: Update w/ dynamic config path
@@ -486,8 +504,8 @@ set statusline+=\ " padding
 set statusline+=%#CursorColumn#
 set statusline+=\ " padding
 set statusline+=%{StatuslineALE()}
-set statusline+=\ " padding
-set statusline+=%{coc#status()}
+" set statusline+=\ " padding
+" set statusline+=%{coc#status()}
 set statusline+=\ " padding
 set statusline+=%#LineNr#
 set statusline+=\ " padding
@@ -548,7 +566,7 @@ set showmatch
 set hlsearch
 set colorcolumn=80
 set cmdheight=2
-set signcolumn=yes
+set signcolumn=yes:2
 set tags=./tags;,tags;$HOME;
 set regexpengine=0
 set backspace=indent,eol,start
@@ -840,7 +858,7 @@ let g:falcon_inactive = 1
 
 " }}}
 
-set background=dark
+set background=light
 
 " moonfly
 " vibrantink
@@ -1014,9 +1032,9 @@ nnoremap <down> :resize +1<CR>
 nnoremap <left> :vert resize +1<CR>
 nnoremap <right> :vert resize -1<CR>
 
-nnoremap <leader>ss :CleverSplit<CR>
-nnoremap <leader>sh :CleverHSplit<CR>
-nnoremap <leader>sv :CleverVSplit<CR>
+nnoremap <leader>cs :CleverSplit<CR>
+nnoremap <leader>ch :CleverHSplit<CR>
+nnoremap <leader>cv :CleverVSplit<CR>
 
 " }}}
 " {{{ netrw
@@ -1056,27 +1074,33 @@ nmap <silent> <leader>ak :ALEPrevious<cr>
 
 " Helper to handle complex tab behavior, allowing for elegant snippet expansion
 
-func! s:xf_coc_tab_handler() abort
-  if pumvisible()
-    call coc#_select_confirm()
-  elseif coc#expandableOrJumpable()
-    call coc#rpc#request('doKeymap', ['snippets-expand-jump',''])
-  elseif <SID>xf_util_used_backspace()
-    return "\<TAB>"
-  endif
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-  " call coc#refresh()
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-  return ''
-endfunc
-
-func! s:xf_util_used_backspace() abort
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
-endfunc
+endfunction
 
-inoremap <silent><expr> <tab> <SID>xf_coc_tab_handler()
-inoremap <silent><expr> <c-space> coc#refresh()
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -1159,4 +1183,3 @@ nnoremap <leader>W :ToggleWorkspace<CR>
 " }}}
 
 " }}}
-
