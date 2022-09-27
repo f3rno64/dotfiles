@@ -84,7 +84,6 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 " }}}
 " {{{ lsp
 
-Plug 'anott03/nvim-lspinstall'
 Plug 'neovim/nvim-lspconfig'
 
 " }}}
@@ -95,7 +94,6 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " }}}
@@ -110,9 +108,9 @@ Plug 'honza/vim-snippets'
 Plug 'thaerkh/vim-workspace'
 Plug 'rhysd/clever-split.vim'
 Plug 'Shougo/neco-vim'
-Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'yarn set version 2.4.0 && yarn install --immutable'}
-Plug 'declancm/cinnamon.nvim' " smooth movements/scrolling
+" Plug 'neoclide/coc-neco'
+" Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'yarn set version 2.4.0 && yarn install --immutable'}
+" Plug 'declancm/cinnamon.nvim' " smooth movements/scrolling
 Plug 'tpope/vim-repeat'
 Plug 'ggandor/leap.nvim'
 Plug 'dense-analysis/ale'
@@ -176,21 +174,21 @@ Plug 'mrjones2014/lighthaus.nvim'
 Plug 'catppuccin/nvim', {'as': 'catppuccin'}
 Plug 'ayu-theme/ayu-vim'
 Plug 'toupeira/vim-desertink'
-" Plug 'fcpg/vim-farout'
-" Plug 'fcpg/vim-fahrenheit'
-" Plug 'bluz71/vim-moonfly-colors'
+Plug 'fcpg/vim-farout'
+Plug 'fcpg/vim-fahrenheit'
+Plug 'bluz71/vim-moonfly-colors'
 Plug 'romainl/Apprentice'
-" Plug 'AlessandroYorba/Alduin'
+Plug 'AlessandroYorba/Alduin'
 " Plug 'djjcast/mirodark'
 " Plug 'ajmwagar/vim-deus'
-" Plug 'nanotech/jellybeans.vim'
+Plug 'nanotech/jellybeans.vim'
 " Plug 'yuttie/hydrangea-vim'
 " Plug 'cocopon/iceberg.vim'
 " Plug 'itchyny/landscape.vim'
 " Plug 'sstallion/vim-wtf'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'AlessandroYorba/Sierra'
-" Plug 'srcery-colors/srcery-vim'
+Plug 'srcery-colors/srcery-vim'
 Plug 'tpope/vim-vividchalk'
 Plug 'jacoborus/tender.vim'
 " Plug 'artanikin/vim-synthwave84'
@@ -250,7 +248,7 @@ call plug#end()
 
 " {{{ ale
 
-let g:ale_enabled = 1
+let g:ale_enabled = 0
 
 let g:ale_linters = {
 \ 'sh': ['shellcheck'],
@@ -283,32 +281,33 @@ let g:ale_set_quickfix = 0
 let g:ale_set_highlights = 1
 let g:ale_set_signs = 1
 let g:ale_sign_highlight_linenrs = 1
-let g:ale_virtualtext_cursor = 2
+let g:ale_virtualtext_cursor = 1
 let g:ale_sign_column_always = 1
 let g:ale_open_list = 0
+let g:ale_disable_lsp = 1
 
 " }}}
 " {{{ coc
 
-let g:coc#snippet#next = '<c-j>'
-let g:coc#snippet#prev = '<c-k>'
+" let g:coc#snippet#next = '<c-j>'
+" let g:coc#snippet#prev = '<c-k>'
 
-let g:coc#node#path = $HOME . '.nvm/versions/node/v17.8.0/bin/node'
-let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
+" let g:coc#node#path = $HOME . '.nvm/versions/node/v17.8.0/bin/node'
+" let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
 
 " }}}
 " {{{ cinnamon.nvim
 
-lua << EOF
+" lua << EOF
 
-require('cinnamon').setup {
-  extra_keymaps = true,
-  override_keymaps = true,
-  max_length = 500,
-  scroll_limit = 80,
-}
+" require('cinnamon').setup {
+"   extra_keymaps = true,
+"   override_keymaps = true,
+"   max_length = 500,
+"   scroll_limit = 80,
+" }
 
-EOF
+" EOF
 
 " }}}
 " {{{ focus
@@ -392,6 +391,106 @@ let g:used_javascript_libs = 'underscore,react,chai,handlebars'
 " {{{ leap
 
 lua require('leap').set_default_keymaps()
+
+" }}}
+" {{{ cmp
+
+set completeopt=menu,menuone,noselect
+
+lua << EOF
+
+local cmp = require'cmp'
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["UltiSnips#Anon"](args.body)
+    end,
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'ultisnips' },
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+
+EOF
+
+" }}}
+" {{{ lsp
+
+lua << EOF
+
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+end
+
+local lsp_flags = {
+  debounce_text_changes = 150,
+}
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+require('lspconfig')['tsserver'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+    capabilities = capabilities,
+}
+
+EOF
 
 " }}}
 " {{{ MatchTagAlways
@@ -858,7 +957,7 @@ let g:falcon_inactive = 1
 
 " }}}
 
-set background=light
+set background=dark
 
 " moonfly
 " vibrantink
@@ -876,8 +975,9 @@ set background=light
 " tokyonight
 " PaperColor
 " falcon
-" colorscheme rose-pine
-colorscheme gruvbox
+" rose-pine
+" tender
+colorscheme tender
 
 " }}}
 " {{{ 6. gui
@@ -1045,6 +1145,8 @@ nnoremap <leader>e :Lexplore<cr>
 " {{{ buffers
 
 nnoremap <leader>bo :BufOnly<CR>
+nnoremap <leader>bn :BufferNext<CR>
+nnoremap <leader>bN :BufferPrevious<CR>
 
 " }}}
 " {{{ terminal splits
@@ -1079,74 +1181,74 @@ nmap <silent> <leader>ak :ALEPrevious<cr>
 " no select by `"suggest.noselect": true` in your configuration file.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ coc#pum#visible() ? coc#pum#next(1) :
+"       \ CheckBackspace() ? "\<Tab>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice.
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" function! CheckBackspace() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
 " Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+" if has('nvim')
+"   inoremap <silent><expr> <c-space> coc#refresh()
+" else
+"   inoremap <silent><expr> <c-@> coc#refresh()
+" endif
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" nmap <silent> [g <Plug>(coc-diagnostic-prev)
+" nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call ShowDocumentation()<CR>
+" nnoremap <silent> K :call ShowDocumentation()<CR>
 
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
+" function! ShowDocumentation()
+"   if CocAction('hasProvider', 'hover')
+"     call CocActionAsync('doHover')
+"   else
+"     call feedkeys('K', 'in')
+"   endif
+" endfunction
 
 " Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+" nmap <leader>rn <Plug>(coc-rename)
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
 " Show commands.
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " }}}
 " {{{ grepper
