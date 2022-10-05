@@ -54,9 +54,9 @@ Plug 'nvim-lua/plenary.nvim'
 " {{{ json/javascript/typescript
 
 Plug 'yuezk/vim-js'
-Plug 'HerringtonDarkholme/yats.vim'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'elzr/vim-json'
+Plug 'leafgarland/typescript-vim'
 
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/es.next.syntax.vim'
@@ -79,12 +79,16 @@ Plug 'jparise/vim-graphql'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'zackhsi/fzf-tags'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " }}}
 " {{{ lsp
 
 Plug 'neovim/nvim-lspconfig'
+
+" }}}
+" {{{ copilot
+
+Plug 'zbirenbaum/copilot.lua'
 
 " }}}
 " {{{ cmp
@@ -95,6 +99,7 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+Plug 'zbirenbaum/copilot-cmp'
 
 " }}}
 " {{{ snipppets
@@ -105,6 +110,10 @@ Plug 'honza/vim-snippets'
 " }}}
 " {{{ general
 
+Plug 'folke/zen-mode.nvim'
+Plug 'soywod/quicklist.vim'
+Plug 'tpope/vim-eunuch'
+Plug 'romainl/vim-qlist'
 Plug 'thaerkh/vim-workspace'
 Plug 'rhysd/clever-split.vim'
 Plug 'Shougo/neco-vim'
@@ -133,12 +142,11 @@ Plug 'Lenovsky/nuake'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 Plug 'valloric/MatchTagAlways'
-Plug 'nvim-telescope/telescope.nvim'
 
 " }}}
 " {{{ visual
 
-Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/goyo.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
 Plug 'jbgutierrez/vim-better-comments'
@@ -163,6 +171,7 @@ Plug 'vim-scripts/summerfruit256.vim'
 Plug 'habamax/vim-colors-defminus'
 Plug 'notpratheek/vim-sol'
 Plug 'vim-scripts/mayansmoke'
+Plug 'kamwitsta/flatwhite-vim'
 
 " }}}
 " {{{ dark
@@ -213,6 +222,7 @@ Plug 'vim-scripts/vibrantink'
 " }}}
 " {{{ dual/multiple
 
+Plug 'sainnhe/everforest'
 Plug 'ellisonleao/gruvbox.nvim'
 Plug 'rose-pine/neovim'
 Plug 'EdenEast/nightfox.nvim'
@@ -222,17 +232,16 @@ Plug 'chriskempson/base16-vim'
 Plug 'sonph/onehalf', { 'rtp': 'vim/' }
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'rakr/vim-one'
-" Plug 'severij/vadelma'
+Plug 'severij/vadelma'
 Plug 'iKarith/tigrana'
 Plug 'sainnhe/sonokai'
 Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'junegunn/seoul256.vim'
-" Plug 'machakann/vim-colorscheme-tatami'
 Plug 'noahfrederick/vim-hemisu'
-" Plug 'jan-warchol/selenized', { 'rtp': 'editors/vim' }
-" Plug 'andbar-ru/vim-unicon'
-" Plug 'wimstefan/vim-artesanal'
-" Plug 'overcache/NeoSolarized'
+Plug 'jan-warchol/selenized', { 'rtp': 'editors/vim' }
+Plug 'andbar-ru/vim-unicon'
+Plug 'wimstefan/vim-artesanal'
+Plug 'overcache/NeoSolarized'
 
 " }}}
 
@@ -248,7 +257,7 @@ call plug#end()
 
 " {{{ ale
 
-let g:ale_enabled = 0
+let g:ale_enabled = 1
 
 let g:ale_linters = {
 \ 'sh': ['shellcheck'],
@@ -329,7 +338,7 @@ let g:fzf#layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 command! -bang -nargs=? -complete=dir FZFShowFileExplorer :call <SID>xf_fzf_find_files(<q-args>, <bang>0)
 
 func! s:xf_fzf_find_files(q_args, bang) abort
-  let s:preview_path = g:xf_plugin_path . '/fzf.vim/bin/preview.sh {}'
+  let s:preview_path = s:xf_plugin_path . '/fzf.vim/bin/preview.sh {}'
   let s:q_args = a:q_args || ''
   let s:bang = a:bang || ''
 
@@ -353,34 +362,34 @@ let g:gitgutter_max_signs = 1000
 " }}}
 " {{{ goyo
 
-let g:goyo_height = '80%'
-let g:goyo_width = '60%'
+" let g:goyo_height = '80%'
+" let g:goyo_width = '60%'
 
-func! s:goyo_enter()
-  set noshowmode
-  set noshowcmd
-  set nonumber
+" func! s:goyo_enter()
+"   set noshowmode
+"   set noshowcmd
+"   set nonumber
 
-  " let b:coc_suggest_disable = 1 " popup 'invisible' but hides content
-endfunc
+"   " let b:coc_suggest_disable = 1 " popup 'invisible' but hides content
+" endfunc
 
-func! s:goyo_leave()
-  set showmode
-  set showcmd
-  set number
-  " let b:coc_suggest_disable = 0
+" func! s:goyo_leave()
+"   set showmode
+"   set showcmd
+"   set number
+"   " let b:coc_suggest_disable = 0
 
-  " Workaround for color scheme issue
-  " TODO: Update w/ dynamic config path
-  if has('nvim')
-    silent! source $HOME/.config/nvim/init.vim
-  else
-    silent! source $HOME/.vimrc
-  endif
-endfunc
+"   " Workaround for color scheme issue
+"   " TODO: Update w/ dynamic config path
+"   if has('nvim')
+"     silent! source $HOME/.config/nvim/init.vim
+"   else
+"     silent! source $HOME/.vimrc
+"   endif
+" endfunc
 
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
+" autocmd! User GoyoEnter nested call <SID>goyo_enter()
+" autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " }}}
 " {{{ javascript-libraries-syntax.vim
@@ -393,11 +402,24 @@ let g:used_javascript_libs = 'underscore,react,chai,handlebars'
 lua require('leap').set_default_keymaps()
 
 " }}}
+" {{{ copilot
+
+lua << EOF
+
+require("copilot").setup({
+  copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v17.8.0/bin/node"
+})
+
+EOF
+
+" }}}
 " {{{ cmp
 
 set completeopt=menu,menuone,noselect
 
 lua << EOF
+
+require("copilot_cmp").setup()
 
 local cmp = require'cmp'
 
@@ -419,8 +441,9 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'ultisnips' },
+    { name = "copilot", group_index = 2 },
+    { name = 'nvim_lsp', group_index = 2 },
+    { name = 'ultisnips', group_index = 2 },
   }, {
     { name = 'buffer' },
   })
@@ -570,6 +593,43 @@ let g:workspace_persist_undo_history = 1
 let g_workspace_autosave_untrailspaces = 0
 let g_workspace_autosave_untrailtabs = 0
 let g:workspace_autosave = 0
+
+" }}}
+" {{{ zen-mode
+
+lua << EOF
+
+require("zen-mode").setup {
+  window = {
+    backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
+    -- height and width can be:
+    -- * an absolute number of cells when > 1
+    -- * a percentage of the width / height of the editor when <= 1
+    -- * a function that returns the width or the height
+    width = 120, -- width of the Zen window
+    height = 1, -- height of the Zen window
+    options = {
+      -- signcolumn = "no",
+      -- number = false,
+      -- relativenumber = false,
+      -- cursorline = true,
+      -- cursorcolumn = false,
+      -- foldcolumn = "0",
+      -- list = true,
+    },
+  },
+  plugins = {
+    options = {
+      enabled = true,
+      ruler = true,
+      showcmd = false,
+    },
+    twilight = { enabled = true },
+    gitsigns = { enabled = false }
+  }
+}
+
+EOF
 
 " }}}
 
@@ -957,7 +1017,7 @@ let g:falcon_inactive = 1
 
 " }}}
 
-set background=dark
+set background=light
 
 " moonfly
 " vibrantink
@@ -977,7 +1037,9 @@ set background=dark
 " falcon
 " rose-pine
 " tender
-colorscheme tender
+" everforest
+" unicon
+colorscheme base16-github
 
 " }}}
 " {{{ 6. gui
@@ -1251,15 +1313,75 @@ nmap <silent> <leader>ak :ALEPrevious<cr>
 " nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " }}}
+" {{{ fzf
+
+nnoremap <C-p> :FZFShowFileExplorer<cr>
+nnoremap <leader>ZC :FZFCommands<cr>
+nnoremap <leader>ZB :FZFTags<cr>
+
+" {{{ search open buffers
+
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+
+nnoremap <silent> <Leader><Enter> :call fzf#run({
+\   'source':  reverse(<sid>buflist()),
+\   'sink':    function('<sid>bufopen'),
+\   'options': '+m',
+\   'down':    len(<sid>buflist()) + 2
+\ })<CR>
+
+" }}}
+" {{{ search tags
+
+function! s:tags_sink(line)
+  let parts = split(a:line, '\t\zs')
+  let excmd = matchstr(parts[2:], '^.*\ze;"\t')
+  execute 'silent e' parts[1][:-2]
+  let [magic, &magic] = [&magic, 0]
+  execute excmd
+  let &magic = magic
+endfunction
+
+function! s:tags()
+  call fzf#run({
+  \ 'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
+  \            '| grep -v -a ^!',
+  \ 'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
+  \ 'down':    '40%',
+  \ 'sink':    function('s:tags_sink')})
+endfunction
+
+command! Tags call s:tags()
+
+" }}}
+
+" }}}
 " {{{ grepper
 
 nnoremap <silent> <leader>G :Grepper<cr>
-nnoremap <silent> <leader>W :Grepper-cword<cr>
+nnoremap <silent> <leader>C :Grepper-cword<cr>
 
 " }}}
 " {{{ goyo
 
-nnoremap <silent> <leader>g :Goyo<cr>
+" nnoremap <silent> <leader>g :Goyo<cr>
+
+" }}}
+" {{{ quicklist
+
+nmap <a-l> <plug>(quicklist-toggle-lc) " Toggle the loclist
+nmap <a-c> <plug>(quicklist-toggle-qf) " Toggle the quickfix
+nmap <c-a> <plug>(quicklist-prev-item) " Select the previous loclist item (or the previous quickfix one if empty)
+nmap <c-l> <plug>(quicklist-next-item) " Select the next loclist item (or the next quickfix one if empty)
 
 " }}}
 " {{{ nuake
@@ -1267,15 +1389,6 @@ nnoremap <silent> <leader>g :Goyo<cr>
 nnoremap <leader>T :Nuake<cr>
 inoremap <leader>T <C-\><C-n>:Nuake<cr>
 tnoremap <leader>T <C-\><C-n>:Nuake<cr>
-
-" }}}
-" {{{ telescope
-
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <leader>fc <cmd>Telescope colorscheme<cr>
 
 " }}}
 " {{{ vim-workspace
