@@ -41,12 +41,31 @@ endif
 call plug#begin(s:xf_plugin_path)
 
 " }}}
+" {{{ impatient
+
+Plug 'lewis6991/impatient.nvim'
+
+" }}}
 " {{{ script libraries
 
 Plug 'google/vim-maktaba'
 Plug 'xolox/vim-misc'
 Plug 'godlygeek/tabular'
 Plug 'nvim-lua/plenary.nvim'
+
+" }}}
+" {{{ treesitter
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'yioneko/nvim-yati', { 'tag': '*' }
+Plug 'm-demare/hlargs.nvim'
+Plug 'p00f/nvim-ts-rainbow'
+Plug 'windwp/nvim-ts-autotag'
+
+" }}}
+" {{{ lualine
+
+Plug 'nvim-lualine/lualine.nvim'
 
 " }}}
 " {{{ syntax/languages
@@ -60,6 +79,11 @@ Plug 'leafgarland/typescript-vim'
 
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/es.next.syntax.vim'
+
+" }}}
+" {{{ python
+
+Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
 " }}}
 
@@ -84,6 +108,8 @@ Plug 'zackhsi/fzf-tags'
 " {{{ lsp
 
 Plug 'neovim/nvim-lspconfig'
+Plug 'reksar/nvim-lsp-python'
+Plug 'j-hui/fidget.nvim'
 
 " }}}
 " {{{ copilot
@@ -110,6 +136,13 @@ Plug 'honza/vim-snippets'
 " }}}
 " {{{ general
 
+Plug 'chentoast/marks.nvim'
+" Plug 'justinmk/vim-sneak'
+Plug 'pechorin/any-jump.vim'
+Plug 'RRethy/vim-illuminate'
+Plug 'delphinus/vim-auto-cursorline'
+Plug 'folke/lsp-colors.nvim'
+Plug 'NvChad/nvim-colorizer.lua'
 Plug 'folke/zen-mode.nvim'
 Plug 'soywod/quicklist.vim'
 Plug 'tpope/vim-eunuch'
@@ -130,7 +163,7 @@ Plug 'tpope/vim-commentary' " fast commenting
 Plug 'Raimondi/delimitMate' " quote/etc autocomplete
 Plug 'wincent/terminus' " enhanced terminal integration
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+Plug 'f3rno64/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 Plug 'michaeljsmith/vim-indent-object' " indent-level text object
 Plug 'machakann/vim-highlightedyank'
 Plug 'unblevable/quick-scope' " f jump highlights
@@ -139,24 +172,32 @@ Plug 'tpope/vim-eunuch' " shell command helpers
 Plug 'fcpg/vim-shore' " mv to 1st non-blank char w/ j/k
 Plug 'danro/rename.vim'
 Plug 'Lenovsky/nuake'
-Plug 'tpope/vim-surround'
+Plug 'kylechui/nvim-surround'
+" Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 Plug 'valloric/MatchTagAlways'
 
 " }}}
 " {{{ visual
 
+Plug 'pgdouyon/vim-evanesco'
+Plug 'luukvbaal/stabilize.nvim'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'petertriho/nvim-scrollbar'
+Plug 'melkster/modicator.nvim'
+Plug 'lukas-reineke/indent-blankline.nvim'
 " Plug 'junegunn/goyo.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
 Plug 'jbgutierrez/vim-better-comments'
 Plug 'beauwilliams/focus.nvim'
+Plug 'nvim-tree/nvim-tree.lua'
+" Plug 'lcheylus/overlength.nvim'
 
 " }}}
 " {{{ git integration
 
 Plug 'tanvirtin/vgit.nvim'
-Plug 'airblade/vim-gitgutter'
 Plug 'rhysd/committia.vim' " better git commit layout
 Plug 'int3/vim-extradite' " git log
 
@@ -176,6 +217,9 @@ Plug 'kamwitsta/flatwhite-vim'
 " }}}
 " {{{ dark
 
+Plug 'Everblush/everblush.nvim', { 'as': 'everblush' }
+Plug 'Abstract-IDE/Abstract-cs'
+Plug 'ray-x/aurora'
 Plug 'mangeshrex/uwu.vim'
 Plug 'fenetikm/falcon'
 Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
@@ -190,7 +234,8 @@ Plug 'romainl/Apprentice'
 Plug 'AlessandroYorba/Alduin'
 " Plug 'djjcast/mirodark'
 " Plug 'ajmwagar/vim-deus'
-Plug 'nanotech/jellybeans.vim'
+" Plug 'nanotech/jellybeans.vim'
+Plug 'metalelf0/jellybeans-nvim'
 " Plug 'yuttie/hydrangea-vim'
 " Plug 'cocopon/iceberg.vim'
 " Plug 'itchyny/landscape.vim'
@@ -255,6 +300,101 @@ call plug#end()
 " }}}
 " {{{ configuration
 
+" {{{ any-jump
+
+let g:any_jump_list_numbers = 0
+let g:any_jump_references_enabled = 1
+let g:any_jump_grouping_enabled = 1
+let g:any_jump_preview_lines_count = 4
+let g:any_jump_max_search_results = 10
+let g:any_jump_search_prefered_engine = 'rg'
+let g:any_jump_disable_default_keybindings = 0
+let g:any_jump_remove_comments_from_results = 1
+let g:any_jump_ignored_files = ['node_modules/*', '*.tmp', '*.temp']
+let g:any_jump_references_only_for_current_filetype = 1
+let g:any_jump_disable_vcs_ignore = 0
+
+let g:any_jump_results_ui_style = 'filename_first'
+
+let g:any_jump_window_width_ratio  = 0.4
+let g:any_jump_window_height_ratio = 0.4
+let g:any_jump_window_top_offset   = 4
+
+let g:any_jump_colors = {
+  \ 'plain_text':         'Comment',
+  \ 'preview':            'Comment',
+  \ 'preview_keyword':    'Operator',
+  \ 'heading_text':       'Function',
+  \ 'heading_keyword':    'Identifier',
+  \ 'group_text':         'Comment',
+  \ 'group_name':         'Function',
+  \ 'more_button':        'Operator',
+  \ 'more_explain':       'Comment',
+  \ 'result_line_number': 'Comment',
+  \ 'result_text':        'Statement',
+  \ 'result_path':        'String',
+  \ 'help':               'Comment'
+  \ }
+
+" }}}
+" {{{ impatient
+
+lua require('impatient')
+
+" }}}
+" {{{ lualine
+
+lua << EOF
+
+require('lualine').setup({
+  options = { theme = "gruvbox" },
+})
+
+EOF
+
+" }}}
+" {{{ treesitter
+
+lua << EOF
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { 'python', 'javascript', 'typescript', 'json' },
+  sync_install = false,
+  auto_install = true,
+  highlight = {
+    enable = true,
+  },
+
+  indent = {
+    enable = false,
+  },
+
+  yati = {
+    enable = true,
+    default_lazy = true,
+
+    -- Determine the fallback method used when we cannot calculate indent by tree-sitter
+    --   'auto': fallback to vim auto indent
+    --   'asis': use current indent as-is
+    --   'cindent': see `:h cindent()`
+    -- Or a custom function return the final indent result.
+    default_fallback = 'auto'
+  },
+
+  autotag = {
+    enable = true,
+  },
+
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil
+  }
+}
+
+EOF
+
+" }}}
 " {{{ ale
 
 let g:ale_enabled = 1
@@ -319,6 +459,11 @@ let g:ale_disable_lsp = 1
 " EOF
 
 " }}}
+" {{{ fidget
+
+lua require"fidget".setup{}
+
+" }}}
 " {{{ focus
 
 lua require('focus').setup()
@@ -355,9 +500,9 @@ endfunc
 " TOOD: Explode final preview script path
 
 " }}}
-" {{{ gitgutter
+" {{{ gitsigns
 
-let g:gitgutter_max_signs = 1000
+lua require('gitsigns').setup()
 
 " }}}
 " {{{ goyo
@@ -392,6 +537,21 @@ let g:gitgutter_max_signs = 1000
 " autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " }}}
+" {{{ hlargs
+
+lua require('hlargs').setup()
+
+" }}}
+" {{{ indent-blankline
+
+lua << EOF
+  require("indent_blankline").setup {
+    show_current_context = true,
+    show_current_context_start = true,
+  }
+EOF
+
+" }}}
 " {{{ javascript-libraries-syntax.vim
 
 let g:used_javascript_libs = 'underscore,react,chai,handlebars'
@@ -407,7 +567,8 @@ lua require('leap').set_default_keymaps()
 lua << EOF
 
 require("copilot").setup({
-  copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v17.8.0/bin/node"
+  copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v16.13.2/bin/node",
+  plugin_manager_path = vim.fn.expand("$HOME") .. "/.nvim-plugins"
 })
 
 EOF
@@ -468,6 +629,20 @@ cmp.setup.cmdline(':', {
 EOF
 
 " }}}
+" {{{ illuminate
+
+lua << EOF
+
+require('illuminate').configure({
+  providers = {
+      'lsp',
+      'treesitter',
+  },
+})
+
+EOF
+
+" }}}
 " {{{ lsp
 
 lua << EOF
@@ -505,15 +680,22 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-require('lspconfig')['tsserver'].setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
-    capabilities = capabilities,
+require('lspconfig').tsserver.setup{
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities,
 }
 
+require('lspconfig').pylsp.setup{}
+
 EOF
+
+" }}}
+" {{{ marks.nvim
+
+lua require'marks'.setup {}
 
 " }}}
 " {{{ MatchTagAlways
@@ -525,11 +707,70 @@ let g:mta_filetypes = {
 \}
 
 " }}}
+" {{{ modicator.nvim
+
+lua require('modicator').setup()
+
+" }}}
 " {{{ nuake
 
 let g:nuake_start_insert = 0
 let g:nuake_position = 'bottom'
 let g:nuake_size = 0.4
+
+" }}}
+" {{{ nvim-colorizer
+
+lua require('colorizer').setup()
+
+" }}}
+" {{{ nvim-scrollbar
+
+lua require("scrollbar").setup()
+
+" }}}
+" {{{ nvim-surround
+
+lua << EOF
+  require("nvim-surround").setup({})
+EOF
+
+" }}}
+" {{{ nvim-tree
+
+lua << EOF
+
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  view = {
+    adaptive_size = true,
+    mappings = {
+      list = {
+        { key = "u", action = "dir_up" },
+      },
+    },
+  },
+
+  renderer = {
+    group_empty = true,
+  },
+
+  filters = {
+    dotfiles = true,
+  },
+})
+
+EOF
+
+" }}}
+" {{{ overlength.nvim
+
+" lua require('overlength').setup({})
+
+" }}}
+" {{{ stabilize.nvim
+
+lua require('stabilize').setup()
 
 " }}}
 " {{{ ultisnips
@@ -571,15 +812,12 @@ let g:vim_jsx_pretty_colorful_config = 1
 " {{{ vim-grepper
 
 let g:grepper = {}
-let g:grepper.tools = ['ag']
+let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
 let g:grepper.quickfix = 1
 let g:grepper.open = 1
 let g:grepper.switch = 1
 let g:grepper.dir = 'repo,file'
-let g:grepper.ag = {
-\ 'grepprg': 'ag --ignore-dir=modules --ignore-dir=node_modules --ignore-dir=.undodir --ignore-dir=docs/dist --ignore-dir=bower_components --ignore-dir=dist --ignore-dir=build'
-\ }
 
 " }}}
 " {{{ vim-workspace
@@ -858,6 +1096,14 @@ endif
 " }}}
 " {{{ configuration
 
+" {{{ aurora
+
+let g:aurora_italic = 1
+let g:aurora_transparent = 0
+let g:aurora_bold = 1
+let g:aurora_darker = 1
+
+" }}}
 " {{{ ayu
 
 " let ayucolor='light'
@@ -1017,7 +1263,7 @@ let g:falcon_inactive = 1
 
 " }}}
 
-set background=light
+set background=dark
 
 " moonfly
 " vibrantink
@@ -1039,7 +1285,10 @@ set background=light
 " tender
 " everforest
 " unicon
-colorscheme base16-github
+" aurora
+" abscs
+" everblush
+colorscheme aurora
 
 " }}}
 " {{{ 6. gui
@@ -1090,7 +1339,7 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 
 let g:font_name = 'Jet Brains Mono Nerd Font'
 let g:font_features = ''
-let g:font_size = 10
+let g:font_size = 8
 
 call SetFont()
 
@@ -1199,9 +1448,9 @@ nnoremap <leader>ch :CleverHSplit<CR>
 nnoremap <leader>cv :CleverVSplit<CR>
 
 " }}}
-" {{{ netrw
+" {{{ netrw (disabled)
 
-nnoremap <leader>e :Lexplore<cr>
+" nnoremap <leader>e :Lexplore<cr>
 
 " }}}
 " {{{ buffers
@@ -1225,6 +1474,15 @@ tnoremap <Esc> <C-\><C-n>
 " {{{ trim trailing spaces
 
 nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
+
+" }}}
+" {{{ lsp
+
+lua << EOF
+
+vim.api.nvim_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', { noremap = true })
+
+EOF
 
 " }}}
 
@@ -1367,8 +1625,8 @@ command! Tags call s:tags()
 " }}}
 " {{{ grepper
 
-nnoremap <silent> <leader>G :Grepper<cr>
-nnoremap <silent> <leader>C :Grepper-cword<cr>
+nnoremap <silent> GG :Grepper<cr>
+nnoremap <silent> GC :Grepper-cword -noprompt<cr>
 
 " }}}
 " {{{ goyo
@@ -1389,6 +1647,11 @@ nmap <c-l> <plug>(quicklist-next-item) " Select the next loclist item (or the ne
 nnoremap <leader>T :Nuake<cr>
 inoremap <leader>T <C-\><C-n>:Nuake<cr>
 tnoremap <leader>T <C-\><C-n>:Nuake<cr>
+
+" }}}
+" {{{ nvim-tree
+
+nnoremap <leader>e :NvimTreeToggle<cr>
 
 " }}}
 " {{{ vim-workspace

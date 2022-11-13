@@ -426,6 +426,6 @@ schemes:
 
 # }}}
 
-colors: *night-owl
+colors: *ayu-dark
 
 # }}}
