@@ -52,6 +52,7 @@ Plug 'google/vim-maktaba'
 Plug 'xolox/vim-misc'
 Plug 'godlygeek/tabular'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'winston0410/cmd-parser.nvim'
 
 " }}}
 " {{{ treesitter
@@ -61,6 +62,7 @@ Plug 'yioneko/nvim-yati', { 'tag': '*' }
 Plug 'm-demare/hlargs.nvim'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'windwp/nvim-ts-autotag'
+Plug 'RRethy/nvim-treesitter-textsubjects'
 
 " }}}
 " {{{ lualine
@@ -110,6 +112,7 @@ Plug 'zackhsi/fzf-tags'
 Plug 'neovim/nvim-lspconfig'
 Plug 'reksar/nvim-lsp-python'
 Plug 'j-hui/fidget.nvim'
+Plug 'ray-x/lsp_signature.nvim'
 
 " }}}
 " {{{ copilot
@@ -136,6 +139,9 @@ Plug 'honza/vim-snippets'
 " }}}
 " {{{ general
 
+Plug 'jghauser/mkdir.nvim'
+Plug 'lambdalisue/readablefold.vim'
+Plug 'nathom/filetype.nvim'
 Plug 'chentoast/marks.nvim'
 " Plug 'justinmk/vim-sneak'
 Plug 'pechorin/any-jump.vim'
@@ -180,6 +186,9 @@ Plug 'valloric/MatchTagAlways'
 " }}}
 " {{{ visual
 
+Plug 'jinh0/eyeliner.nvim'
+Plug 'winston0410/range-highlight.nvim'
+Plug 'lukas-reineke/virt-column.nvim'
 Plug 'pgdouyon/vim-evanesco'
 Plug 'luukvbaal/stabilize.nvim'
 Plug 'lewis6991/gitsigns.nvim'
@@ -389,6 +398,16 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     extended_mode = true,
     max_file_lines = nil
+  },
+
+  textsubjects = {
+    enable = true,
+    prev_selection = ',',
+    keymaps = {
+      ['.'] = 'textsubjects-smart',
+      [';'] = 'textsubjects-container-outer',
+      ['i;'] = 'textsubjects-container-inner'
+    }
   }
 }
 
@@ -457,6 +476,15 @@ let g:ale_disable_lsp = 1
 " }
 
 " EOF
+
+" }}}
+" {{{ eyeliner
+
+lua << EOF
+  require'eyeliner'.setup {
+    highlight_on_key = true
+  }
+EOF
 
 " }}}
 " {{{ fidget
@@ -674,6 +702,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+
+  require "lsp_signature".on_attach({}, bufnr)
 end
 
 local lsp_flags = {
@@ -768,6 +798,11 @@ EOF
 " lua require('overlength').setup({})
 
 " }}}
+" {{{ range-highlight
+
+lua require'range-highlight'.setup{}
+
+" }}}
 " {{{ stabilize.nvim
 
 lua require('stabilize').setup()
@@ -785,6 +820,11 @@ let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 " let g:UltiSnipsSnippetDirectories = [
 "       \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
 "       \ ]
+
+" }}}
+" {{{ virt-column
+
+lua require("virt-column").setup()
 
 " }}}
 " {{{ vgit
