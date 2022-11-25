@@ -112,7 +112,6 @@ Plug 'zackhsi/fzf-tags'
 Plug 'neovim/nvim-lspconfig'
 Plug 'reksar/nvim-lsp-python'
 Plug 'j-hui/fidget.nvim'
-Plug 'ray-x/lsp_signature.nvim'
 
 " }}}
 " {{{ copilot
@@ -139,12 +138,13 @@ Plug 'honza/vim-snippets'
 " }}}
 " {{{ general
 
+Plug 'folke/trouble.nvim'
 Plug 'jghauser/mkdir.nvim'
 Plug 'lambdalisue/readablefold.vim'
 Plug 'nathom/filetype.nvim'
 Plug 'chentoast/marks.nvim'
 " Plug 'justinmk/vim-sneak'
-Plug 'pechorin/any-jump.vim'
+" Plug 'pechorin/any-jump.vim'
 Plug 'RRethy/vim-illuminate'
 Plug 'delphinus/vim-auto-cursorline'
 Plug 'folke/lsp-colors.nvim'
@@ -193,8 +193,8 @@ Plug 'pgdouyon/vim-evanesco'
 Plug 'luukvbaal/stabilize.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'petertriho/nvim-scrollbar'
-Plug 'melkster/modicator.nvim'
-Plug 'lukas-reineke/indent-blankline.nvim'
+" Plug 'melkster/modicator.nvim'
+" Plug 'lukas-reineke/indent-blankline.nvim'
 " Plug 'junegunn/goyo.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
@@ -226,6 +226,7 @@ Plug 'kamwitsta/flatwhite-vim'
 " }}}
 " {{{ dark
 
+Plug 'phha/zenburn.nvim'
 Plug 'Everblush/everblush.nvim', { 'as': 'everblush' }
 Plug 'Abstract-IDE/Abstract-cs'
 Plug 'ray-x/aurora'
@@ -243,8 +244,8 @@ Plug 'romainl/Apprentice'
 Plug 'AlessandroYorba/Alduin'
 " Plug 'djjcast/mirodark'
 " Plug 'ajmwagar/vim-deus'
-" Plug 'nanotech/jellybeans.vim'
-Plug 'metalelf0/jellybeans-nvim'
+Plug 'nanotech/jellybeans.vim'
+" Plug 'metalelf0/jellybeans-nvim'
 " Plug 'yuttie/hydrangea-vim'
 " Plug 'cocopon/iceberg.vim'
 " Plug 'itchyny/landscape.vim'
@@ -309,41 +310,41 @@ call plug#end()
 " }}}
 " {{{ configuration
 
-" {{{ any-jump
+" {{{ any-jump (disabled)
 
-let g:any_jump_list_numbers = 0
-let g:any_jump_references_enabled = 1
-let g:any_jump_grouping_enabled = 1
-let g:any_jump_preview_lines_count = 4
-let g:any_jump_max_search_results = 10
-let g:any_jump_search_prefered_engine = 'rg'
-let g:any_jump_disable_default_keybindings = 0
-let g:any_jump_remove_comments_from_results = 1
-let g:any_jump_ignored_files = ['node_modules/*', '*.tmp', '*.temp']
-let g:any_jump_references_only_for_current_filetype = 1
-let g:any_jump_disable_vcs_ignore = 0
+" let g:any_jump_list_numbers = 0
+" let g:any_jump_references_enabled = 1
+" let g:any_jump_grouping_enabled = 1
+" let g:any_jump_preview_lines_count = 4
+" let g:any_jump_max_search_results = 10
+" let g:any_jump_search_prefered_engine = 'rg'
+" let g:any_jump_disable_default_keybindings = 0
+" let g:any_jump_remove_comments_from_results = 1
+" let g:any_jump_ignored_files = ['node_modules/*', '*.tmp', '*.temp']
+" let g:any_jump_references_only_for_current_filetype = 1
+" let g:any_jump_disable_vcs_ignore = 0
 
-let g:any_jump_results_ui_style = 'filename_first'
+" let g:any_jump_results_ui_style = 'filename_first'
 
-let g:any_jump_window_width_ratio  = 0.4
-let g:any_jump_window_height_ratio = 0.4
-let g:any_jump_window_top_offset   = 4
+" let g:any_jump_window_width_ratio  = 0.4
+" let g:any_jump_window_height_ratio = 0.4
+" let g:any_jump_window_top_offset   = 4
 
-let g:any_jump_colors = {
-  \ 'plain_text':         'Comment',
-  \ 'preview':            'Comment',
-  \ 'preview_keyword':    'Operator',
-  \ 'heading_text':       'Function',
-  \ 'heading_keyword':    'Identifier',
-  \ 'group_text':         'Comment',
-  \ 'group_name':         'Function',
-  \ 'more_button':        'Operator',
-  \ 'more_explain':       'Comment',
-  \ 'result_line_number': 'Comment',
-  \ 'result_text':        'Statement',
-  \ 'result_path':        'String',
-  \ 'help':               'Comment'
-  \ }
+" let g:any_jump_colors = {
+"   \ 'plain_text':         'Comment',
+"   \ 'preview':            'Comment',
+"   \ 'preview_keyword':    'Operator',
+"   \ 'heading_text':       'Function',
+"   \ 'heading_keyword':    'Identifier',
+"   \ 'group_text':         'Comment',
+"   \ 'group_name':         'Function',
+"   \ 'more_button':        'Operator',
+"   \ 'more_explain':       'Comment',
+"   \ 'result_line_number': 'Comment',
+"   \ 'result_text':        'Statement',
+"   \ 'result_path':        'String',
+"   \ 'help':               'Comment'
+"   \ }
 
 " }}}
 " {{{ impatient
@@ -517,15 +518,13 @@ func! s:xf_fzf_find_files(q_args, bang) abort
 
   call fzf#vim#files(s:q_args, {
     \   'options': [
+    \     '--ansi',
     \     '--reverse',
     \     '--info=inline',
     \     '--preview',
     \     s:preview_path
     \   ]}, s:bang)
 endfunc
-
-" TODO: Check for/extract fzf.vim path
-" TOOD: Explode final preview script path
 
 " }}}
 " {{{ gitsigns
@@ -570,14 +569,14 @@ lua require('gitsigns').setup()
 lua require('hlargs').setup()
 
 " }}}
-" {{{ indent-blankline
+" {{{ indent-blankline (disabled)
 
-lua << EOF
-  require("indent_blankline").setup {
-    show_current_context = true,
-    show_current_context_start = true,
-  }
-EOF
+" lua << EOF
+"   require("indent_blankline").setup {
+"     show_current_context = true,
+"     show_current_context_start = true,
+"   }
+" EOF
 
 " }}}
 " {{{ javascript-libraries-syntax.vim
@@ -595,7 +594,7 @@ lua require('leap').set_default_keymaps()
 lua << EOF
 
 require("copilot").setup({
-  copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v16.13.2/bin/node",
+  copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v19.0.1/bin/node",
   plugin_manager_path = vim.fn.expand("$HOME") .. "/.nvim-plugins"
 })
 
@@ -702,8 +701,6 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
-
-  require "lsp_signature".on_attach({}, bufnr)
 end
 
 local lsp_flags = {
@@ -737,9 +734,9 @@ let g:mta_filetypes = {
 \}
 
 " }}}
-" {{{ modicator.nvim
+" {{{ modicator.nvim (disabled)
 
-lua require('modicator').setup()
+" lua require('modicator').setup()
 
 " }}}
 " {{{ nuake
@@ -808,6 +805,11 @@ lua require'range-highlight'.setup{}
 lua require('stabilize').setup()
 
 " }}}
+" {{{ trouble.nvim
+
+lua require('trouble').setup({})
+
+" }}}
 " {{{ ultisnips
 
 autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
@@ -817,9 +819,9 @@ let g:UltiSnipsExpandTrigger = '<c-space>'
 let g:UltiSnipsListSnippets = '<c-space><c-space>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-" let g:UltiSnipsSnippetDirectories = [
-"       \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
-"       \ ]
+let g:UltiSnipsSnippetDirectories = [
+  \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
+  \ ]
 
 " }}}
 " {{{ virt-column
@@ -1053,6 +1055,7 @@ autocmd WinEnter,Filetype * syntax sync fromstart
 
 au BufNewFile,BufRead *.nvim setf vim
 au BufNewFile,BufRead */i3/config setf i3config
+au BufNewFile,BufRead */sway/config setf i3config
 
 " autosave
 autocmd InsertLeave,TextChanged * update
@@ -1328,7 +1331,23 @@ set background=dark
 " aurora
 " abscs
 " everblush
-colorscheme aurora
+" zenburn
+" base16-gruvbox-dark-hard
+" base16-atelier-dune-light
+" base16-atelier-heath-light !
+" base16-ashes
+" base16-chalk !
+" base16-cupertino (light)
+" base16-one-light !
+" base16-isotope
+" base16-snazzy
+" base16-tomorrow-night
+" base16-dracula
+" base16-material-darker
+" base16-seti
+" base16-synth-midnight-dark ! (black fav)
+" base16-bright ! (black)
+colorscheme base16-synth-midnight-dark
 
 " }}}
 " {{{ 6. gui
@@ -1377,9 +1396,9 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 
 " }}}
 
-let g:font_name = 'Jet Brains Mono Nerd Font'
+let g:font_name = 'Hasklug Nerd Font'
 let g:font_features = ''
-let g:font_size = 8
+let g:font_size = 10
 
 call SetFont()
 
@@ -1525,7 +1544,6 @@ vim.api.nvim_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', 
 EOF
 
 " }}}
-
 " {{{ ale
 
 nmap <silent> <leader>aj :ALENext<cr>
@@ -1614,8 +1632,6 @@ nmap <silent> <leader>ak :ALEPrevious<cr>
 " {{{ fzf
 
 nnoremap <C-p> :FZFShowFileExplorer<cr>
-nnoremap <leader>ZC :FZFCommands<cr>
-nnoremap <leader>ZB :FZFTags<cr>
 
 " {{{ search open buffers
 
@@ -1694,9 +1710,24 @@ tnoremap <leader>T <C-\><C-n>:Nuake<cr>
 nnoremap <leader>e :NvimTreeToggle<cr>
 
 " }}}
+" {{{ trouble.nvim
+
+nnoremap <leader>xx <cmd>TroubleToggle<cr>
+nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
+nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+nnoremap gR <cmd>TroubleToggle lsp_references<cr>
+
+" }}}
 " {{{ vim-workspace
 
 nnoremap <leader>W :ToggleWorkspace<CR>
+
+" }}}
+" {{{ snippets
+
+nnoremap <leader>SS :call UltiSnips#RefreshSnippets()<cr>
 
 " }}}
 

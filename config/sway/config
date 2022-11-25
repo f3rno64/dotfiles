@@ -24,7 +24,7 @@ set $ws20 "20"
 
 set $refresh_i3status killall -SIGUSR1 i3status
 
-for_window [class=".*"] border pixel 1
+for_window [class="^.*"] border pixel 1
 for_window [class="Gvim"] fullscreen enable
 for_window [class="NeovimGtk"] fullscreen enable
 for_window [class="Cawbird"] floating enable
@@ -42,19 +42,18 @@ floating_modifier $mod
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id nitrogen --restore
+exec --no-startup-id ~/.azotebg
 exec --no-startup-id dunst --config ~/.config/dunst/config
 
 bindsym $mod+p exec rofi -show drun
 bindsym $mod+m exec ~/.exec/rofi/applets/mpd.sh
 bindsym $mod+Shift+p exec rofi -show run
-bindsym $mod+Shift+s exec flameshot gui
-bindsym $mod+Ctrl+Shift+l exec i3lock -c 000000
+bindsym $mod+Shift+s exec QT_QPA_PLATFORM=wayland-egl XDG_CURRENG_DESKTOP=sway flameshot gui
+bindsym $mod+Ctrl+Shift+l exec swaylock -c 000000
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.src/github/hastinbe/i3-volume/volume -n up 10 && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.src/github/hastinbe/i3-volume/volume -n down 10 && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id ~/.src/github/hastinbe/i3-volume/volume -n mute && $refresh_i3status
 
 bindsym XF86MonBrightnessUp exec "brillo -A 10"
 bindsym XF86MonBrightnessDown exec "brillo -U 10"
