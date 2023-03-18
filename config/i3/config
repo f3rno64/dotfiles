@@ -49,7 +49,7 @@ bindsym $mod+p exec rofi -show drun
 bindsym $mod+m exec ~/.exec/rofi/applets/mpd.sh
 bindsym $mod+Shift+p exec rofi -show run
 bindsym $mod+Shift+s exec flameshot gui
-bindsym $mod+Ctrl+Shift+l exec i3lock -c 000000
+bindsym $mod+Ctrl+Shift+l exec swaylock -c 000000
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
