@@ -185,3 +185,9 @@ if [[ -d $XF_HOME_BASH_SCRIPTS_DIR ]]; then
 fi
 
 # }}}
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+complete -C /usr/bin/terraform terraform

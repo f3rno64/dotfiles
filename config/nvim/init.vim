@@ -1,63 +1,32 @@
-" f3rno64's neovim config
-" Put together with love.
-"
-" https://github.com/f3rno64/dotfiles/config/nvim/init.vim
+let s:f3_plugin_path = $HOME . '/.nvim-plugins'
 
-" {{{ 1. globals
+" {{{ disable netrw, as we use nvim-tree instead
 
-let s:xf_plugin_path = $HOME . '/.nvim-plugins'
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 
 " }}}
-" {{{ 2. terminal setup
+" {{{ plugin loading
 
-" {{{ reference
+call plug#begin(s:f3_plugin_path)
 
-" t_SI: INSERT mode
-" t_SR: REPLACE mode
-" t_EI: NORMAL mode (ELSE)
-"
-" 1 blinking block
-" 2 solid block
-" 3 blinking underscore
-" 4 solid underscore
-" 5 blinking vertical bar
-" 6 solid vertical bar
+" {{{ libs
 
-" }}}
-
-if !has('gui_running')
-  let &t_SI = "\<Esc>[3 q"
-  let &t_SR = "\<Esc>[5 q"
-  let &t_EI = "\<Esc>[1 q"
-endif
-
-" }}}
-" {{{ 3. plugins
-
-" {{{ loading
-
-" {{{
-
-call plug#begin(s:xf_plugin_path)
-
-" }}}
-" {{{ impatient
-
-Plug 'lewis6991/impatient.nvim'
-
-" }}}
-" {{{ script libraries
-
-Plug 'google/vim-maktaba'
-Plug 'xolox/vim-misc'
-Plug 'godlygeek/tabular'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'winston0410/cmd-parser.nvim'
+Plug 'tpope/vim-repeat'
+
+" }}}
+" {{{ telescope
+
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+Plug 'aznhe21/actions-preview.nvim'
 
 " }}}
 " {{{ treesitter
 
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'yioneko/nvim-yati', { 'tag': '*' }
 Plug 'm-demare/hlargs.nvim'
 Plug 'p00f/nvim-ts-rainbow'
@@ -65,46 +34,10 @@ Plug 'windwp/nvim-ts-autotag'
 Plug 'RRethy/nvim-treesitter-textsubjects'
 
 " }}}
-" {{{ lualine
+" {{{ nvim-tree
 
-Plug 'nvim-lualine/lualine.nvim'
-
-" }}}
-" {{{ syntax/languages
-
-" {{{ json/javascript/typescript
-
-Plug 'yuezk/vim-js'
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'elzr/vim-json'
-Plug 'leafgarland/typescript-vim'
-
-Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'othree/es.next.syntax.vim'
-
-" }}}
-" {{{ python
-
-Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
-
-" }}}
-
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'digitaltoad/vim-pug'
-Plug 'a5ob7r/shellcheckrc.vim'
-Plug 'hail2u/vim-css3-syntax'
-Plug 'mboughaba/i3config.vim'
-Plug 'moll/vim-node'
-Plug 'gisphm/vim-gitignore'
-Plug 'andyk/vim-liquid'
-Plug 'jparise/vim-graphql'
-
-" }}}
-" {{{ fzf
-
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'zackhsi/fzf-tags'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-tree/nvim-tree.lua'
 
 " }}}
 " {{{ lsp
@@ -112,11 +45,11 @@ Plug 'zackhsi/fzf-tags'
 Plug 'neovim/nvim-lspconfig'
 Plug 'reksar/nvim-lsp-python'
 Plug 'j-hui/fidget.nvim'
-
-" }}}
-" {{{ copilot
-
-Plug 'zbirenbaum/copilot.lua'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'jay-babu/mason-null-ls.nvim'
+Plug 'RubixDev/mason-update-all'
 
 " }}}
 " {{{ cmp
@@ -127,7 +60,6 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-Plug 'zbirenbaum/copilot-cmp'
 
 " }}}
 " {{{ snipppets
@@ -136,855 +68,93 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " }}}
-" {{{ general
+" {{{ tabline
 
-Plug 'folke/trouble.nvim'
-Plug 'jghauser/mkdir.nvim'
-Plug 'lambdalisue/readablefold.vim'
-Plug 'nathom/filetype.nvim'
-Plug 'chentoast/marks.nvim'
-" Plug 'justinmk/vim-sneak'
-" Plug 'pechorin/any-jump.vim'
-Plug 'RRethy/vim-illuminate'
-Plug 'delphinus/vim-auto-cursorline'
-Plug 'folke/lsp-colors.nvim'
-Plug 'NvChad/nvim-colorizer.lua'
-Plug 'folke/zen-mode.nvim'
-Plug 'soywod/quicklist.vim'
-Plug 'tpope/vim-eunuch'
-Plug 'romainl/vim-qlist'
-Plug 'thaerkh/vim-workspace'
+" Plug 'romgrk/barbar.nvim'
+Plug 'nanozuki/tabby.nvim'
+
+" }}}
+" {{{ javascript
+
+Plug 'yuezk/vim-js'
+Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'elzr/vim-json'
+Plug 'leafgarland/typescript-vim'
+Plug 'jason0x43/vim-js-indent'
+
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'othree/es.next.syntax.vim'
+Plug 'Quramy/vim-js-pretty-template'
+
+" }}}
+" {{{ other
+
+Plug 'natecraddock/sessions.nvim'
+Plug 'natecraddock/workspaces.nvim'
+Plug 'numtostr/BufOnly.nvim', { 'on': 'BufOnly' }
 Plug 'rhysd/clever-split.vim'
-Plug 'Shougo/neco-vim'
-" Plug 'neoclide/coc-neco'
-" Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'yarn set version 2.4.0 && yarn install --immutable'}
-" Plug 'declancm/cinnamon.nvim' " smooth movements/scrolling
-Plug 'tpope/vim-repeat'
-Plug 'ggandor/leap.nvim'
-Plug 'dense-analysis/ale'
-Plug 'vim-scripts/ZoomWin'
-Plug 'markonm/traces.vim' " live search/sub preview
-Plug 'schickling/vim-bufonly'
-Plug 'tpope/vim-commentary' " fast commenting
-Plug 'Raimondi/delimitMate' " quote/etc autocomplete
-Plug 'wincent/terminus' " enhanced terminal integration
-Plug 'ntpeters/vim-better-whitespace'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'hashivim/vim-terraform'
 Plug 'f3rno64/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
-Plug 'michaeljsmith/vim-indent-object' " indent-level text object
-Plug 'machakann/vim-highlightedyank'
-Plug 'unblevable/quick-scope' " f jump highlights
-Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-eunuch' " shell command helpers
-Plug 'fcpg/vim-shore' " mv to 1st non-blank char w/ j/k
-Plug 'danro/rename.vim'
-Plug 'Lenovsky/nuake'
-Plug 'kylechui/nvim-surround'
-" Plug 'tpope/vim-surround'
-Plug 'tpope/vim-endwise'
-Plug 'valloric/MatchTagAlways'
-
-" }}}
-" {{{ visual
-
-Plug 'jinh0/eyeliner.nvim'
-Plug 'winston0410/range-highlight.nvim'
-Plug 'lukas-reineke/virt-column.nvim'
-Plug 'pgdouyon/vim-evanesco'
-Plug 'luukvbaal/stabilize.nvim'
+Plug 'folke/trouble.nvim'
+Plug 'weilbith/nvim-code-action-menu', { 'on': 'CodeActionMenu' }
+Plug 'kosayoda/nvim-lightbulb'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'ggandor/leap.nvim'
+Plug 'tpope/vim-speeddating'
 Plug 'lewis6991/gitsigns.nvim'
-Plug 'petertriho/nvim-scrollbar'
-" Plug 'melkster/modicator.nvim'
-" Plug 'lukas-reineke/indent-blankline.nvim'
-" Plug 'junegunn/goyo.vim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'romgrk/barbar.nvim'
-Plug 'jbgutierrez/vim-better-comments'
-Plug 'beauwilliams/focus.nvim'
-Plug 'nvim-tree/nvim-tree.lua'
-" Plug 'lcheylus/overlength.nvim'
+Plug 'numToStr/Comment.nvim'
+Plug 'RRethy/vim-illuminate'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'kevinhwang91/nvim-bqf'
+Plug 'karb94/neoscroll.nvim'
+Plug 'onsails/lspkind.nvim'
+Plug 'kylechui/nvim-surround'
+Plug 'folke/todo-comments.nvim'
+Plug 'lewis6991/foldsigns.nvim'
+Plug 'booperlv/nvim-gomove'
+Plug 'windwp/nvim-autopairs'
+Plug 'nvim-zh/colorful-winsep.nvim'
+Plug 'kwkarlwang/bufresize.nvim'
+Plug 'mrjones2014/smart-splits.nvim'
+" Plug 'folke/twilight.nvim'
+Plug 'folke/zen-mode.nvim'
+Plug 'glepnir/dashboard-nvim'
+Plug 'ojroques/nvim-bufdel'
+Plug 'smjonas/inc-rename.nvim'
+Plug 'numToStr/FTerm.nvim'
 
-" }}}
-" {{{ git integration
+function! UpdateRemotePlugins(...)
+  " Needed to refresh runtime files
+  let &rtp=&rtp
+  UpdateRemotePlugins
+endfunction
 
-Plug 'tanvirtin/vgit.nvim'
-Plug 'rhysd/committia.vim' " better git commit layout
-Plug 'int3/vim-extradite' " git log
+Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 
 " }}}
 " {{{ colorschemes
 
-" {{{ light
-
-Plug 'reedes/vim-colors-pencil'
-Plug 'aonemd/kuroi.vim'
-Plug 'vim-scripts/summerfruit256.vim'
-Plug 'habamax/vim-colors-defminus'
-Plug 'notpratheek/vim-sol'
-Plug 'vim-scripts/mayansmoke'
-Plug 'kamwitsta/flatwhite-vim'
-
-" }}}
-" {{{ dark
-
-Plug 'phha/zenburn.nvim'
-Plug 'Everblush/everblush.nvim', { 'as': 'everblush' }
-Plug 'Abstract-IDE/Abstract-cs'
-Plug 'ray-x/aurora'
-Plug 'mangeshrex/uwu.vim'
-Plug 'fenetikm/falcon'
-Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
-Plug 'mrjones2014/lighthaus.nvim'
-Plug 'catppuccin/nvim', {'as': 'catppuccin'}
-Plug 'ayu-theme/ayu-vim'
-Plug 'toupeira/vim-desertink'
-Plug 'fcpg/vim-farout'
-Plug 'fcpg/vim-fahrenheit'
-Plug 'bluz71/vim-moonfly-colors'
-Plug 'romainl/Apprentice'
-Plug 'AlessandroYorba/Alduin'
-" Plug 'djjcast/mirodark'
-" Plug 'ajmwagar/vim-deus'
-Plug 'nanotech/jellybeans.vim'
-" Plug 'metalelf0/jellybeans-nvim'
-" Plug 'yuttie/hydrangea-vim'
-" Plug 'cocopon/iceberg.vim'
-" Plug 'itchyny/landscape.vim'
-" Plug 'sstallion/vim-wtf'
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'AlessandroYorba/Sierra'
-Plug 'srcery-colors/srcery-vim'
-Plug 'tpope/vim-vividchalk'
-Plug 'jacoborus/tender.vim'
-" Plug 'artanikin/vim-synthwave84'
-Plug 'drewtempelmeyer/palenight.vim'
-" Plug 'DemonCloud/J'
-Plug 'whatyouhide/vim-gotham'
-" Plug 'bignimbus/pop-punk.vim'
-Plug 'franbach/miramare'
-Plug 'trevordmiller/nova-vim'
-" Plug 'acepukas/vim-zenburn'
-" Plug 'arcticicestudio/nord-vim'
-" Plug 'atahabaki/archman-vim'
-Plug 'levelone/tequila-sunrise.vim'
-" Plug 'ts-26a/vim-darkspace'
-" Plug 'evturn/vim-hardaway'
-" Plug 'ksevelyar/joker.vim'
-" Plug 'tomasr/molokai'
-" Plug 'hardcoreplayers/oceanic-material'
-" Plug 'shannonmoeller/vim-monokai256'
-Plug 'vim-scripts/vibrantink'
-
-" }}}
-" {{{ dual/multiple
-
-Plug 'sainnhe/everforest'
-Plug 'ellisonleao/gruvbox.nvim'
-Plug 'rose-pine/neovim'
+Plug 'RRethy/nvim-base16'
+Plug 'rebelot/kanagawa.nvim'
 Plug 'EdenEast/nightfox.nvim'
-Plug 'rakr/vim-two-firewatch'
+Plug 'nyoom-engineering/oxocarbon.nvim'
+Plug 'levelone/tequila-sunrise.vim'
+Plug 'Abstract-IDE/Abstract-cs'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
-Plug 'chriskempson/base16-vim'
-Plug 'sonph/onehalf', { 'rtp': 'vim/' }
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'rakr/vim-one'
-Plug 'severij/vadelma'
-Plug 'iKarith/tigrana'
-Plug 'sainnhe/sonokai'
-Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
-Plug 'junegunn/seoul256.vim'
-Plug 'noahfrederick/vim-hemisu'
-Plug 'jan-warchol/selenized', { 'rtp': 'editors/vim' }
-Plug 'andbar-ru/vim-unicon'
-Plug 'wimstefan/vim-artesanal'
-Plug 'overcache/NeoSolarized'
+Plug 'glepnir/zephyr-nvim'
 
 " }}}
-
-" }}}
-" {{{
 
 call plug#end()
 
 " }}}
-
-" }}}
-" {{{ configuration
-
-" {{{ any-jump (disabled)
-
-" let g:any_jump_list_numbers = 0
-" let g:any_jump_references_enabled = 1
-" let g:any_jump_grouping_enabled = 1
-" let g:any_jump_preview_lines_count = 4
-" let g:any_jump_max_search_results = 10
-" let g:any_jump_search_prefered_engine = 'rg'
-" let g:any_jump_disable_default_keybindings = 0
-" let g:any_jump_remove_comments_from_results = 1
-" let g:any_jump_ignored_files = ['node_modules/*', '*.tmp', '*.temp']
-" let g:any_jump_references_only_for_current_filetype = 1
-" let g:any_jump_disable_vcs_ignore = 0
-
-" let g:any_jump_results_ui_style = 'filename_first'
-
-" let g:any_jump_window_width_ratio  = 0.4
-" let g:any_jump_window_height_ratio = 0.4
-" let g:any_jump_window_top_offset   = 4
-
-" let g:any_jump_colors = {
-"   \ 'plain_text':         'Comment',
-"   \ 'preview':            'Comment',
-"   \ 'preview_keyword':    'Operator',
-"   \ 'heading_text':       'Function',
-"   \ 'heading_keyword':    'Identifier',
-"   \ 'group_text':         'Comment',
-"   \ 'group_name':         'Function',
-"   \ 'more_button':        'Operator',
-"   \ 'more_explain':       'Comment',
-"   \ 'result_line_number': 'Comment',
-"   \ 'result_text':        'Statement',
-"   \ 'result_path':        'String',
-"   \ 'help':               'Comment'
-"   \ }
-
-" }}}
-" {{{ impatient
-
-lua require('impatient')
-
-" }}}
-" {{{ lualine
-
-lua << EOF
-
-require('lualine').setup({
-  options = { theme = "gruvbox" },
-})
-
-EOF
-
-" }}}
-" {{{ treesitter
-
-lua << EOF
-
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { 'python', 'javascript', 'typescript', 'json' },
-  sync_install = false,
-  auto_install = true,
-  highlight = {
-    enable = true,
-  },
-
-  indent = {
-    enable = false,
-  },
-
-  yati = {
-    enable = true,
-    default_lazy = true,
-
-    -- Determine the fallback method used when we cannot calculate indent by tree-sitter
-    --   'auto': fallback to vim auto indent
-    --   'asis': use current indent as-is
-    --   'cindent': see `:h cindent()`
-    -- Or a custom function return the final indent result.
-    default_fallback = 'auto'
-  },
-
-  autotag = {
-    enable = true,
-  },
-
-  rainbow = {
-    enable = true,
-    extended_mode = true,
-    max_file_lines = nil
-  },
-
-  textsubjects = {
-    enable = true,
-    prev_selection = ',',
-    keymaps = {
-      ['.'] = 'textsubjects-smart',
-      [';'] = 'textsubjects-container-outer',
-      ['i;'] = 'textsubjects-container-inner'
-    }
-  }
-}
-
-EOF
-
-" }}}
-" {{{ ale
-
-let g:ale_enabled = 1
-
-let g:ale_linters = {
-\ 'sh': ['shellcheck'],
-\ 'javascript': ['eslint'],
-\ 'typescript': ['tslint'],
-\ 'json': ['eslint'],
-\ 'ruby': ['rubocop'],
-\ 'scss': ['stylelint'],
-\ 'css': ['stylelint'],
-\ 'vim': ['vint'],
-\ 'yaml': ['yamllint'],
-\ }
-
-let g:ale_fixers = {
-\ 'sh': ['shfmt'],
-\ 'javascript': ['eslint'],
-\ 'typescript': ['prettier'],
-\ 'json': ['fixjson'],
-\ 'ruby': ['rubocop'],
-\ 'scss': ['stylelint'],
-\ 'css': ['stylelint'],
-\ 'vim': ['vint'],
-\ }
-
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_enter = 1
-let g:ale_lint_on_save = 1
-let g:ale_set_loclist = 1
-let g:ale_set_quickfix = 0
-let g:ale_set_highlights = 1
-let g:ale_set_signs = 1
-let g:ale_sign_highlight_linenrs = 1
-let g:ale_virtualtext_cursor = 1
-let g:ale_sign_column_always = 1
-let g:ale_open_list = 0
-let g:ale_disable_lsp = 1
-
-" }}}
-" {{{ coc
-
-" let g:coc#snippet#next = '<c-j>'
-" let g:coc#snippet#prev = '<c-k>'
-
-" let g:coc#node#path = $HOME . '.nvm/versions/node/v17.8.0/bin/node'
-" let g:coc#node#args = ['--max-old-space-size=16384', '--no-warnings']
-
-" }}}
-" {{{ cinnamon.nvim
-
-" lua << EOF
-
-" require('cinnamon').setup {
-"   extra_keymaps = true,
-"   override_keymaps = true,
-"   max_length = 500,
-"   scroll_limit = 80,
-" }
-
-" EOF
-
-" }}}
-" {{{ eyeliner
-
-lua << EOF
-  require'eyeliner'.setup {
-    highlight_on_key = true
-  }
-EOF
-
-" }}}
-" {{{ fidget
-
-lua require"fidget".setup{}
-
-" }}}
-" {{{ focus
-
-lua require('focus').setup()
-
-" }}}
-" {{{ fzf
-
-set rtp+=/usr/bin/fzf
-set rtp+=$HOME/.cargo/bin
-
-let g:fzf#command#prefix = 'FZF'
-let g:fzf#buffers#jump = 1
-let g:fzf#tags#command = 'ctags -R'
-let g:fzf#layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-
-" TODO: Refactor out of command, or consider moving more logic to commands
-command! -bang -nargs=? -complete=dir FZFShowFileExplorer :call <SID>xf_fzf_find_files(<q-args>, <bang>0)
-
-func! s:xf_fzf_find_files(q_args, bang) abort
-  let s:preview_path = s:xf_plugin_path . '/fzf.vim/bin/preview.sh {}'
-  let s:q_args = a:q_args || ''
-  let s:bang = a:bang || ''
-
-  call fzf#vim#files(s:q_args, {
-    \   'options': [
-    \     '--ansi',
-    \     '--reverse',
-    \     '--info=inline',
-    \     '--preview',
-    \     s:preview_path
-    \   ]}, s:bang)
-endfunc
-
-" }}}
-" {{{ gitsigns
-
-lua require('gitsigns').setup()
-
-" }}}
-" {{{ goyo
-
-" let g:goyo_height = '80%'
-" let g:goyo_width = '60%'
-
-" func! s:goyo_enter()
-"   set noshowmode
-"   set noshowcmd
-"   set nonumber
-
-"   " let b:coc_suggest_disable = 1 " popup 'invisible' but hides content
-" endfunc
-
-" func! s:goyo_leave()
-"   set showmode
-"   set showcmd
-"   set number
-"   " let b:coc_suggest_disable = 0
-
-"   " Workaround for color scheme issue
-"   " TODO: Update w/ dynamic config path
-"   if has('nvim')
-"     silent! source $HOME/.config/nvim/init.vim
-"   else
-"     silent! source $HOME/.vimrc
-"   endif
-" endfunc
-
-" autocmd! User GoyoEnter nested call <SID>goyo_enter()
-" autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-" }}}
-" {{{ hlargs
-
-lua require('hlargs').setup()
-
-" }}}
-" {{{ indent-blankline (disabled)
-
-" lua << EOF
-"   require("indent_blankline").setup {
-"     show_current_context = true,
-"     show_current_context_start = true,
-"   }
-" EOF
-
-" }}}
-" {{{ javascript-libraries-syntax.vim
-
-let g:used_javascript_libs = 'underscore,react,chai,handlebars'
-
-" }}}
-" {{{ leap
-
-lua require('leap').set_default_keymaps()
-
-" }}}
-" {{{ copilot
-
-lua << EOF
-
-require("copilot").setup({
-  copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v19.0.1/bin/node",
-  plugin_manager_path = vim.fn.expand("$HOME") .. "/.nvim-plugins"
-})
-
-EOF
-
-" }}}
-" {{{ cmp
-
-set completeopt=menu,menuone,noselect
-
-lua << EOF
-
-require("copilot_cmp").setup()
-
-local cmp = require'cmp'
-
-cmp.setup({
-  snippet = {
-    expand = function(args)
-      vim.fn["UltiSnips#Anon"](args.body)
-    end,
-  },
-  window = {
-    -- completion = cmp.config.window.bordered(),
-    -- documentation = cmp.config.window.bordered(),
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-  }),
-  sources = cmp.config.sources({
-    { name = "copilot", group_index = 2 },
-    { name = 'nvim_lsp', group_index = 2 },
-    { name = 'ultisnips', group_index = 2 },
-  }, {
-    { name = 'buffer' },
-  })
-})
-
-cmp.setup.cmdline({ '/', '?' }, {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'buffer' }
-  }
-})
-
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  })
-})
-
-EOF
-
-" }}}
-" {{{ illuminate
-
-lua << EOF
-
-require('illuminate').configure({
-  providers = {
-      'lsp',
-      'treesitter',
-  },
-})
-
-EOF
-
-" }}}
-" {{{ lsp
-
-lua << EOF
-
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
-end
-
-local lsp_flags = {
-  debounce_text_changes = 150,
-}
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-require('lspconfig').tsserver.setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-}
-
-require('lspconfig').pylsp.setup{}
-
-EOF
-
-" }}}
-" {{{ marks.nvim
-
-lua require'marks'.setup {}
-
-" }}}
-" {{{ MatchTagAlways
-
-let g:mta_filetypes = {
-\ 'html' : 1,
-\ 'xml' : 1,
-\ 'jinja.html' : 1,
-\}
-
-" }}}
-" {{{ modicator.nvim (disabled)
-
-" lua require('modicator').setup()
-
-" }}}
-" {{{ nuake
-
-let g:nuake_start_insert = 0
-let g:nuake_position = 'bottom'
-let g:nuake_size = 0.4
-
-" }}}
-" {{{ nvim-colorizer
-
-lua require('colorizer').setup()
-
-" }}}
-" {{{ nvim-scrollbar
-
-lua require("scrollbar").setup()
-
-" }}}
-" {{{ nvim-surround
-
-lua << EOF
-  require("nvim-surround").setup({})
-EOF
-
-" }}}
-" {{{ nvim-tree
-
-lua << EOF
-
-require("nvim-tree").setup({
-  sort_by = "case_sensitive",
-  view = {
-    adaptive_size = true,
-    mappings = {
-      list = {
-        { key = "u", action = "dir_up" },
-      },
-    },
-  },
-
-  renderer = {
-    group_empty = true,
-  },
-
-  filters = {
-    dotfiles = true,
-  },
-})
-
-EOF
-
-" }}}
-" {{{ overlength.nvim
-
-" lua require('overlength').setup({})
-
-" }}}
-" {{{ range-highlight
-
-lua require'range-highlight'.setup{}
-
-" }}}
-" {{{ stabilize.nvim
-
-lua require('stabilize').setup()
-
-" }}}
-" {{{ trouble.nvim
-
-lua require('trouble').setup({})
-
-" }}}
-" {{{ ultisnips
-
-autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
-
-let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsExpandTrigger = '<c-space>'
-let g:UltiSnipsListSnippets = '<c-space><c-space>'
-let g:UltiSnipsJumpForwardTrigger = '<c-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-let g:UltiSnipsSnippetDirectories = [
-  \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
-  \ ]
-
-" }}}
-" {{{ virt-column
-
-lua require("virt-column").setup()
-
-" }}}
-" {{{ vgit
-
-lua << EOF
-require('vgit').setup()
-EOF
-
-" }}}
-" {{{ vim-better-comments
-
-let g:bettercomments_included = ['javascript', 'js', 'go', 'ruby', 'python']
-
-" }}}
-" {{{ vim-better-whitespace
-
-let g:better_whitespace_enabled = 1
-
-" }}}
-" {{{ vim-jsx-pretty
-
-let g:vim_jsx_pretty_colorful_config = 1
-
-" }}}
-" {{{ vim-grepper
-
-let g:grepper = {}
-let g:grepper.tools = ['rg']
-let g:grepper.highlight = 1
-let g:grepper.quickfix = 1
-let g:grepper.open = 1
-let g:grepper.switch = 1
-let g:grepper.dir = 'repo,file'
-
-" }}}
-" {{{ vim-workspace
-
-let g:workspace_autocreate = 1
-let g:workspace_create_new_tabs = 0
-let g:workspace_session_disable_on_args = 1
-let g:workspace_session_directory = $HOME . '/.config/nvim/sessions/'
-let g:workspace_undodir = $HOME . '/.config/nvim/undodir'
-let g:workspace_persist_undo_history = 1
-let g_workspace_autosave_untrailspaces = 0
-let g_workspace_autosave_untrailtabs = 0
-let g:workspace_autosave = 0
-
-" }}}
-" {{{ zen-mode
-
-lua << EOF
-
-require("zen-mode").setup {
-  window = {
-    backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
-    -- height and width can be:
-    -- * an absolute number of cells when > 1
-    -- * a percentage of the width / height of the editor when <= 1
-    -- * a function that returns the width or the height
-    width = 120, -- width of the Zen window
-    height = 1, -- height of the Zen window
-    options = {
-      -- signcolumn = "no",
-      -- number = false,
-      -- relativenumber = false,
-      -- cursorline = true,
-      -- cursorcolumn = false,
-      -- foldcolumn = "0",
-      -- list = true,
-    },
-  },
-  plugins = {
-    options = {
-      enabled = true,
-      ruler = true,
-      showcmd = false,
-    },
-    twilight = { enabled = true },
-    gitsigns = { enabled = false }
-  }
-}
-
-EOF
-
-" }}}
-
-" }}}
-
-" }}}
-" {{{ 4. configuration
-
-" {{{ statusline
-
-func! StatuslineALE() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-
-  if l:counts.total == 0
-    return 'OK'
-  endif
-
-  return printf('%dW %dE', all_non_errors, all_errors)
-endfunc
-
-set laststatus=2
-
-" left
-set statusline=
-set statusline+=%#PmenuSel#
-set statusline+=\ " padding
-" set statusline+=%{FugitiveHead()}
-" set statusline+=\ " padding
-set statusline+=%#CursorColumn#
-set statusline+=\ " padding
-set statusline+=%{StatuslineALE()}
-" set statusline+=\ " padding
-" set statusline+=%{coc#status()}
-set statusline+=\ " padding
-set statusline+=%#LineNr#
-set statusline+=\ " padding
-set statusline+=%f
-
-" right
-set statusline+=%=
-set statusline+=%#CursorColumn#
-set statusline+=\ " padding
-set statusline+=%y
-set statusline+=\ " padding
-set statusline+=%#PmenuSel#
-set statusline+=\ L%l\ %p%%
-set statusline+=\ " padding
-
-" }}}
-" {{{ netrw
-
-let g:netrw_banner = 0
-let g:netrw_altv = 1 " split to right
-" let g:netrw_browse_split = 2 " open file in right split
-let g:netrw_sizestyle = "H" " human readable base 1024
-let g:netrw_liststyle = 3
-let g:netrw_winsize = 20
-let g:netrw_nogx = 1
-let g:netrw_browsex_viewer = 'xdg-open'
-let g:netrw_list_hide = netrw_gitignore#Hide()
-
-" }}}
-" {{{ general
-
-" Disable background erase for kitty
-let &t_ut=''
+" {{{ general settings
 
 syntax enable
 
 filetype plugin on
 filetype indent on
-
-let &shell=$SHELL
 
 set expandtab
 set tabstop=2
@@ -997,11 +167,12 @@ set ttimeout          " for key codes
 set ttimeoutlen=10    " unnoticeable small value
 
 set encoding=utf-8
+set updatetime=300
 set number
 set nojoinspaces
 set splitbelow
 set showmatch
-" set incsearch " incsearch.vim used
+set incsearch
 set hlsearch
 set colorcolumn=80
 set cmdheight=2
@@ -1024,14 +195,10 @@ set nobackup
 set nowritebackup
 set concealcursor=nc
 set conceallevel=3
+set termguicolors
+set mouse+=a
+set splitkeep=screen
 
-" Disable python2 check
-let g:loaded_python_provider=0
-
-" Enabled embedded lua highlighting
-let g:vimsyn_embed = 'l'
-
-" }}}
 " {{{ folding
 
 set foldmethod=marker
@@ -1062,295 +229,21 @@ autocmd InsertLeave,TextChanged * update
 
 " }}}
 
-" }}}
-" {{{ 5. colorscheme
-
-" {{{ reference
-
-" {{{ dark
-
-" jellybeans
-" synthwave84
-" dracula
-" alduin
-" desertink
-" gotham
-" miramare
-" nova
-" zenburn
-" nord
-" tequila-sunrise
-" base16-seti
-" tender
-" selenized_bw
-" sonokai
-" falcon
-" sierra
-" srcery
-" tender
-" vim-farout
-" vim-desertink
-
-" }}}
-" {{{ black
-
-" base16-irblack
-" moonfly
-" archman
-" vividchalk
-" darkspace
-" vim-hardaway
-
-" }}}
-" {{{ dual
-
-" hemisu
-" artesanal
-" ayu
-" gruvbox
-" PaperColor
-
-" }}}
-" {{{ light
-
-" sol
-" mayansmoke
-" flatwhite
-" pencil
-" paper
-" kuroi
-" shirotelin
-" defminus
-" summerfruit256
-
-" }}}
-
-" }}}
-" {{{ enable 256 colors
-
-set t_Co=256
-
-if has("termguicolors")
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
-" }}}
-" {{{ configuration
-
-" {{{ aurora
-
-let g:aurora_italic = 1
-let g:aurora_transparent = 0
-let g:aurora_bold = 1
-let g:aurora_darker = 1
-
-" }}}
-" {{{ ayu
-
-" let ayucolor='light'
-" let ayucolor='mirage'
-let ayucolor='dark'
-
-" }}}
-" {{{ gruvbox
-
-let g:gruvbox#contrast#dark = 'hard'
-let g:gruvbox#improved#strings = 0
-let g:gruvbox#improved#warnings = 0
-let g:gruvbox#bold = 1
-let g:gruvbox#italic = 1
-let g:gruvbox#underline = 1
-let g:gruvbox#invert#selection = 0
-
-" }}}
-" {{{ gruvbox_material
-
-let g:gruvbox#material#background = 'hard'
-
-" }}}
-" {{{ OceanicMaterial
-
-let g:oceanic#material#enable#bold = 1
-let g:oceanic#material#enable#italic = 1
-
-" }}}
-" {{{ seoul256
-
-" 233 (darkest) - 239 (lightest)
-let g:seoul256#background = 234
-
-" 252 (darkest) - 256 (lightest)
-let g:seoul256#light#background = 252
-
-" }}}
-" {{{ sierra
-
-let g:sierra#Twilight = 1
-
-" }}}
-" {{{ sonokai
-
-" let g:sonokai_style = 'andromeda'
-let g:sonokai#style = 'shusia'
-" let g:sonokai_style = 'atlantis'
-" let g:sonokai_style = 'maia'
-let g:sonokai#enable#italic = 1
-
-" }}}
-" {{{ miramare
-
-let g:miramare#enable#italic = 1
-
-" }}}
-" {{{ molokai
-
-" let g:molokai_original = 1
-
-" }}}
-" {{{ NeoSolarized
-
-let g:neosolarized#contrast = 'high' " low, normal, high
-let g:neosolarized#visibility = "normal" " low, normal, high
-let g:neosolarized#bold = 1
-let g:neosolarized#underline = 1
-let g:neosolarized#italic = 1
-
-" }}}
-" {{{ alduin
-
-" Almost black bg
-let g:alduin#Shout#Dragon#Aspect = 1
-
-" Black bg
-" let g:alduin_Shout_Become_Ethereal = 1
-
-" Deep red for special highlighting groups
-" let g:alduin_Shout_Fire_Breath = 1
-
-" Remove block matchparens & add underline
-" let g:alduin_Shout_Aura_Whisper = 1
-
-" }}}
-" {{{ one
-
-let g:one#allow#italics = 1
-
-" }}}
-" {{{ rosepine
-
-lua << EOF
-require('rose-pine').setup({
-	---@usage 'main'|'moon'
-	dark_variant = 'main',
-	bold_vert_split = false,
-	dim_nc_background = false,
-	disable_background = false,
-	disable_float_background = false,
-	disable_italics = false,
-	---@usage string hex value or named color from rosepinetheme.com/palette
-	groups = {
-		background = 'base',
-		panel = 'surface',
-		border = 'highlight_med',
-		comment = 'muted',
-		link = 'iris',
-		punctuation = 'subtle',
-
-		error = 'love',
-		hint = 'iris',
-		info = 'foam',
-		warn = 'gold',
-
-		headings = {
-			h1 = 'iris',
-			h2 = 'foam',
-			h3 = 'rose',
-			h4 = 'gold',
-			h5 = 'pine',
-			h6 = 'foam',
-		}
-		-- or set all headings at once
-		-- headings = 'subtle'
-	}
-})
-EOF
-
-" }}}
-" {{{ sonokai
-
-" shusia, andromeda, atlantis, maia
-let g:sonokai_style = 'andromeda'
-let g:sonokai_enable_italic = 1
-let g:sonokai_better_performance = 1
-
-" }}}
-" {{{ srcery
-
-let g:srcery#italic = 1
-
-" }}}
-" {{{ tokyonight
-
-let g:tokyonight_style = "night"
-let g:tokyonight_italic_functions = 1
-
-" }}}
-" {{{ falcon
-
-let g:falcon_background = 1
-let g:falcon_inactive = 1
-
-" }}}
-
-" }}}
-
 set background=dark
 
-" moonfly
-" vibrantink
-" farout
-" hemisu
-" paper
-" gotham
-" desertink
-" nova
-" oceanic_material
-" base16-irblack
-" base16-github
-" ayu
-" tequila-sunrise
-" tokyonight
-" PaperColor
-" falcon
-" rose-pine
-" tender
-" everforest
-" unicon
-" aurora
-" abscs
-" everblush
-" zenburn
-" base16-gruvbox-dark-hard
-" base16-atelier-dune-light
-" base16-atelier-heath-light !
-" base16-ashes
-" base16-chalk !
-" base16-cupertino (light)
-" base16-one-light !
-" base16-isotope
-" base16-snazzy
-" base16-tomorrow-night
-" base16-dracula
-" base16-material-darker
-" base16-seti
-" base16-synth-midnight-dark ! (black fav)
-" base16-bright ! (black)
-colorscheme base16-synth-midnight-dark
+" colorscheme tequila-sunrise
+" colorscheme kanagawa
+" colorscheme nightfox
+" colorscheme oxocarbon
+" colorscheme base16-gruvbox-dark-medium
+" colorscheme abscs
+" colorscheme tokyonight-night
+colorscheme zephyr
+
+let mapleader=','
 
 " }}}
-" {{{ 6. gui
+" {{{ gui
 
 if has('gui_running') || exists('g:GtkGuiLoaded')
 
@@ -1398,7 +291,7 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 
 let g:font_name = 'Hasklug Nerd Font'
 let g:font_features = ''
-let g:font_size = 10
+let g:font_size = 12
 
 call SetFont()
 
@@ -1437,10 +330,66 @@ endif
 endif
 
 " }}}
-" {{{ 7. keybindings
 
-let mapleader = ','
+" {{{ mason
 
+lua require("mason").setup()
+
+" }}}
+" {{{ mason-lspconfig
+
+lua << EOF
+
+require("mason-lspconfig").setup()
+require("mason-lspconfig").setup_handlers {
+  function (server_name)
+    require("lspconfig")[server_name].setup {}
+  end
+}
+
+EOF
+
+" }}}
+" {{{ mason-null-ls
+
+lua << EOF
+
+require("mason-null-ls").setup({
+  automatic_setup = true,
+})
+
+require("mason-null-ls").setup_handlers()
+
+EOF
+
+" }}}
+" {{{ mason-update-all
+
+lua require("mason-update-all").setup()
+
+" }}}
+" {{{ null-ls
+
+lua << EOF
+
+local null_ls = require("null-ls")
+
+require("null-ls").setup()
+
+EOF
+
+" }}}
+" {{{ code actions
+
+lua << EOF
+
+vim.keymap.set({ "v", "n" }, "ca", function()
+    vim.lsp.buf.code_action() end, bufopts)
+vim.keymap.set({ "v", "n" }, "cp", require("actions-preview").code_actions)
+
+EOF
+
+" }}}
 " {{{ fast line movements
 
 nnoremap J 2j
@@ -1507,11 +456,6 @@ nnoremap <leader>ch :CleverHSplit<CR>
 nnoremap <leader>cv :CleverVSplit<CR>
 
 " }}}
-" {{{ netrw (disabled)
-
-" nnoremap <leader>e :Lexplore<cr>
-
-" }}}
 " {{{ buffers
 
 nnoremap <leader>bo :BufOnly<CR>
@@ -1535,200 +479,548 @@ tnoremap <Esc> <C-\><C-n>
 nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
 
 " }}}
-" {{{ lsp
+
+" {{{ lualine
 
 lua << EOF
 
-vim.api.nvim_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', { noremap = true })
+require("lualine").setup {
+  options = {
+    icons_enabled = true,
+    theme = "auto",
+    component_separators = { left = "", right = ""},
+    section_separators = { left = "", right = ""},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {"mode"},
+    lualine_b = {"branch", "diff", "diagnostics"},
+    lualine_c = {"filename"},
+    lualine_x = {"encoding", "fileformat", "filetype"},
+    lualine_y = {"progress"},
+    lualine_z = {"location"}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {"filename"},
+    lualine_x = {"location"},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
 
 EOF
 
 " }}}
-" {{{ ale
+" {{{ devicons
 
-nmap <silent> <leader>aj :ALENext<cr>
-nmap <silent> <leader>ak :ALEPrevious<cr>
+lua << EOF
 
-" }}}
-" {{{ coc
+require("nvim-web-devicons").setup({
+  color_icons = true,
+  default = true,
+  strict = true
+})
 
-" Helper to handle complex tab behavior, allowing for elegant snippet expansion
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: There's always complete item selected by default, you may want to enable
-" no select by `"suggest.noselect": true` in your configuration file.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-" inoremap <silent><expr> <TAB>
-"       \ coc#pum#visible() ? coc#pum#next(1) :
-"       \ CheckBackspace() ? "\<Tab>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-" Make <CR> to accept selected completion item or notify coc.nvim to format
-" <C-g>u breaks current undo, please make your own choice.
-" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" function! CheckBackspace() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
-" Use <c-space> to trigger completion.
-" if has('nvim')
-"   inoremap <silent><expr> <c-space> coc#refresh()
-" else
-"   inoremap <silent><expr> <c-@> coc#refresh()
-" endif
-
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-" nmap <silent> [g <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-" nnoremap <silent> K :call ShowDocumentation()<CR>
-
-" function! ShowDocumentation()
-"   if CocAction('hasProvider', 'hover')
-"     call CocActionAsync('doHover')
-"   else
-"     call feedkeys('K', 'in')
-"   endif
-" endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Symbol renaming.
-" nmap <leader>rn <Plug>(coc-rename)
-
-" Mappings for CoCList
-" Show all diagnostics.
-" nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-" nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
-" nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document.
-" nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols.
-" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-" nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+EOF
 
 " }}}
-" {{{ fzf
+" {{{ sessions
 
-nnoremap <C-p> :FZFShowFileExplorer<cr>
+lua << EOF
 
-" {{{ search open buffers
+require("sessions").setup({
+  events = { "BufEnter" },
+  session_filepath = vim.fn.stdpath("data") .. "/sessions",
+  absolute = true,
+})
 
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
+EOF
 
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-nnoremap <silent> <Leader><Enter> :call fzf#run({
-\   'source':  reverse(<sid>buflist()),
-\   'sink':    function('<sid>bufopen'),
-\   'options': '+m',
-\   'down':    len(<sid>buflist()) + 2
-\ })<CR>
+nnoremap <leader>ss <cmd>SessionsSave<cr>
+nnoremap <leader>sl <cmd>SessionsLoad<cr>
 
 " }}}
-" {{{ search tags
+" {{{ workspaces
 
-function! s:tags_sink(line)
-  let parts = split(a:line, '\t\zs')
-  let excmd = matchstr(parts[2:], '^.*\ze;"\t')
-  execute 'silent e' parts[1][:-2]
-  let [magic, &magic] = [&magic, 0]
-  execute excmd
-  let &magic = magic
-endfunction
+lua << EOF
 
-function! s:tags()
-  call fzf#run({
-  \ 'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
-  \            '| grep -v -a ^!',
-  \ 'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
-  \ 'down':    '40%',
-  \ 'sink':    function('s:tags_sink')})
-endfunction
+require("workspaces").setup({
+  path = vim.fn.stdpath("data") .. "/workspaces",
+  cd_type = "global",
+  sort = true,
+  mru_sort = true,
+  notify_info = true,
+  hooks = {
+    add = {},
+    remove = {},
+    rename = {},
+    open_pre = {},
+    open = function()
+      require("sessions").load(nil, { silent = true })
+    end,
+  },
+})
 
-command! Tags call s:tags()
+EOF
+
+nnoremap <leader>wo <cmd>WorkspacesOpen<cr>
+nnoremap <leader>wl <cmd>WorkspacesList<cr>
 
 " }}}
+" {{{ telescope
+
+lua << EOF
+
+require("telescope").setup({
+  extensions = {
+    fzf = {
+      fuzzy = true,
+      override_generic_sorter = true,
+      override_file_sorter = true,
+      case_mode = "smart_case",
+    }
+  }
+})
+
+require("telescope").load_extension("workspaces")
+require("telescope").load_extension("ui-select")
+
+EOF
+
+nnoremap <c-p> <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fw <cmd>Telescope workspaces<cr>
 
 " }}}
-" {{{ grepper
+" {{{ nvim-tree
+
+lua << EOF
+
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  view = {
+    width = 30,
+    mappings = {
+      list = {
+        { key = "u", action = "dir_up" },
+      },
+    },
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
+
+EOF
+
+nnoremap <silent> <leader>e :NvimTreeToggle<cr>
+
+" }}}
+" {{{ vim-grepper
+
+let g:grepper = {}
+let g:grepper.tools = ['rg']
+let g:grepper.highlight = 1
+let g:grepper.quickfix = 1
+let g:grepper.open = 1
+let g:grepper.switch = 1
+let g:grepper.dir = 'repo,file'
 
 nnoremap <silent> GG :Grepper<cr>
 nnoremap <silent> GC :Grepper-cword -noprompt<cr>
 
 " }}}
-" {{{ goyo
+" {{{ barbar
 
-" nnoremap <silent> <leader>g :Goyo<cr>
+nnoremap <silent>    <A-,> <Cmd>BufferPrevious<CR>
+nnoremap <silent>    <A-.> <Cmd>BufferNext<CR>
 
-" }}}
-" {{{ quicklist
+nnoremap <silent>    <A-<> <Cmd>BufferMovePrevious<CR>
+nnoremap <silent>    <A->> <Cmd>BufferMoveNext<CR>
 
-nmap <a-l> <plug>(quicklist-toggle-lc) " Toggle the loclist
-nmap <a-c> <plug>(quicklist-toggle-qf) " Toggle the quickfix
-nmap <c-a> <plug>(quicklist-prev-item) " Select the previous loclist item (or the previous quickfix one if empty)
-nmap <c-l> <plug>(quicklist-next-item) " Select the next loclist item (or the next quickfix one if empty)
+nnoremap <silent>    <A-1> <Cmd>BufferGoto 1<CR>
+nnoremap <silent>    <A-2> <Cmd>BufferGoto 2<CR>
+nnoremap <silent>    <A-3> <Cmd>BufferGoto 3<CR>
+nnoremap <silent>    <A-4> <Cmd>BufferGoto 4<CR>
+nnoremap <silent>    <A-5> <Cmd>BufferGoto 5<CR>
+nnoremap <silent>    <A-6> <Cmd>BufferGoto 6<CR>
+nnoremap <silent>    <A-7> <Cmd>BufferGoto 7<CR>
+nnoremap <silent>    <A-8> <Cmd>BufferGoto 8<CR>
+nnoremap <silent>    <A-9> <Cmd>BufferGoto 9<CR>
+nnoremap <silent>    <A-0> <Cmd>BufferLast<CR>
 
-" }}}
-" {{{ nuake
+nnoremap <silent>    <A-p> <Cmd>BufferPin<CR>
 
-nnoremap <leader>T :Nuake<cr>
-inoremap <leader>T <C-\><C-n>:Nuake<cr>
-tnoremap <leader>T <C-\><C-n>:Nuake<cr>
+nnoremap <silent>    <A-c> <Cmd>BufferClose<CR>
 
-" }}}
-" {{{ nvim-tree
-
-nnoremap <leader>e :NvimTreeToggle<cr>
-
-" }}}
-" {{{ trouble.nvim
-
-nnoremap <leader>xx <cmd>TroubleToggle<cr>
-nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
-nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
-nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
-nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
-nnoremap gR <cmd>TroubleToggle lsp_references<cr>
+nnoremap <silent> <Space>bb <Cmd>BufferOrderByBufferNumber<CR>
+nnoremap <silent> <Space>bd <Cmd>BufferOrderByDirectory<CR>
+nnoremap <silent> <Space>bl <Cmd>BufferOrderByLanguage<CR>
+nnoremap <silent> <Space>bw <Cmd>BufferOrderByWindowNumber<CR>
 
 " }}}
-" {{{ vim-workspace
+" {{{ trouble
 
-nnoremap <leader>W :ToggleWorkspace<CR>
+lua << EOF
+
+require("trouble").setup({
+  height = 15,
+  auto_open = false,
+  auto_close = false
+})
+
+EOF
+
+nnoremap <silent> <leader>D :TroubleToggle<cr>
 
 " }}}
-" {{{ snippets
+" {{{ treesitter
 
-nnoremap <leader>SS :call UltiSnips#RefreshSnippets()<cr>
+lua << EOF
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { 'python', 'javascript', 'typescript', 'json' },
+  sync_install = false,
+  auto_install = true,
+  highlight = {
+    enable = true,
+  },
+
+  indent = {
+    enable = false,
+  },
+
+  yati = {
+    enable = true,
+    default_lazy = true,
+
+    -- Determine the fallback method used when we cannot calculate indent by tree-sitter
+    --   'auto': fallback to vim auto indent
+    --   'asis': use current indent as-is
+    --   'cindent': see `:h cindent()`
+    -- Or a custom function return the final indent result.
+    default_fallback = 'auto'
+  },
+
+  autotag = {
+    enable = true,
+  },
+
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil
+  },
+
+  textsubjects = {
+    enable = true,
+    prev_selection = ',',
+    keymaps = {
+      ['.'] = 'textsubjects-smart',
+      [';'] = 'textsubjects-container-outer',
+      ['i;'] = 'textsubjects-container-inner'
+    }
+  }
+}
+
+EOF
+
+" }}}
+" {{{ fidget
+
+lua require("fidget").setup{}
+
+" }}}
+" {{{ hlargs
+
+lua require("hlargs").setup()
+
+" }}}
+" {{{ cmp
+
+set completeopt=menu,menuone,noselect
+
+lua << EOF
+
+local cmp = require('cmp')
+local lspkind = require('lspkind')
+
+cmp.setup({
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol',
+      maxwidth = 50,
+      ellipsis_char = '...',
+
+      before = function (entry, vim_item)
+        return vim_item
+      end
+    })
+  },
+  snippet = {
+    expand = function(args)
+      vim.fn["UltiSnips#Anon"](args.body)
+    end,
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp', group_index = 2 },
+    { name = 'ultisnips', group_index = 2 },
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+
+EOF
+
+" }}}
+" {{{ ultisnips
+
+autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
+
+let g:UltiSnipsEnableSnipMate = 0
+let g:UltiSnipsExpandTrigger = '<c-space>'
+let g:UltiSnipsListSnippets = '<c-space><c-space>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsSnippetDirectories = [
+  \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
+  \ ]
+
+" }}}
+" {{{ nvim-lightbulb
+
+autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+
+" }}}
+" {{{ leap
+
+lua require("leap").add_default_mappings()
+
+" }}}
+" {{{ gitsigns
+
+lua require("gitsigns").setup()
+
+" }}}
+" {{{ comment
+
+lua require('Comment').setup()
+
+" }}}
+" {{{ tabline
+
+lua << EOF
+
+require('tabby.tabline').use_preset('active_wins_at_tail', {
+  nerdfont = true,
+})
+
+EOF
+
+nnoremap <silent> <leader>ta :$tabnew<cr>
+nnoremap <silent> <leader>tc :tabclose<cr>
+nnoremap <silent> <leader>to :tabonly<cr>
+nnoremap <silent> <leader>tn :tabn<cr>
+nnoremap <silent> <leader>tp :tabp<cr>
+nnoremap <silent> <leader>tmp :-tabmove<cr>
+nnoremap <silent> <leader>tmn :+tabmove<cr>
+
+" }}}
+" {{{ neoscroll
+
+lua require("neoscroll").setup()
+
+" }}}
+" {{{ wilder
+
+call wilder#setup({'modes': [':', '/', '?']})
+call wilder#set_option('renderer', wilder#popupmenu_renderer({
+      \ 'highlighter': wilder#basic_highlighter(),
+      \ }))
+
+" }}}
+" {{{ nvim-surround
+
+lua require("nvim-surround").setup()
+
+" }}}
+" {{{ todo-comments
+
+lua require("todo-comments").setup()
+
+" }}}
+" {{{ foldsigns
+
+lua require("foldsigns").setup()
+
+" }}}
+" {{{ nvim-gomove
+
+lua << EOF
+
+require("gomove").setup({
+  map_defaults = true,
+  reindent = true,
+  undojoin = true,
+  move_past_end_col = false
+})
+
+EOF
+
+" }}}
+" {{{ nvim-autopairs
+
+lua require("nvim-autopairs").setup()
+
+" }}}
+" {{{ colorful-winsep
+
+lua require("colorful-winsep").setup()
+
+" }}}
+" {{{ bufresize
+
+lua require("bufresize").setup()
+
+" }}}
+" {{{ smart-splits
+
+lua << EOF
+
+require('smart-splits').setup({
+  resize_mode = {
+    hooks = {
+      on_leave = require('bufresize').register,
+    },
+  },
+})
+
+vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
+
+vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+
+vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
+vim.keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
+vim.keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
+vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
+
+EOF
+
+" }}}
+" {{{ twilight
+
+" lua require("twilight").setup()
+
+" }}}
+" {{{ zen-mode
+
+lua require("zen-mode").setup()
+
+" }}}
+" {{{ dashboard-nvim
+
+lua require("dashboard").setup()
+
+" }}}
+" {{{ vim-jsx-pretty-template
+
+autocmd FileType javascript JsPreTmpl
+autocmd FileType javascript.jsx JsPreTmpl
+autocmd FileType typescript JsPreTmpl
+autocmd FileType typescript syn clear foldBraces
+
+" }}}
+" {{{ inc-rename
+
+lua << EOF
+
+require("inc_rename").setup()
+
+vim.keymap.set("n", "<leader>rn", function()
+  return ":IncRename " .. vim.fn.expand("<cword>")
+end, { expr = true })
+
+EOF
+
+" }}}
+" {{{ toggleterm
+
+lua << EOF
+
+require'FTerm'.setup({
+    border = 'double',
+    dimensions  = {
+        height = 0.9,
+        width = 0.9,
+    },
+})
+
+vim.keymap.set('n', '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>')
+vim.keymap.set('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
+
+EOF
 
 " }}}
 
+" {{{ python config
+
+autocmd FileType python syntax on
+
 " }}}
+

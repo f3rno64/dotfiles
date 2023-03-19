@@ -70,10 +70,11 @@
 
   "diagnostic.enable": true,
   "diagnostic.virtualText": true,
+  "diagnostic.locationListUpdate": true,
   "diagnostic.refreshOnInsertMode": true,
   "diagnostic.virtualTextPrefix": "!",
   "diagnostic.virtualTextLineSeparator": "-",
-  "diagnostic.displayByAle": true,
+  "diagnostic.displayByAle": false,
   "diagnostic.virtualTextCurrentLineOnly": false
 }
 
