@@ -50,6 +50,7 @@ Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jay-babu/mason-null-ls.nvim'
 Plug 'RubixDev/mason-update-all'
+Plug 'dnlhc/glance.nvim'
 
 " }}}
 " {{{ cmp
@@ -123,6 +124,8 @@ Plug 'glepnir/dashboard-nvim'
 Plug 'ojroques/nvim-bufdel'
 Plug 'smjonas/inc-rename.nvim'
 Plug 'numToStr/FTerm.nvim'
+Plug 'winston0410/cmd-parser.nvim'
+Plug 'winston0410/range-highlight.nvim'
 
 function! UpdateRemotePlugins(...)
   " Needed to refresh runtime files
@@ -143,6 +146,15 @@ Plug 'levelone/tequila-sunrise.vim'
 Plug 'Abstract-IDE/Abstract-cs'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'glepnir/zephyr-nvim'
+Plug 'fenetikm/falcon'
+Plug 'savq/melange-nvim'
+Plug 'ray-x/aurora'
+Plug 'Th3Whit3Wolf/one-nvim'
+Plug 'hoprr/calvera-dark.nvim'
+Plug 'nxvu699134/vn-night.nvim'
+Plug 'Everblush/nvim'
+Plug 'sonph/onehalf', { 'rtp': 'vim/' }
+Plug 'NLKNguyen/papercolor-theme'
 
 " }}}
 
@@ -228,9 +240,22 @@ au BufNewFile,BufRead */sway/config setf i3config
 autocmd InsertLeave,TextChanged * update
 
 " }}}
+" {{{ colorscheme configs
+
+let g:falcon_background = 0
+let g:falcon_inactive = 1
+
+let g:calvera_italic_comments = 1
+let g:calvera_italic_keywords = 1
+let g:calvera_italic_functions = 1
+let g:calvera_contrast = 1
+
+" }}}
 
 set background=dark
 
+" colorscheme PaperColor
+" colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
 " colorscheme nightfox
@@ -238,7 +263,15 @@ set background=dark
 " colorscheme base16-gruvbox-dark-medium
 " colorscheme abscs
 " colorscheme tokyonight-night
-colorscheme zephyr
+" colorscheme zephyr
+" colorscheme melange
+" colorscheme aurora
+" colorscheme one-nvim
+" colorscheme falcon
+" colorscheme calvera
+" colorscheme vn-night
+colorscheme everblush
+" colorscheme onehalflight
 
 let mapleader=','
 
@@ -291,7 +324,7 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 
 let g:font_name = 'Hasklug Nerd Font'
 let g:font_features = ''
-let g:font_size = 12
+let g:font_size = 10
 
 call SetFont()
 
@@ -506,7 +539,12 @@ require("lualine").setup {
   sections = {
     lualine_a = {"mode"},
     lualine_b = {"branch", "diff", "diagnostics"},
-    lualine_c = {"filename"},
+    lualine_c = {
+      {
+        "filename",
+        path = 2
+      }
+    },
     lualine_x = {"encoding", "fileformat", "filetype"},
     lualine_y = {"progress"},
     lualine_z = {"location"}
@@ -1023,4 +1061,95 @@ EOF
 autocmd FileType python syntax on
 
 " }}}
+" {{{ range-highlight
 
+lua require("range-highlight").setup()
+
+" }}}
+" {{{ glance
+
+lua << EOF
+
+-- Lua configuration
+local glance = require('glance')
+local actions = glance.actions
+
+glance.setup({
+  height = 18, -- Height of the window
+  zindex = 45,
+
+  -- By default glance will open preview "embedded" within your active window
+  -- when `detached` is enabled, glance will render above all existing windows
+  -- and won't be restiricted by the width of your active window
+  detached = true,
+
+  -- Or use a function to enable `detached` only when the active window is too small
+  -- (default behavior)
+  detached = function(winid)
+    return vim.api.nvim_win_get_width(winid) < 100
+  end,
+
+  preview_win_opts = { -- Configure preview window options
+    cursorline = true,
+    number = true,
+    wrap = true,
+  },
+  border = {
+    enable = false, -- Show window borders. Only horizontal borders allowed
+    top_char = '―',
+    bottom_char = '―',
+  },
+  list = {
+    position = 'right', -- Position of the list window 'left'|'right'
+    width = 0.33, -- 33% width relative to the active window, min 0.1, max 0.5
+  },
+  theme = { -- This feature might not work properly in nvim-0.7.2
+    enable = true, -- Will generate colors for the plugin based on your current colorscheme
+    mode = 'auto', -- 'brighten'|'darken'|'auto', 'auto' will set mode based on the brightness of your colorscheme
+  },
+  mappings = {
+    list = {
+      ['j'] = actions.next, -- Bring the cursor to the next item in the list
+      ['k'] = actions.previous, -- Bring the cursor to the previous item in the list
+      ['<Down>'] = actions.next,
+      ['<Up>'] = actions.previous,
+      ['<Tab>'] = actions.next_location, -- Bring the cursor to the next location skipping groups in the list
+      ['<S-Tab>'] = actions.previous_location, -- Bring the cursor to the previous location skipping groups in the list
+      ['<C-u>'] = actions.preview_scroll_win(5),
+      ['<C-d>'] = actions.preview_scroll_win(-5),
+      ['v'] = actions.jump_vsplit,
+      ['s'] = actions.jump_split,
+      ['t'] = actions.jump_tab,
+      ['<CR>'] = actions.jump,
+      ['o'] = actions.jump,
+      ['<leader>l'] = actions.enter_win('preview'), -- Focus preview window
+      ['q'] = actions.close,
+      ['Q'] = actions.close,
+      ['<Esc>'] = actions.close,
+      -- ['<Esc>'] = false -- disable a mapping
+    },
+    preview = {
+      ['Q'] = actions.close,
+      ['<Tab>'] = actions.next_location,
+      ['<S-Tab>'] = actions.previous_location,
+      ['<leader>l'] = actions.enter_win('list'), -- Focus list window
+    },
+  },
+  hooks = {},
+  folds = {
+    fold_closed = '',
+    fold_open = '',
+    folded = true, -- Automatically fold list on startup
+  },
+  indent_lines = {
+    enable = true,
+    icon = '│',
+  },
+  winbar = {
+    enable = true, -- Available strating from nvim-0.8+
+  },
+})
+
+EOF
+
+" }}}
