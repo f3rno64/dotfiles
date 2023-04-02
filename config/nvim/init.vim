@@ -279,7 +279,7 @@ set background=dark
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
-colorscheme newpaper
+" colorscheme newpaper
 
 " Dark color schemes
 " colorscheme tempus_future
@@ -288,7 +288,7 @@ colorscheme newpaper
 " colorscheme desertink
 " colorscheme lighthaus
 " colorscheme base16-irblack
-" colorscheme tequila-sunrise
+colorscheme tequila-sunrise
 " colorscheme kanagawa
 " colorscheme nightfox
 " colorscheme oxocarbon
