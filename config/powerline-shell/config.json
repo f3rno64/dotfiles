@@ -2,11 +2,10 @@
   "segments": [
     "time",
     "battery",
-    "virtual_env",
-    "hostname",
     "username",
     "cwd",
     "git",
+    "git_stash",
     "root"
   ],
 
