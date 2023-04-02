@@ -126,6 +126,10 @@ Plug 'smjonas/inc-rename.nvim'
 Plug 'numToStr/FTerm.nvim'
 Plug 'winston0410/cmd-parser.nvim'
 Plug 'winston0410/range-highlight.nvim'
+Plug 'mawkler/modicator.nvim'
+Plug 'RRethy/vim-illuminate'
+Plug 'm4xshen/smartcolumn.nvim'
+Plug 'mhinz/vim-signify'
 
 function! UpdateRemotePlugins(...)
   " Needed to refresh runtime files
@@ -155,6 +159,15 @@ Plug 'nxvu699134/vn-night.nvim'
 Plug 'Everblush/nvim'
 Plug 'sonph/onehalf', { 'rtp': 'vim/' }
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'lighthaus-theme/vim-lighthaus'
+Plug 'daschw/leaf.nvim'
+Plug 'schickele/vim-fruchtig'
+Plug 'yasukotelin/shirotelin'
+Plug 'toupeira/vim-desertink'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'https://gitlab.com/yorickpeterse/vim-paper.git'
+Plug 'yorik1984/newpaper.nvim'
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 
 " }}}
 
@@ -179,7 +192,7 @@ set ttimeout          " for key codes
 set ttimeoutlen=10    " unnoticeable small value
 
 set encoding=utf-8
-set updatetime=300
+set updatetime=100
 set number
 set nojoinspaces
 set splitbelow
@@ -187,6 +200,7 @@ set showmatch
 set incsearch
 set hlsearch
 set colorcolumn=80
+set cursorline
 set cmdheight=2
 set signcolumn=yes:2
 set tags=./tags;,tags;$HOME;
@@ -254,13 +268,31 @@ let g:calvera_contrast = 1
 
 set background=dark
 
+" Light color schemes
+" colorscheme fruchtig
+" colorscheme shirotelin
+" colorscheme onehalflight
+" colorscheme paper
+" colorscheme tempus_day
+
+" Light and dark color schemes
+" colorscheme leaf
 " colorscheme PaperColor
+" colorscheme catppuccin-latte
+colorscheme newpaper
+
+" Dark color schemes
+" colorscheme tempus_future
+" colorscheme tempus_night
+" colorscheme tempus_warp
+" colorscheme desertink
+" colorscheme lighthaus
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
 " colorscheme nightfox
 " colorscheme oxocarbon
-" colorscheme base16-gruvbox-dark-medium
+" colorscheme base16-gruvbox-light-medium
 " colorscheme abscs
 " colorscheme tokyonight-night
 " colorscheme zephyr
@@ -270,8 +302,7 @@ set background=dark
 " colorscheme falcon
 " colorscheme calvera
 " colorscheme vn-night
-colorscheme everblush
-" colorscheme onehalflight
+" colorscheme everblush
 
 let mapleader=','
 
@@ -322,7 +353,7 @@ nnoremap <C--> :call AdjustFontSize(-1)<cr>
 
 " }}}
 
-let g:font_name = 'Hasklug Nerd Font'
+let g:font_name = 'JetBrainsMono Nerd Font'
 let g:font_features = ''
 let g:font_size = 10
 
@@ -412,21 +443,21 @@ require("null-ls").setup()
 EOF
 
 " }}}
-" {{{ code actions
+" {{{ lsp
 
 lua << EOF
 
-vim.keymap.set({ "v", "n" }, "ca", function()
-    vim.lsp.buf.code_action() end, bufopts)
+vim.keymap.set({ "v", "n" }, "ca", function() vim.lsp.buf.code_action() end, bufopts)
 vim.keymap.set({ "v", "n" }, "cp", require("actions-preview").code_actions)
+vim.api.nvim_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "single" })<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "single" })<CR>', { noremap = true, silent = true })
 
 EOF
-
-" }}}
-" {{{ fast line movements
-
-nnoremap J 2j
-nnoremap K 2k
 
 " }}}
 " {{{ ctrl+backspace delete word
@@ -1151,5 +1182,69 @@ glance.setup({
 })
 
 EOF
+
+" }}}
+" {{{ vim-illuminate
+
+lua << EOF
+
+require('illuminate').configure({
+    -- providers: provider used to get references in the buffer, ordered by priority
+    providers = {
+        'lsp',
+        'treesitter',
+        'regex',
+    },
+    -- delay: delay in milliseconds
+    delay = 100,
+    -- filetype_overrides: filetype specific overrides.
+    -- The keys are strings to represent the filetype while the values are tables that
+    -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+    filetype_overrides = {},
+    -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+    filetypes_denylist = {
+        'dirvish',
+        'fugitive',
+    },
+    -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
+    filetypes_allowlist = {},
+    -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+    -- See `:help mode()` for possible values
+    modes_denylist = {},
+    -- modes_allowlist: modes to illuminate, this is overriden by modes_denylist
+    -- See `:help mode()` for possible values
+    modes_allowlist = {},
+    -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
+    -- Only applies to the 'regex' provider
+    -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+    providers_regex_syntax_denylist = {},
+    -- providers_regex_syntax_allowlist: syntax to illuminate, this is overriden by providers_regex_syntax_denylist
+    -- Only applies to the 'regex' provider
+    -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+    providers_regex_syntax_allowlist = {},
+    -- under_cursor: whether or not to illuminate under the cursor
+    under_cursor = true,
+    -- large_file_cutoff: number of lines at which to use large_file_config
+    -- The `under_cursor` option is disabled when this cutoff is hit
+    large_file_cutoff = nil,
+    -- large_file_config: config to use for large files (based on large_file_cutoff).
+    -- Supports the same keys passed to .configure
+    -- If nil, vim-illuminate will be disabled for large files.
+    large_file_overrides = nil,
+    -- min_count_to_highlight: minimum number of matches required to perform highlighting
+    min_count_to_highlight = 1,
+})
+
+EOF
+
+" }}}
+" {{{ modicator
+
+lua require("modicator").setup()
+
+" }}}
+" {{{ smartcolumn
+
+lua require("smartcolumn").setup()
 
 " }}}
