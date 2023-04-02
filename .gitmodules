@@ -16,3 +16,6 @@
 [submodule "xf-bash-lib"]
 	path = xf-bash-lib
 	url = https://github.com/f3rno64/xf-bash-lib.git
+[submodule "config/alacritty/tempus-themes"]
+	path = config/alacritty/tempus-themes
+	url = https://gitlab.com/protesilaos/tempus-themes-alacritty.git
