@@ -48,7 +48,7 @@ exec --no-startup-id dunst --config ~/.config/dunst/config
 bindsym $mod+p exec rofi -show drun
 bindsym $mod+m exec ~/.exec/rofi/applets/mpd.sh
 bindsym $mod+Shift+p exec rofi -show run
-bindsym $mod+Shift+s exec QT_QPA_PLATFORM=wayland-egl XDG_CURRENG_DESKTOP=sway flameshot gui
+bindsym $mod+Shift+s exec ~/.src/github/moverest/sway-interactive-screenshot/sway-interactive-screenshot --save-dir ~/.media/images/screenshots
 bindsym $mod+Ctrl+Shift+l exec swaylock -c 000000
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.src/github/hastinbe/i3-volume/volume -n up 10 && $refresh_i3status
