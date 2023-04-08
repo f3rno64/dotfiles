@@ -250,8 +250,7 @@ au BufNewFile,BufRead *.nvim setf vim
 au BufNewFile,BufRead */i3/config setf i3config
 au BufNewFile,BufRead */sway/config setf i3config
 
-" autosave
-autocmd InsertLeave,TextChanged * update
+au InsertLeave * write
 
 " }}}
 " {{{ colorscheme configs
@@ -288,11 +287,11 @@ set background=dark
 " colorscheme desertink
 " colorscheme lighthaus
 " colorscheme base16-irblack
-colorscheme tequila-sunrise
+" colorscheme tequila-sunrise
 " colorscheme kanagawa
-" colorscheme nightfox
+colorscheme nightfox
 " colorscheme oxocarbon
-" colorscheme base16-gruvbox-light-medium
+" colorscheme base16-gruvbox-dark-hard
 " colorscheme abscs
 " colorscheme tokyonight-night
 " colorscheme zephyr
@@ -658,6 +657,14 @@ nnoremap <leader>wl <cmd>WorkspacesList<cr>
 lua << EOF
 
 require("telescope").setup({
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = "close"
+      }
+    }
+  },
+
   extensions = {
     fzf = {
       fuzzy = true,
@@ -688,7 +695,7 @@ lua << EOF
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
   view = {
-    width = 30,
+    width = 50,
     mappings = {
       list = {
         { key = "u", action = "dir_up" },
@@ -706,6 +713,7 @@ require("nvim-tree").setup({
 EOF
 
 nnoremap <silent> <leader>e :NvimTreeToggle<cr>
+nnoremap <silent> <leader>E :NvimTreeFindFile<cr>
 
 " }}}
 " {{{ vim-grepper
