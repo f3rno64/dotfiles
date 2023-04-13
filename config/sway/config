@@ -148,7 +148,25 @@ bar {
   position bottom
   status_command i3status
   tray_output none
-  output eDP-1
+  output XWAYLAND0
+
+  colors {
+    background $bg
+    statusline $white
+
+    # border | bg | fg
+    focused_workspace    $bg $bg $white
+    inactive_workspace   $bg $bg $gray
+    active_workspace     $bg $bg $white
+    urgent_workspace     $red $red $bg
+  }
+}
+
+bar {
+  position bottom
+  status_command i3status
+  tray_output none
+  output XWAYLAND1
 
   colors {
     background $bg

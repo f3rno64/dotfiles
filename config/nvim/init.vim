@@ -288,10 +288,10 @@ set background=dark
 " colorscheme lighthaus
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
-" colorscheme kanagawa
-colorscheme nightfox
+colorscheme kanagawa
+" colorscheme nightfox
 " colorscheme oxocarbon
-" colorscheme base16-gruvbox-dark-hard
+" colorscheme base16-gruvbox-dark-medium
 " colorscheme abscs
 " colorscheme tokyonight-night
 " colorscheme zephyr
