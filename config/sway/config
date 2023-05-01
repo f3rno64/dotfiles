@@ -44,6 +44,7 @@ floating_modifier $mod
 exec --no-startup-id xss-lock --transfer-sleep-lock -- swaylock --nofork
 exec --no-startup-id ~/.azotebg
 exec --no-startup-id dunst --config ~/.config/dunst/config
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets
 
 bindsym $mod+p exec rofi -show drun
 bindsym $mod+m exec ~/.exec/rofi/applets/mpd.sh
@@ -128,7 +129,7 @@ bindsym $mod+Control+Shift+8 move container to workspace number $ws18
 bindsym $mod+Control+Shift+9 move container to workspace number $ws19
 bindsym $mod+Control+Shift+0 move container to workspace number $ws20
 
-bindsym $mod+Shift+r restart
+bindsym $mod+Shift+r exec "swaymsg reload"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'"
 
 set $bg #0f1419
@@ -147,26 +148,11 @@ set $white #ffffff
 bar {
   position bottom
   status_command i3status
-  tray_output none
-  output XWAYLAND0
-
-  colors {
-    background $bg
-    statusline $white
-
-    # border | bg | fg
-    focused_workspace    $bg $bg $white
-    inactive_workspace   $bg $bg $gray
-    active_workspace     $bg $bg $white
-    urgent_workspace     $red $red $bg
-  }
-}
-
-bar {
-  position bottom
-  status_command i3status
-  tray_output none
-  output XWAYLAND1
+  mode hide
+  tray_output *
+  output *
+  font "JetBrainsMono Nerd Font 8"
+  separator_symbol " | "
 
   colors {
     background $bg
