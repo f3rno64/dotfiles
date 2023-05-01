@@ -57,3 +57,4 @@ npmrc
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+wakatime.cfg
