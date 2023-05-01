@@ -90,6 +90,10 @@ Plug 'Quramy/vim-js-pretty-template'
 " }}}
 " {{{ other
 
+Plug 'github/copilot.vim'
+Plug 'smitajit/bufutils.vim'
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
+Plug 'wakatime/vim-wakatime'
 Plug 'natecraddock/sessions.nvim'
 Plug 'natecraddock/workspaces.nvim'
 Plug 'numtostr/BufOnly.nvim', { 'on': 'BufOnly' }
@@ -142,6 +146,7 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'wadackel/vim-dogrun'
 Plug 'RRethy/nvim-base16'
 Plug 'rebelot/kanagawa.nvim'
 Plug 'EdenEast/nightfox.nvim'
@@ -281,6 +286,7 @@ set background=dark
 " colorscheme newpaper
 
 " Dark color schemes
+" colorscheme dogrun
 " colorscheme tempus_future
 " colorscheme tempus_night
 " colorscheme tempus_warp
@@ -288,13 +294,13 @@ set background=dark
 " colorscheme lighthaus
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
-colorscheme kanagawa
+" colorscheme kanagawa
 " colorscheme nightfox
 " colorscheme oxocarbon
 " colorscheme base16-gruvbox-dark-medium
 " colorscheme abscs
 " colorscheme tokyonight-night
-" colorscheme zephyr
+colorscheme zephyr
 " colorscheme melange
 " colorscheme aurora
 " colorscheme one-nvim
@@ -421,8 +427,6 @@ require("mason-null-ls").setup({
   automatic_setup = true,
 })
 
-require("mason-null-ls").setup_handlers()
-
 EOF
 
 " }}}
@@ -452,7 +456,7 @@ vim.api.nvim_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { n
 vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "single" })<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "single" })<CR>', { noremap = true, silent = true })
 
@@ -594,6 +598,12 @@ require("lualine").setup {
 }
 
 EOF
+
+" }}}
+" {{{ bufutils
+
+nnoremap <leader>zi :BResizeZoom<cr>
+nnoremap <leader>zo :BResizeZoom<cr>
 
 " }}}
 " {{{ devicons
