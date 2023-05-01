@@ -1,6 +1,6 @@
 ---
-import:
-- ~/.config/alacritty/tempus-themes/tempus_dus.yml
+# import:
+# - ~/.config/alacritty/tempus-themes/tempus_dus.yml
 
 # {{{ keybindings
 
@@ -21,15 +21,16 @@ font:
     # family: Blex Mono Nerd Font
     # family: Fura Code Nerd Font
     # family: Hack Nerd Font
-    # family: Hasklug Nerd Font
+    family: Hasklug Nerd Font
     # family: Hasklig
     # family: Hurmit Nerd Font
     # family: Inconsolata Nerd Font
     # family: Sauce Code Pro Nerd Font
     # family: Literation Mono Nerd Font
     # family: Fira Code Nerd Font
-    family: Jet Brains Mono Nerd Font
+    # family: Jet Brains Mono Nerd Font
     # family: IBM Plex Mono
+    # family: CaskaydiaCove Nerd Font
 
 # }}}
 # {{{ general
@@ -428,5 +429,7 @@ schemes:
       white:   '0xfeffff'
 
 # }}}
+
+colors: *tokyo-night
 
 # }}}
