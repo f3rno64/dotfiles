@@ -39,9 +39,9 @@ font pango:Hasklug Nerd Font 9
 hide_edge_borders smart
 floating_modifier $mod
 
-# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# xss-lock grabs a logind suspend inhibit lock and will use swaylock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- swaylock --nofork
 exec --no-startup-id ~/.azotebg
 exec --no-startup-id dunst --config ~/.config/dunst/config
 
