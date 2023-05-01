@@ -112,6 +112,10 @@ fi
 # }}}
 # {{{ powerline-shell for non-vtty
 
+function _update_ps1() {
+  PS1=$(powerline-shell $?)
+}
+
 if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
   POWERLINE_SHELL_CONFIG_DIR="$HOME/.config/powerline-shell"
   POWERLINE_SHELL_PRIMARY_CONFIG_PATH="$POWERLINE_SHELL_CONFIG_DIR/config.json"
@@ -125,11 +129,6 @@ if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
   cat "$POWERLINE_SHELL_CONFIG_PATH" > "$POWERLINE_SHELL_PRIMARY_CONFIG_PATH"
 
   PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
-
-  function _update_ps1() {
-    PS1=$(powerline-shell $?)
-  }
-
 fi
 
 # }}}
@@ -174,9 +173,11 @@ xf_init_custom_scripts() {
 
   for SCRIPT in "${SCRIPTS_PATHS}"
   do
-    local -r SCRIPT_REL_PATH="$(realpath --relative-to="$HOME" "$SCRIPT")"
+    if [ ! -z "$SCRIPT" ]; then
+      local -r SCRIPT_REL_PATH="$(realpath --relative-to="$HOME" "$SCRIPT")"
 
-    xf_safe_source "$SCRIPT"
+      xf_safe_source "$SCRIPT"
+    fi
   done
 }
 
