@@ -1,5 +1,7 @@
 ---
-# import:
+import:
+- ~/.config/alacritty/themes/themes/taerminal.yaml
+# - ~/.config/alacritty/themes/themes/snazzy.yaml
 # - ~/.config/alacritty/tempus-themes/tempus_dus.yml
 
 # {{{ keybindings
@@ -430,6 +432,6 @@ schemes:
 
 # }}}
 
-colors: *tokyo-night
+# colors: *tokyo-night
 
 # }}}
