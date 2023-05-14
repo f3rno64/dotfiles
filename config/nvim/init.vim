@@ -88,8 +88,21 @@ Plug 'othree/es.next.syntax.vim'
 Plug 'Quramy/vim-js-pretty-template'
 
 " }}}
+" {{{ markdown
+
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
+" }}}
 " {{{ other
 
+Plug 'wincent/terminus'
+Plug 'stevearc/dressing.nvim'
+Plug 'jghauser/mkdir.nvim'
+Plug 'tpope/vim-eunuch'
+Plug 'beauwilliams/focus.nvim'
+Plug 'jinh0/eyeliner.nvim'
 Plug 'github/copilot.vim'
 Plug 'smitajit/bufutils.vim'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
@@ -146,6 +159,7 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'marko-cerovac/material.nvim'
 Plug 'wadackel/vim-dogrun'
 Plug 'RRethy/nvim-base16'
 Plug 'rebelot/kanagawa.nvim'
@@ -268,6 +282,35 @@ let g:calvera_italic_keywords = 1
 let g:calvera_italic_functions = 1
 let g:calvera_contrast = 1
 
+let g:material_style = 'deep ocean'
+" let g:material_style = 'lighter'
+
+" }}}
+" {{{ material setup
+
+lua << EOF
+
+require('material').setup({
+  contrast = {
+    terminal = true,
+    sidebars = true,
+    floating_windows = true,
+    cursor_line = true,
+    non_current_windows = true
+  },
+
+  plugins = {
+    'gitsigns',
+    'lspsaga',
+    'nvim-cmp',
+    'nvim-web-devicons',
+    'telescope',
+    'trouble'
+  }
+})
+
+EOF
+
 " }}}
 
 set background=dark
@@ -295,12 +338,13 @@ set background=dark
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
+colorscheme material
 " colorscheme nightfox
 " colorscheme oxocarbon
 " colorscheme base16-gruvbox-dark-medium
 " colorscheme abscs
 " colorscheme tokyonight-night
-colorscheme zephyr
+" colorscheme zephyr
 " colorscheme melange
 " colorscheme aurora
 " colorscheme one-nvim
@@ -441,7 +485,15 @@ lua << EOF
 
 local null_ls = require("null-ls")
 
-require("null-ls").setup()
+null_ls.setup({
+  sources = {
+    null_ls.builtins.diagnostics.tsc,
+    null_ls.builtins.diagnostics.jsonlint,
+    null_ls.builtins.diagnostics.markdownlint,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.eslint
+  },
+})
 
 EOF
 
@@ -696,6 +748,7 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fw <cmd>Telescope workspaces<cr>
+nnoremap <leader>fd <cmd>Telescope diagnostics<cr>
 
 " }}}
 " {{{ nvim-tree
@@ -1264,5 +1317,26 @@ lua require("modicator").setup()
 " {{{ smartcolumn
 
 lua require("smartcolumn").setup()
+
+" }}}
+" {{{ eyeliner
+
+lua << EOF
+
+require'eyeliner'.setup {
+  highlight_on_key = true
+}
+
+EOF
+
+" }}}
+" {{{ focus.nvim
+
+lua require("focus").setup()
+
+" }}}
+" {{{ dressing
+
+lua require('dressing').setup()
 
 " }}}

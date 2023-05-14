@@ -1,1 +1,0 @@
-../gnotify.py

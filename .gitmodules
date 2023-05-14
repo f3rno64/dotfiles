@@ -13,3 +13,6 @@
 [submodule "config/alacritty/tempus-themes"]
 	path = config/alacritty/tempus-themes
 	url = https://gitlab.com/protesilaos/tempus-themes-alacritty.git
+[submodule "config/alacritty/themes"]
+	path = config/alacritty/themes
+	url = https://github.com/alacritty/alacritty-theme
