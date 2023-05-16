@@ -161,6 +161,7 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'jacoborus/tender.vim'
 Plug 'marko-cerovac/material.nvim'
 Plug 'wadackel/vim-dogrun'
 Plug 'RRethy/nvim-base16'
@@ -246,6 +247,8 @@ set termguicolors
 set mouse+=a
 set splitkeep=screen
 
+let g:python3_host_prog = '/home/f3rno64/.pyenv/versions/cs-cli/bin/python'
+
 " {{{ folding
 
 set foldmethod=marker
@@ -315,7 +318,7 @@ EOF
 
 " }}}
 
-set background=light
+set background=dark
 
 " Light color schemes
 " colorscheme fruchtig
@@ -328,9 +331,10 @@ set background=light
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
-colorscheme newpaper
+" colorscheme newpaper
 
 " Dark color schemes
+colorscheme tender
 " colorscheme dogrun
 " colorscheme tempus_future
 " colorscheme tempus_night
@@ -833,8 +837,6 @@ local function on_attach(bufnr)
 end
 
 EOF
-
-" }}}
 
 " }}}
 
