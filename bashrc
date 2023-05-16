@@ -17,7 +17,7 @@ shopt -s direxpand dirspell dotglob execfail
 # {{{ configuration
 
 export XF_SHELL="bash"
-export XF_TERM="xterm-256color"
+export XF_TERM="tmux-256color"
 export XF_LIB_DIR="$HOME/.xf-bash-lib"
 export XF_VIM_EDITORS=('nvim-gtk' 'nvim' 'vim' 'vi')
 export XF_DESIRED_EDITORS=("${XF_VIM_EDITORS[@]} nano")
