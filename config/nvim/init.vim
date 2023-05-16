@@ -97,6 +97,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 " }}}
 " {{{ other
 
+Plug 'ralismark/opsort.vim'
 Plug 'dnlhc/glance.nvim'
 Plug 'wincent/terminus'
 Plug 'stevearc/dressing.nvim'
