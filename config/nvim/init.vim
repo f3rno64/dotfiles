@@ -364,7 +364,7 @@ EOF
 
 " }}}
 
-set background=dark
+set background=light
 
 " Light color schemes
 " colorscheme fruchtig
@@ -372,7 +372,7 @@ set background=dark
 " colorscheme onehalflight
 " colorscheme paper
 " colorscheme tempus_day
-" colorscheme base16-one-light
+colorscheme base16-one-light
 " colorscheme base16-railscasts
 
 " Light and dark color schemes
@@ -392,7 +392,7 @@ set background=dark
 " colorscheme base16-material-palenight
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
-colorscheme kanagawa
+" colorscheme kanagawa
 " colorscheme material
 " colorscheme nightfox
 " colorscheme oxocarbon
@@ -650,6 +650,15 @@ nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
 
 " }}}
 
+" {{{ shortcut to edit config
+
+if has('nvim')
+  nnoremap <silent> <leader>rr :e ~/.config/nvim/init.vim<cr>
+else
+  nnoremap <silent> <leader>rr :e ~/.vimrc<cr>
+endif
+
+" }}}
 " {{{ lualine
 
 lua << EOF
