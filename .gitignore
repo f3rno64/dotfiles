@@ -4,7 +4,6 @@ zsh_history
 weechat/*
 !weechat/weechat.conf
 ncmpcpp/error.log
-config/fish/fishd*
 ssh/config
 vim/.netrwhist
 .undodir
@@ -32,6 +31,10 @@ local/state
 config/nvim/undodir
 config/nvim/.netrwhist
 config/nvim/sessions
+config/fish/fishd*
+config/Slack
+config/google-chrome-unstable
+config/skypeforlinux
 
 media/*
 !media/.keep
