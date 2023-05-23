@@ -188,11 +188,6 @@ fi
 # }}}
 
 # TODO: Extract/refactor
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-# TODO: Extract/refactor
 complete -C /usr/bin/terraform terraform
 
 # TODO: Extract/refactor
@@ -211,4 +206,26 @@ function hstrnotiocsti {
 }
 # if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
 if [[ $- =~ .*i.* ]]; then bind -x '"\C-r": "hstrnotiocsti"'; fi
+
+GPG_TTY="$(tty)"
 export HSTR_TIOCSTI=n
+export GPG_TTY
+
+
+if [ -z "$XF_SSH_IS_SETUP" ]; then
+  eval "$(ssh-agent)"
+
+  ssh-add ~/.ssh/id_rsa
+  ssh-add ~/.ssh/id_rsa_github
+
+  export XF_SSH_IS_SETUP=1
+fi
+
+export RUSTC_WRAPPER=sccache
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PYENV_BIN="$PYENV_ROOT/bin"
+
+xf_safe_add_dir_to_path "$PYENV_BIN"
+
+eval "$(pyenv init -)"
