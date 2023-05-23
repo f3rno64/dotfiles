@@ -97,6 +97,12 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 " }}}
 " {{{ other
 
+Plug 'mvllow/modes.nvim'
+Plug 'preservim/vim-wheel'
+Plug 'vim-scripts/ScrollColors'
+Plug 'preservim/vim-lexical'
+Plug 'preservim/vim-thematic'
+Plug 'zbirenbaum/copilot.lua'
 Plug 'ralismark/opsort.vim'
 Plug 'dnlhc/glance.nvim'
 Plug 'wincent/terminus'
@@ -105,7 +111,6 @@ Plug 'jghauser/mkdir.nvim'
 Plug 'tpope/vim-eunuch'
 Plug 'beauwilliams/focus.nvim'
 Plug 'jinh0/eyeliner.nvim'
-Plug 'github/copilot.vim'
 Plug 'smitajit/bufutils.vim'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'wakatime/vim-wakatime'
@@ -247,8 +252,49 @@ set termguicolors
 set mouse+=a
 set splitkeep=screen
 
-let g:python3_host_prog = '/home/f3rno64/.pyenv/versions/cs-cli/bin/python'
+" {{{ vim-thematic
 
+let g:thematic#defaults = {
+\ "background": "dark",
+\ "laststatus": 2,
+\ "ruler": 1
+\ }
+
+let g:thematic#themes = {
+\   "newpaper": {
+\     "background": "light",
+\     "colorscheme": "newpaper",
+\     "typeface": "JetBrainsMono Nerd Font"
+\   },
+\
+\   "kanagawa": {
+\     "colorscheme": "kanagawa",
+\     "background": "dark",
+\   },
+\
+\   "material": {
+\     "colorscheme": "material",
+\     "background": "dark",
+\   },
+\
+\   "base16-irblack": {
+\     "colorscheme": "base16-irblack",
+\     "background": "dark",
+\   }
+\ }
+
+nnoremap tn :ThematicNext<cr>
+nnoremap tp :ThematicPrevious<cr>
+nnoremap tnp :Thematic newpaper<cr>
+nnoremap tir :Thematic base16-irblack<cr>
+nnoremap tam :Thematic material<cr>
+nnoremap tka :Thematic kanagawa<cr>
+
+" <c-l> to clear the highlight, as well as redraw the screen
+noremap <silent> <C-l> :<C-u>nohlsearch<cr><C-l>
+inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
+
+" }}}
 " {{{ folding
 
 set foldmethod=marker
@@ -326,6 +372,8 @@ set background=dark
 " colorscheme onehalflight
 " colorscheme paper
 " colorscheme tempus_day
+" colorscheme base16-one-light
+" colorscheme base16-railscasts
 
 " Light and dark color schemes
 " colorscheme leaf
@@ -334,16 +382,17 @@ set background=dark
 " colorscheme newpaper
 
 " Dark color schemes
-colorscheme tender
+" colorscheme tender
 " colorscheme dogrun
 " colorscheme tempus_future
 " colorscheme tempus_night
 " colorscheme tempus_warp
 " colorscheme desertink
 " colorscheme lighthaus
+" colorscheme base16-material-palenight
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
-" colorscheme kanagawa
+colorscheme kanagawa
 " colorscheme material
 " colorscheme nightfox
 " colorscheme oxocarbon
@@ -386,12 +435,7 @@ if has('gui_running') || exists('g:GtkGuiLoaded')
 " {{{ functions
 
 func! SetFont()
-  if has('nvim') && !has('gui_vimr')
-    call rpcnotify(1, 'Gui', 'Font', g:font_name . ' ' . g:font_size)
-    call rpcnotify(1, 'Gui', 'FontFeatures', g:font_features)
-  else
-    let &guifont = g:font_name . " " . g:font_size
-  endif
+  let &guifont = g:font_name . " " . g:font_size
 endfunc
 
 func! AdjustFontSize(delta)
@@ -462,7 +506,7 @@ lua << EOF
 require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers {
   function (server_name)
-    require("lspconfig")[server_name].setup {}
+    require("lspconfig")[server_name].setup{}
   end
 }
 
@@ -498,7 +542,8 @@ null_ls.setup({
     null_ls.builtins.diagnostics.markdownlint,
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.eslint
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.diagnostics.eslint_d
   },
 })
 
@@ -1437,5 +1482,42 @@ nnoremap <silent> <leader>Gr :Glance references<cr>
 nnoremap <silent> <leader>Gd :Glance definitions<cr>
 nnoremap <silent> <leader>Gt :Glance type_definitions<cr>
 nnoremap <silent> <leader>Gi :Glance implementations<cr>
+
+" }}}
+" {{{ copilot
+
+lua require('copilot').setup()
+
+" }}}
+" {{{ vim-lexical
+
+let g:lexical#spelllang = ["en_us"]
+let g:lexical#thesaurus = ["/home/f3rno64/.src/github/f3rno64/dotfiles/moby_wordlist"]
+
+augroup lexical
+  autocmd!
+  autocmd FileType markdown,md,mkd call lexical#init()
+  autocmd FileType textile call lexical#init()
+  autocmd FileType text call lexical#init({ 'spell': 0 })
+augroup END
+
+" }}}
+" {{{ ScrollColors
+
+map <silent><F3> :NEXTCOLOR<cr>
+map <silent><F2> :PREVCOLOR<cr>
+
+" }}}
+" {{{ vim-wheel
+
+let g:wheel#map#up = '<c-k>'
+let g:wheel#map#down = '<c-j>'
+let g:wheel#map#mouse = 1
+let g:wheel#scroll_on_wrap = 1
+
+" }}}
+" {{{ modes
+
+lua require('modes').setup({})
 
 " }}}
