@@ -1,6 +1,7 @@
 [user]
 	name = Cris Mihalache
 	email = f3rno64@gmail.com
+	signingkey = /home/f3rno64/.ssh/id_rsa_github.pub
 
 [color]
 	ui = auto
@@ -49,3 +50,10 @@
 	defaultBranch = master
 [gpg]
 	program = gpg
+	format = ssh
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = /home/f3rno64/.config/git/allowed_signers
