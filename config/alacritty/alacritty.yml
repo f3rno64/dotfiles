@@ -1,8 +1,9 @@
 ---
-import:
+# import:
+# - ~/.config/alacritty/themes/themes/hyper.yaml
 # - ~/.config/alacritty/themes/themes/rose-pine-dawn.yaml
 # - ~/.config/alacritty/themes/themes/rose-pine-moon.yaml
-- ~/.config/alacritty/themes/themes/terminal.yaml
+# - ~/.config/alacritty/themes/themes/terminal.yaml
 # - ~/.config/alacritty/themes/themes/snazzy.yaml
 # - ~/.config/alacritty/tempus-themes/tempus_dus.yml
 
@@ -434,6 +435,6 @@ schemes:
 
 # }}}
 
-# colors: *tokyo-night
+colors: *papercolor-light
 
 # }}}
