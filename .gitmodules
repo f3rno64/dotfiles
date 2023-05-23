@@ -16,3 +16,6 @@
 [submodule "config/alacritty/themes"]
 	path = config/alacritty/themes
 	url = https://github.com/alacritty/alacritty-theme
+[submodule "moby_wordlist"]
+	path = moby_wordlist
+	url = https://github.com/words/moby
