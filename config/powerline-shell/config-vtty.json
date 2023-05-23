@@ -1,4 +1,5 @@
 {
+  "theme": "/home/f3rno64/.powerline-shell-theme/theme/datsusara.py",
   "segments": [
     "time",
     "battery",
@@ -17,10 +18,6 @@
   "battery": {
     "always_show_percentage": true,
     "low_threshold": 0.2
-  },
-
-  "hostname": {
-    "colorize": true
   },
 
   "vcs": {
