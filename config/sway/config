@@ -167,7 +167,7 @@ bar {
 }
 
 # class                 border|backgr|text|indicator|child_border
-client.focused          $green $green $darkgray $purple $darkgreen
+client.focused          $red $red $darkgray $purple $darkgreen
 client.focused_inactive $darkgray $darkgray $yellow $purple $verydarkgreen
 client.unfocused        $darkgray $darkgray $yellow $purple $verydarkgreen
 client.urgent           $red $red $white $red $red
