@@ -171,7 +171,7 @@ xf_init_custom_scripts() {
   local -r SCRIPTS_PATHS="$SRC_FULL_PATHS"
   IFS="$OLD_IFS"
 
-  for SCRIPT in "${SCRIPTS_PATHS}"
+  for SCRIPT in $SCRIPTS_PATHS
   do
     if [ ! -z "$SCRIPT" ]; then
       local -r SCRIPT_REL_PATH="$(realpath --relative-to="$HOME" "$SCRIPT")"
