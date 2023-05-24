@@ -224,8 +224,5 @@ fi
 export RUSTC_WRAPPER=sccache
 
 export PYENV_ROOT="$HOME/.pyenv"
-export PYENV_BIN="$PYENV_ROOT/bin"
-
-xf_safe_add_dir_to_path "$PYENV_BIN"
-
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"

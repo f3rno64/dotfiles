@@ -28,13 +28,12 @@ local/include
 local/share
 local/state
 
-config/nvim/undodir
-config/nvim/.netrwhist
-config/nvim/sessions
-config/fish/fishd*
-config/Slack
-config/google-chrome-unstable
-config/skypeforlinux
+config/*
+!config/alacritty/alacritty.yml
+!config/alacritty/themes
+!config/sway/config
+!config/i3/config
+!config/nvim/init.vim
 
 media/*
 !media/.keep
