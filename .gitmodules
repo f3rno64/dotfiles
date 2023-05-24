@@ -25,3 +25,6 @@
 [submodule "sway-interactive-screenshot"]
 	path = sway-interactive-screenshot
 	url = https://github.com/moverest/sway-interactive-screenshot
+[submodule "modules-dotfiles/oh-my-tmux"]
+	path = modules-dotfiles/oh-my-tmux
+	url = https://github.com/gpakosz/.tmux.git
