@@ -1,29 +1,29 @@
 [submodule "config/i3blocks"]
-	path = config/i3blocks
+	path = modules-dotfiles/i3blocks-contrib
 	url = https://github.com/vivien/i3blocks-contrib
 [submodule "bash-powerline"]
-	path = bash-powerline
+	path = modules-dotfiles/bash-powerline
 	url = http://github.com/riobard/bash-powerline
 [submodule "npm-completion-fast"]
-	path = npm-completion-fast
+	path = modules-dotfiles/npm-completion-fast
 	url = http://github.com/seavan/npm-completion-fast
 [submodule "xf-bash-lib"]
-	path = xf-bash-lib
+	path = modules-dotfiles/xf-bash-lib
 	url = https://github.com/f3rno64/xf-bash-lib.git
 [submodule "config/alacritty/tempus-themes"]
-	path = config/alacritty/tempus-themes
+	path = modules-dotfiles/alacritty-tempus-themes
 	url = https://gitlab.com/protesilaos/tempus-themes-alacritty.git
 [submodule "config/alacritty/themes"]
-	path = config/alacritty/themes
+	path = modules-dotfiles/alacritty-themes
 	url = https://github.com/alacritty/alacritty-theme
 [submodule "moby_wordlist"]
-	path = moby_wordlist
+	path = modules-dotfiles/moby-wordlist
 	url = https://github.com/words/moby
 [submodule "i3-volume"]
-	path = i3-volume
+	path = modules-dotfiles/i3-volume
 	url = https://github.com/hastinbe/i3-volume
 [submodule "sway-interactive-screenshot"]
-	path = sway-interactive-screenshot
+	path = modules-dotfiles/sway-interactive-screenshot
 	url = https://github.com/moverest/sway-interactive-screenshot
 [submodule "modules-dotfiles/oh-my-tmux"]
 	path = modules-dotfiles/oh-my-tmux

@@ -34,6 +34,7 @@ config/*
 !config/sway/config
 !config/i3/config
 !config/nvim/init.vim
+!config/nvim/ginit.vim
 
 media/*
 !media/.keep

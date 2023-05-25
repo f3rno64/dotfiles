@@ -18,7 +18,7 @@ shopt -s direxpand dirspell dotglob execfail
 
 export XF_SHELL="bash"
 export XF_TERM="tmux-256color"
-export XF_LIB_DIR="$HOME/.xf-bash-lib"
+export XF_LIB_DIR="$HOME/.modules-dotfiles/xf-bash-lib"
 export XF_VIM_EDITORS=('nvim-gtk' 'nvim' 'vim' 'vi')
 export XF_DESIRED_EDITORS=("${XF_VIM_EDITORS[@]} nano")
 export XF_HOME_SRC_DIR
@@ -147,6 +147,7 @@ fi
 xf_safe_source "$HOME/.autojump/share/autojump/autojump.bash"
 xf_safe_source "$(xf_git_repo_path 'alacritty')/extra/completions/alacritty.bash"
 xf_safe_source "$(xf_git_repo_path 'gjsheep' 'bash-wakatime')/bash-wakatime.sh"
+xf_safe_source "$HOME/.modules-dotfiles/npm-completion-fast/npm-completion-fast.bash"
 
 # }}}
 # {{{ OVHcloud Web PaaS CLI configuration

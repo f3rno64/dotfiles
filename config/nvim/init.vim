@@ -166,6 +166,7 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'lewpoly/sherbet.nvim'
 Plug 'jacoborus/tender.vim'
 Plug 'marko-cerovac/material.nvim'
 Plug 'wadackel/vim-dogrun'
@@ -364,7 +365,7 @@ EOF
 
 " }}}
 
-set background=light
+set background=dark
 
 " Light color schemes
 " colorscheme fruchtig
@@ -374,15 +375,17 @@ set background=light
 " colorscheme tempus_day
 " colorscheme base16-one-light
 " colorscheme base16-railscasts
+" colorscheme base16-github
 
 " Light and dark color schemes
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
-colorscheme newpaper
+" colorscheme newpaper
 
 " Dark color schemes
 " colorscheme tender
+colorscheme sherbet
 " colorscheme dogrun
 " colorscheme tempus_future
 " colorscheme tempus_night
