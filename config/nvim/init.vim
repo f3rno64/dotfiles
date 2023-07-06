@@ -97,6 +97,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 " }}}
 " {{{ other
 
+Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
 Plug 'preservim/vim-wheel'
 Plug 'vim-scripts/ScrollColors'
@@ -166,6 +167,10 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'dasupradyumna/midnight.nvim'
+Plug 'jsit/toast.vim'
+Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
+Plug 'Alexis12119/nightly.nvim'
 Plug 'lewpoly/sherbet.nvim'
 Plug 'jacoborus/tender.vim'
 Plug 'marko-cerovac/material.nvim'
@@ -305,6 +310,12 @@ set foldlevel=1
 " }}}
 " {{{ autocommands
 
+augroup TerraformVarFiles
+  au!
+  au BufNewFile,BufRead *.tfvars.dev setf terraform
+  au BufNewFile,BufRead *.tfvars.prod setf terraform
+augroup END
+
 augroup editing
   au!
   au InsertLeave * set nopaste
@@ -364,8 +375,26 @@ require('material').setup({
 EOF
 
 " }}}
+" {{{ nightly setup
 
-set background=dark
+lua << EOF
+
+require("nightly").setup({
+  transparent = false,
+  styles = {
+    comments = { italic = true },
+    functions = { italic = false },
+    variables = { italic = false },
+    keywords = { italic = false },
+  },
+  highlights = {},
+})
+
+EOF
+
+" }}}
+
+set background=light
 
 " Light color schemes
 " colorscheme fruchtig
@@ -376,22 +405,31 @@ set background=dark
 " colorscheme base16-one-light
 " colorscheme base16-railscasts
 " colorscheme base16-github
+colorscheme base16-mexico-light
 
 " Light and dark color schemes
+" colorscheme toast
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
+" colorscheme shirotelin
 " colorscheme newpaper
 
 " Dark color schemes
+" colorscheme sherbet
+" colorscheme slate
+" colorscheme murphy
+" colorscheme gruvbox-baby
+" colorscheme nightly
 " colorscheme tender
-colorscheme sherbet
+" colorscheme sherbet
 " colorscheme dogrun
 " colorscheme tempus_future
 " colorscheme tempus_night
 " colorscheme tempus_warp
 " colorscheme desertink
 " colorscheme lighthaus
+" colorscheme midnight
 " colorscheme base16-material-palenight
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
@@ -1531,5 +1569,10 @@ let g:wheel#scroll_on_wrap = 1
 " {{{ modes
 
 lua require('modes').setup({})
+
+" }}}
+" {{{ hypersonic
+
+lua require('hypersonic').setup({})
 
 " }}}

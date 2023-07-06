@@ -213,14 +213,14 @@ export HSTR_TIOCSTI=n
 export GPG_TTY
 
 
-if [ -z "$XF_SSH_IS_SETUP" ]; then
-  eval "$(ssh-agent)"
-
-  ssh-add ~/.ssh/id_rsa
-  ssh-add ~/.ssh/id_rsa_github
-
-  export XF_SSH_IS_SETUP=1
-fi
+# if [ -z "$XF_SSH_IS_SETUP" ]; then
+#   eval "$(ssh-agent)"
+#
+#   ssh-add ~/.ssh/id_rsa
+#   ssh-add ~/.ssh/id_rsa_github
+#
+#   export XF_SSH_IS_SETUP=1
+# fi
 
 export RUSTC_WRAPPER=sccache
 
