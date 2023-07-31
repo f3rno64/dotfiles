@@ -58,10 +58,10 @@ exec swayidle -w \
 # exec --no-startup-id xss-lock --transfer-sleep-lock -- swaylock --nofork
 
 # Set wallpaper
-# exec --no-startup-id ~/.azotebg
+exec --no-startup-id ~/.azotebg
 
-# exec --no-startup-id dunst --config ~/.config/dunst/config
-# exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets
+exec --no-startup-id dunst --config ~/.config/dunst/config
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets
 
 ### Input Configuration TODO
 #
@@ -178,9 +178,8 @@ bindsym $mod+Control+Shift+0 move container to workspace number 20
 
 ## Layout
 
-# Splits
-bindsym $mod+h splith
-bindsym $mod+v splitv
+# bindsym $mod+h splith
+# bindsym $mod+v splitv
 
 # Switch the current container between different layout styles
 bindsym $mod+s layout stacking
@@ -228,8 +227,8 @@ bindsym $mod+r mode "resize"
 
 ## Brightness Controls
 
-bindsym XF86MonBrightnessUp exec "brillo -A 10"
-bindsym XF86MonBrightnessDown exec "brillo -U 10"
+bindsym XF86MonBrightnessUp exec "brightnessctl s +10%"
+bindsym XF86MonBrightnessDown exec "brightnessctl s -10%"
 
 ## Audio Controls
 
@@ -238,6 +237,11 @@ set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.modules-dotfiles/i3-volume/volume -n up 10 && $refresh_i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id ~/.modules-dotfiles/i3-volume/volume -n down 10 && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id ~/.modules-dotfiles/i3-volume/volume -n mute && $refresh_i3status
+
+## Sway FX Options
+blur enable
+corner_radius 16
+shadows enable
 
 ### Status Bar:
 

@@ -97,13 +97,13 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 " }}}
 " {{{ other
 
+Plug 'github/copilot.vim'
 Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
 Plug 'preservim/vim-wheel'
 Plug 'vim-scripts/ScrollColors'
 Plug 'preservim/vim-lexical'
 Plug 'preservim/vim-thematic'
-Plug 'zbirenbaum/copilot.lua'
 Plug 'ralismark/opsort.vim'
 Plug 'dnlhc/glance.nvim'
 Plug 'wincent/terminus'
@@ -195,7 +195,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'lighthaus-theme/vim-lighthaus'
 Plug 'daschw/leaf.nvim'
 Plug 'schickele/vim-fruchtig'
-Plug 'yasukotelin/shirotelin'
+" Plug 'yasukotelin/shirotelin'
 Plug 'toupeira/vim-desertink'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'https://gitlab.com/yorickpeterse/vim-paper.git'
@@ -405,7 +405,9 @@ set background=light
 " colorscheme base16-one-light
 " colorscheme base16-railscasts
 " colorscheme base16-github
-colorscheme base16-mexico-light
+" colorscheme base16-mexico-light
+" colorscheme base16-still-alive
+" colorscheme base16-unikitty-light
 
 " Light and dark color schemes
 " colorscheme toast
@@ -413,9 +415,11 @@ colorscheme base16-mexico-light
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
 " colorscheme shirotelin
-" colorscheme newpaper
+colorscheme newpaper
 
 " Dark color schemes
+" colorscheme base16-summercamp
+" colorscheme base16-tokyodark-terminal
 " colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
@@ -431,6 +435,7 @@ colorscheme base16-mexico-light
 " colorscheme lighthaus
 " colorscheme midnight
 " colorscheme base16-material-palenight
+" colorscheme base16-horizon-terminal-dark
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
@@ -1532,11 +1537,6 @@ nnoremap <silent> <leader>Gr :Glance references<cr>
 nnoremap <silent> <leader>Gd :Glance definitions<cr>
 nnoremap <silent> <leader>Gt :Glance type_definitions<cr>
 nnoremap <silent> <leader>Gi :Glance implementations<cr>
-
-" }}}
-" {{{ copilot
-
-lua require('copilot').setup()
 
 " }}}
 " {{{ vim-lexical

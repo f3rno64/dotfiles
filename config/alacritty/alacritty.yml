@@ -1,5 +1,5 @@
 import:
-  - ~/.config/alacritty/themes/thelovelace.yaml
+  - /home/f3rno64/.modules-dotfiles/alacritty-themes/themes/papercolor_light.yaml
 
 key_bindings:
   - key: Paste
@@ -12,9 +12,9 @@ key_bindings:
   - key: F12
     action: SpawnNewInstance
 font:
-  size: 12
+  size: 10
   normal:
-    family: Hasklug Nerd Font
+    family: JetBrains Mono Nerd Font
 live_config_reload: true
 window:
   decorations: none

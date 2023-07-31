@@ -33,7 +33,7 @@
 [core]
 	autocrlf = false
 	filemode = false
-	editor = nvim
+	editor = vim
 	sshCommand = ssh -i ~/.ssh/id_rsa -F /dev/null
 
 [branch]
