@@ -394,7 +394,7 @@ EOF
 
 " }}}
 
-set background=light
+set background=dark
 
 " Light color schemes
 " colorscheme fruchtig
@@ -415,11 +415,11 @@ set background=light
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
 " colorscheme shirotelin
-colorscheme newpaper
+" colorscheme newpaper
 
 " Dark color schemes
 " colorscheme base16-summercamp
-" colorscheme base16-tokyodark-terminal
+colorscheme base16-tokyodark-terminal
 " colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
