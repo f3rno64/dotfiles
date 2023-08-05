@@ -8,3 +8,6 @@ fi
 . "$HOME/.cargo/env"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# opam configuration
+test -r /home/f3rno64/.opam/opam-init/init.sh && . /home/f3rno64/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true

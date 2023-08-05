@@ -44,13 +44,13 @@ Plug 'nvim-tree/nvim-tree.lua'
 
 Plug 'neovim/nvim-lspconfig'
 Plug 'reksar/nvim-lsp-python'
-Plug 'j-hui/fidget.nvim'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jay-babu/mason-null-ls.nvim'
 Plug 'RubixDev/mason-update-all'
 Plug 'dnlhc/glance.nvim'
+Plug 'pwntester/nvim-lsp'
 
 " }}}
 " {{{ cmp
@@ -97,6 +97,20 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 " }}}
 " {{{ other
 
+Plug 'zaldih/themery.nvim'
+Plug 'anuvyklack/keymap-amend.nvim'
+Plug 'okuuva/auto-save.nvim'
+Plug 'declancm/cinnamon.nvim'
+Plug 'abecodes/tabout.nvim'
+Plug 'nguyenvukhang/nvim-toggler'
+Plug 'zaldih/themery.nvim'
+Plug 'linrongbin16/lsp-progress.nvim'
+Plug 'roobert/search-replace.nvim'
+Plug 'ray-x/lsp_signature.nvim'
+Plug 'axelvc/template-string.nvim'
+Plug 'sontungexpt/buffer-closer'
+Plug 'jamestthompson3/sort-import.nvim'
+Plug 'sbdchd/neoformat'
 Plug 'github/copilot.vim'
 Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
@@ -167,6 +181,7 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'cseelus/vim-colors-lucid'
 Plug 'dasupradyumna/midnight.nvim'
 Plug 'jsit/toast.vim'
 Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
@@ -414,12 +429,14 @@ set background=dark
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
-" colorscheme shirotelin
 " colorscheme newpaper
 
 " Dark color schemes
+" colorscheme lucid
+" colorscheme base16-ayu-mirage
+" colorscheme vn-night
 " colorscheme base16-summercamp
-colorscheme base16-tokyodark-terminal
+" colorscheme base16-tokyodark-terminal
 " colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
@@ -433,7 +450,7 @@ colorscheme base16-tokyodark-terminal
 " colorscheme tempus_warp
 " colorscheme desertink
 " colorscheme lighthaus
-" colorscheme midnight
+colorscheme midnight
 " colorscheme base16-material-palenight
 " colorscheme base16-horizon-terminal-dark
 " colorscheme base16-irblack
@@ -539,7 +556,6 @@ endif
 endif
 
 " }}}
-
 " {{{ mason
 
 lua require("mason").setup()
@@ -549,12 +565,14 @@ lua require("mason").setup()
 
 lua << EOF
 
-require("mason-lspconfig").setup()
-require("mason-lspconfig").setup_handlers {
-  function (server_name)
-    require("lspconfig")[server_name].setup{}
-  end
+local handlers = {
+  function (server_name) -- default handler (optional)
+    require("lspconfig")[server_name].setup {}
+  end,
 }
+
+require("mason-lspconfig").setup({ handlers = handlers })
+require("mason-lspconfig").setup_handlers(handlers)
 
 EOF
 
@@ -735,7 +753,8 @@ require("lualine").setup {
       {
         "filename",
         path = 2
-      }
+      },
+      "require('lsp-progress').progress()"
     },
     lualine_x = {"encoding", "fileformat", "filetype"},
     lualine_y = {"progress"},
@@ -1072,11 +1091,6 @@ require'nvim-treesitter.configs'.setup {
 EOF
 
 " }}}
-" {{{ fidget
-
-lua require("fidget").setup{}
-
-" }}}
 " {{{ hlargs
 
 lua require("hlargs").setup()
@@ -1340,7 +1354,6 @@ vim.keymap.set('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>'
 EOF
 
 " }}}
-
 " {{{ python config
 
 autocmd FileType python syntax on
@@ -1574,5 +1587,498 @@ lua require('modes').setup({})
 " {{{ hypersonic
 
 lua require('hypersonic').setup({})
+
+" }}}
+" {{{ sort-import
+
+lua require('sort-import').setup()
+
+" }}}
+" {{{ neoformat
+
+let g:neoformat_try_node_exe = 1
+
+autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Neoformat
+
+" }}}
+" {{{ buffer-closer
+
+lua << EOF
+
+require("buffer-closer").setup({
+	min_remaining_buffers = 2,
+	retirement_minutes = 3,
+	check_when_buffer_adding = true,
+	check_after_minutes = {
+		enabled = true,
+		interval_minutes = 1,
+	},
+
+	excluded = {
+		filetypes = { "lazy", "NvimTree" },
+		buftypes = { "terminal", "nofile", "quickfix", "prompt", "help" },
+		filenames = {},
+	},
+
+	ignore_working_windows = true
+})
+
+EOF
+
+" }}}
+" {{{ template-string.nvim
+
+lua << EOF
+
+require('template-string').setup({
+  filetypes = { 'html', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
+  jsx_brackets = true,
+  remove_template_string = true,
+  restore_quotes = {
+    normal = [[']],
+    jsx = [["]],
+  },
+})
+
+EOF
+
+" }}}
+" {{{ lsp_signature.nvim
+
+lua require'lsp_signature'.setup(opts)
+
+" }}}
+" {{{ search-replace.nvim
+
+lua require("search-replace").setup({})
+
+" }}}
+" {{{ lsp-progress.nvim
+
+lua require('lsp-progress').setup()
+
+" }}}
+" {{{ nvim-toggler.nvim
+
+lua require('nvim-toggler').setup()
+lua vim.keymap.set({ 'n', 'v' }, '<leader>cl', require('nvim-toggler').toggle)
+
+" }}}
+" {{{ tabout.nvim
+
+lua << EOF
+
+require('tabout').setup {
+  tabkey = '<Tab>', -- key to trigger tabout, set to an empty string to disable
+  backwards_tabkey = '<S-Tab>', -- key to trigger backwards tabout, set to an empty string to disable
+  act_as_tab = true, -- shift content if tab out is not possible
+  act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
+  default_tab = '<C-t>', -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
+  default_shift_tab = '<C-d>', -- reverse shift default action,
+  enable_backwards = true, -- well ...
+  completion = true, -- if the tabkey is used in a completion pum
+  tabouts = {
+    {open = "'", close = "'"},
+    {open = '"', close = '"'},
+    {open = '`', close = '`'},
+    {open = '(', close = ')'},
+    {open = '[', close = ']'},
+    {open = '{', close = '}'}
+  },
+  ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
+  exclude = {} -- tabout will ignore these filetypes
+}
+
+EOF
+
+" }}}
+" {{{ cinnamon.nvim
+
+lua require('cinnamon').setup()
+
+" }}}
+" {{{ auto-save.nvim
+
+lua require("auto-save").setup()
+
+" }}}
+
+" {{{ custom quickfix
+
+lua << EOF
+
+local opts = { noremap=true, silent=true }
+
+local function quickfix()
+    vim.lsp.buf.code_action({
+        filter = function(a) return a.isPreferred end,
+        apply = true
+    })
+end
+
+vim.keymap.set('n', 'qqf', quickfix, opts)
+
+EOF
+
+" }}}
+" {{{ themery
+
+lua << EOF
+
+require("themery").setup({
+  themeConfigFile = "~/.config/nvim/lua/settings/theme.lua",
+  livePreview = true,
+  themes = {{
+    name = "fruchtig",
+    colorscheme = "fruchtig",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+   name = "shirotelin",
+    colorscheme = "shirotelin",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "onehalflight",
+    colorscheme = "onehalflight",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "paper",
+    colorscheme = "paper",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "tempus-day",
+    colorscheme = "tempus_day",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "base16-one-light",
+    colorscheme = "base16-one-light",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "base16-railscasts",
+    colorscheme = "base16-railscasts",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "base16-github",
+    colorscheme = "base16-github",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "base16-mexico-light",
+    colorscheme = "base16-mexico-light",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "base16-still-alive",
+    colorscheme = "base16-still-alive",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "base16-unikitty-light",
+    colorscheme = "base16-unikitty-light",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "toast light",
+    colorscheme = "toast",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "toast dark",
+    colorscheme = "toast",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "leaf light",
+    colorscheme = "leaf",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "leaf dark",
+    colorscheme = "leaf",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "PaperColor light",
+    colorscheme = "PaperColor",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "PaperColor dark",
+    colorscheme = "PaperColor",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "catppuccin-latte light",
+    colorscheme = "catppuccin-latte",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "catppuccin-latte dark",
+    colorscheme = "catppuccin-latte",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "newpaper light",
+    colorscheme = "newpaper",
+    before = [[
+      vim.opt.background = "light"
+    ]],
+  }, {
+    name = "newpaper dark",
+    colorscheme = "newpaper",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "lucid",
+    colorscheme = "lucid",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "base16-ayu-mirage",
+    colorscheme = "base16-ayu-mirage",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "vn-night",
+    colorscheme = "vn-night",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "base16-summercamp",
+    colorscheme = "base16-summercamp",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "base16-tokyodark-terminal",
+    colorscheme = "base16-tokyodark-terminal",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "sherbet",
+    colorscheme = "sherbet",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "slate",
+    colorscheme = "slate",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "murphy",
+    colorscheme = "murphy",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "gruvbox-baby",
+    colorscheme = "gruvbox-baby",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "nightly",
+    colorscheme = "nightly",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "tender",
+    colorscheme = "tender",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "sherbet",
+    colorscheme = "sherbet",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "dogrun",
+    colorscheme = "dogrun",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "tempus_future",
+    colorscheme = "tempus_future",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "tempus_night",
+    colorscheme = "tempus_night",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "tempus_warp",
+    colorscheme = "tempus_warp",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "desertink",
+    colorscheme = "desertink",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "lighthaus",
+    colorscheme = "lighthaus",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "midnight",
+    colorscheme = "midnight",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "base16-material-palenight",
+    colorscheme = "base16-material-palenight",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "base16-horizon-terminal-dark",
+    colorscheme = "base16-horizon-terminal-dark",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "base16-irblack",
+    colorscheme = "base16-irblack",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "tequila-sunrise",
+    colorscheme = "tequila-sunrise",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "kanagawa",
+    colorscheme = "kanagawa",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "material",
+    colorscheme = "material",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "nightfox",
+    colorscheme = "nightfox",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "oxocarbon",
+    colorscheme = "oxocarbon",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "base16-gruvbox-dark-medium",
+    colorscheme = "base16-gruvbox-dark-medium",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "abscs",
+    colorscheme = "abscs",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "tokyonight-night",
+    colorscheme = "tokyonight-night",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "zephyr",
+    colorscheme = "zephyr",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "melange",
+    colorscheme = "melange",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "aurora",
+    colorscheme = "aurora",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "one-nvim",
+    colorscheme = "one-nvim",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "falcon",
+    colorscheme = "falcon",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "calvera",
+    colorscheme = "calvera",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }, {
+    name = "everblush",
+    colorscheme = "everblush",
+    before = [[
+      vim.opt.background = "dark"
+    ]],
+  }}
+})
+
+EOF
 
 " }}}
