@@ -1598,7 +1598,7 @@ lua require('sort-import').setup()
 
 let g:neoformat_try_node_exe = 1
 
-autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Neoformat
+" autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Neoformat
 
 " }}}
 " {{{ buffer-closer
