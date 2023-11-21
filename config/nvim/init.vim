@@ -14,6 +14,7 @@ call plug#begin(s:f3_plugin_path)
 
 Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-repeat'
+Plug 'google/vim-maktaba'
 
 " }}}
 " {{{ telescope
@@ -27,7 +28,7 @@ Plug 'aznhe21/actions-preview.nvim'
 " {{{ treesitter
 
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-Plug 'yioneko/nvim-yati', { 'tag': '*' }
+" Plug 'yioneko/nvim-yati', { 'tag': '*' }
 Plug 'm-demare/hlargs.nvim'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'windwp/nvim-ts-autotag'
@@ -95,8 +96,24 @@ Plug 'preservim/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 " }}}
+" {{{ wiki
+
+Plug 'powerman/vim-plugin-AnsiEsc', { 'on': 'AnsiEsc' }
+Plug 'rbgrouleff/bclose.vim'
+Plug 'mattn/calendar-vim'
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+Plug 'f3rno/vimwiki-footnotes'
+
+" }}}
 " {{{ other
 
+Plug 'joaohkfaria/vim-jest-snippets'
+" Plug 'MysticalDevil/inlay-hints.nvim'
+Plug 'boltlessengineer/smart-tab.nvim'
+" Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+Plug 'lcheylus/overlength.nvim'
+Plug 'phaazon/hop.nvim', { 'branch': 'v2' }
+" Plug 'folke/which-key.nvim'
 Plug 'zaldih/themery.nvim'
 Plug 'anuvyklack/keymap-amend.nvim'
 Plug 'okuuva/auto-save.nvim'
@@ -111,7 +128,7 @@ Plug 'axelvc/template-string.nvim'
 Plug 'sontungexpt/buffer-closer'
 Plug 'jamestthompson3/sort-import.nvim'
 Plug 'sbdchd/neoformat'
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
 Plug 'preservim/vim-wheel'
@@ -159,13 +176,13 @@ Plug 'kwkarlwang/bufresize.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
 " Plug 'folke/twilight.nvim'
 Plug 'folke/zen-mode.nvim'
-Plug 'glepnir/dashboard-nvim'
+" Plug 'glepnir/dashboard-nvim'
 Plug 'ojroques/nvim-bufdel'
 Plug 'smjonas/inc-rename.nvim'
 Plug 'numToStr/FTerm.nvim'
 Plug 'winston0410/cmd-parser.nvim'
 Plug 'winston0410/range-highlight.nvim'
-Plug 'mawkler/modicator.nvim'
+" Plug 'mawkler/modicator.nvim'
 Plug 'RRethy/vim-illuminate'
 Plug 'm4xshen/smartcolumn.nvim'
 Plug 'mhinz/vim-signify'
@@ -181,6 +198,10 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'jadnw/gemstones.nvim'
+Plug 'Yagua/nebulous.nvim'
+Plug 'rafamadriz/neon'
+Plug 'yashguptaz/calvera-dark.nvim'
 Plug 'cseelus/vim-colors-lucid'
 Plug 'dasupradyumna/midnight.nvim'
 Plug 'jsit/toast.vim'
@@ -408,8 +429,59 @@ require("nightly").setup({
 EOF
 
 " }}}
+" {{{ calvera
 
-set background=dark
+let g:calvera_italic_comments = 1
+let g:calvera_italic_keywords = 1
+let g:calvera_italic_functions = 1
+let g:calvera_contrast = 1
+
+" }}}
+" {{{ nebulous
+
+lua << EOF
+
+require("nebulous").setup({
+  variant = "midnight",
+  disable = {
+    background = true,
+    endOfBuffer = false,
+    terminal_colors = false,
+  },
+  italic = {
+    comments   = false,
+    keywords   = true,
+    functions  = false,
+    variables  = true,
+  },
+  custom_colors = { -- this table can hold any group of colors with their respective values
+    LineNr = { fg = "#5BBBDA", bg = "NONE", style = "NONE" },
+    CursorLineNr = { fg = "#E1CD6C", bg = "NONE", style = "NONE" },
+
+    -- it is possible to specify only the element to be changed
+    TelescopePreviewBorder = { fg = "#A13413" },
+    LspDiagnosticsDefaultError = { bg = "#E11313" },
+    TSTagDelimiter = { style = "bold,italic" },
+  }
+})
+
+local setmap = vim.api.nvim_set_keymap
+local options = { silent = true, noremap = true }
+
+setmap("n", "ntc", ":lua require('nebulous.functions').toggle_variant()<CR>", options)
+setmap("n", "nrc", ":lua require('nebulous.functions').random_variant()<CR>", options)
+-- setmap("n", "<leader>tw", ":lua require('nebulous.functions').set_variant('variant_name')<CR>", options)
+
+EOF
+
+" }}}
+" {{{ gemstones
+
+lua require("gemstones").setup {}
+
+" }}}
+
+set background=light
 
 " Light color schemes
 " colorscheme fruchtig
@@ -450,10 +522,12 @@ set background=dark
 " colorscheme tempus_warp
 " colorscheme desertink
 " colorscheme lighthaus
-colorscheme midnight
+" colorscheme midnight
+" colorscheme nebulous
+" colorscheme gemstones
 " colorscheme base16-material-palenight
 " colorscheme base16-horizon-terminal-dark
-" colorscheme base16-irblack
+colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
 " colorscheme material
@@ -648,6 +722,11 @@ nnoremap <silent> <leader>q :qa<cr>
 nnoremap <silent> <leader>Q :q!<cr>
 
 " }}}
+" {{{ fast save
+
+nnoremap <silent><leader>SS<CR>
+
+" }}}
 " {{{ folds
 
 func! s:xf_folds_toggle() abort
@@ -723,6 +802,41 @@ else
 endif
 
 " }}}
+" {{{ shortcut to force write
+
+nnoremap <silent> <leader><S-w> :w!<cr>
+
+" }}}
+" {{{ shortcut to toggle quickfix
+
+function! ToggleQuickFix()
+    if empty(filter(getwininfo(), 'v:val.quickfix'))
+        copen
+    else
+        cclose
+    endif
+endfunction
+
+nnoremap <silent> <leader>cc :call ToggleQuickFix()<cr>
+
+" }}}
+" {{{ tabnine-nvim
+
+" lua << EOF
+"
+" require('tabnine').setup({
+"   disable_auto_comment=true,
+"   accept_keymap="<C-t>",
+"   dismiss_keymap = "<C-]>",
+"   debounce_ms = 800,
+"   suggestion_color = {gui = "#808080", cterm = 244},
+"   exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+"   log_file_path = nil, -- absolute path to Tabnine log file
+" })
+"
+" EOF
+
+" }}}
 " {{{ lualine
 
 lua << EOF
@@ -756,7 +870,7 @@ require("lualine").setup {
       },
       "require('lsp-progress').progress()"
     },
-    lualine_x = {"encoding", "fileformat", "filetype"},
+    lualine_x = {"tabnine", "fileformat", "filetype"},
     lualine_y = {"progress"},
     lualine_z = {"location"}
   },
@@ -1132,6 +1246,8 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-k>'] = cmp.mapping.select_next_item(),
+    ['<C-k>'] = cmp.mapping.select_prev_item()
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp', group_index = 2 },
@@ -1312,7 +1428,7 @@ lua require("zen-mode").setup()
 " }}}
 " {{{ dashboard-nvim
 
-lua require("dashboard").setup()
+" lua require("dashboard").setup()
 
 " }}}
 " {{{ vim-jsx-pretty-template
@@ -1507,7 +1623,7 @@ EOF
 " }}}
 " {{{ modicator
 
-lua require("modicator").setup()
+" lua require("modicator").setup()
 
 " }}}
 " {{{ smartcolumn
@@ -1598,7 +1714,7 @@ lua require('sort-import').setup()
 
 let g:neoformat_try_node_exe = 1
 
-" autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Neoformat
+autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Neoformat
 
 " }}}
 " {{{ buffer-closer
@@ -1702,6 +1818,638 @@ lua require('cinnamon').setup()
 lua require("auto-save").setup()
 
 " }}}
+" {{{ which-key
+
+" lua << EOF
+"
+" vim.o.timeout = true
+" vim.o.timeoutlen = 300
+"
+" require("which-key").setup({
+"   plugins = {
+"     marks = true, -- shows a list of your marks on ' and `
+"     registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+"     -- the presets plugin, adds help for a bunch of default keybindings in Neovim
+"     -- No actual key bindings are created
+"     spelling = {
+"       enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+"       suggestions = 20, -- how many suggestions should be shown in the list?
+"     },
+"     presets = {
+"       operators = true, -- adds help for operators like d, y, ...
+"       motions = true, -- adds help for motions
+"       text_objects = true, -- help for text objects triggered after entering an operator
+"       windows = true, -- default bindings on <c-w>
+"       nav = true, -- misc bindings to work with windows
+"       z = true, -- bindings for folds, spelling and others prefixed with z
+"       g = true, -- bindings for prefixed with g
+"     },
+"   },
+"   -- add operators that will trigger motion and text object completion
+"   -- to enable all native operators, set the preset / operators plugin above
+"   operators = { gc = "Comments" },
+"   key_labels = {
+"     -- override the label used to display some keys. It doesn't effect WK in any other way.
+"     -- For example:
+"     -- ["<space>"] = "SPC",
+"     -- ["<cr>"] = "RET",
+"     -- ["<tab>"] = "TAB",
+"   },
+"   motions = {
+"     count = true,
+"   },
+"   icons = {
+"     breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+"     separator = "➜", -- symbol used between a key and it's label
+"     group = "+", -- symbol prepended to a group
+"   },
+"   popup_mappings = {
+"     scroll_down = "<c-d>", -- binding to scroll down inside the popup
+"     scroll_up = "<c-u>", -- binding to scroll up inside the popup
+"   },
+"   window = {
+"     border = "none", -- none, single, double, shadow
+"     position = "bottom", -- bottom, top
+"     margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
+"     padding = { 1, 2, 1, 2 }, -- extra window padding [top, right, bottom, left]
+"     winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+"     zindex = 1000, -- positive value to position WhichKey above other floating windows.
+"   },
+"   layout = {
+"     height = { min = 4, max = 25 }, -- min and max height of the columns
+"     width = { min = 20, max = 50 }, -- min and max width of the columns
+"     spacing = 3, -- spacing between columns
+"     align = "left", -- align columns left, center or right
+"   },
+"   ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+"   hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "^:", "^ ", "^call ", "^lua " }, -- hide mapping boilerplate
+"   show_help = true, -- show a help message in the command line for using WhichKey
+"   show_keys = true, -- show the currently pressed key and its label as a message in the command line
+"   triggers = "auto", -- automatically setup triggers
+"   -- triggers = {"<leader>"} -- or specifiy a list manually
+"   -- list of triggers, where WhichKey should not wait for timeoutlen and show immediately
+"   triggers_nowait = {
+"     -- marks
+"     "`",
+"     "'",
+"     "g`",
+"     "g'",
+"     -- registers
+"     '"',
+"     "<c-r>",
+"     -- spelling
+"     "z=",
+"   },
+"   triggers_blacklist = {
+"     -- list of mode / prefixes that should never be hooked by WhichKey
+"     -- this is mostly relevant for keymaps that start with a native binding
+"     i = { "j", "k" },
+"     v = { "j", "k" },
+"   },
+"   -- disable the WhichKey popup for certain buf types and file types.
+"   -- Disabled by default for Telescope
+"   disable = {
+"     buftypes = {},
+"     filetypes = {},
+"   }
+" })
+"
+" EOF
+
+" }}}
+" {{{ hop
+
+lua require'hop'.setup {}
+
+nnoremap <silent>Hw :HopWord<CR>
+nnoremap <silent>Hl :HopLine<CR>
+nnoremap <silent>Hls :HopLineStart<CR>
+nnoremap <silent>Ha :HopAnywhere<CR>
+nnoremap <silent>Hc1 :HopChar1<CR>
+nnoremap <silent>Hc2 :HopChar2<CR>
+nnoremap <silent>Hp :HopPattern<CR>
+
+" }}}
+" {{{ overlength
+
+lua << EOF
+
+require('overlength').setup({
+   -- Overlength highlighting enabled by default
+  enabled = true,
+
+  -- Colors for OverLength highlight group
+  colors = {
+    ctermfg = nil,
+    ctermbg = 'darkgrey',
+    fg = nil,
+    bg = '#8B0000',
+  },
+
+  -- Mode to use textwidth local options
+  -- 0: Don't use textwidth at all, always use config.default_overlength.
+  -- 1: Use `textwidth, unless it's 0, then use config.default_overlength.
+  -- 2: Always use textwidth. There will be no highlighting where
+  --    textwidth == 0, unless added explicitly
+  textwidth_mode = 2,
+  -- Default overlength with no filetype
+  default_overlength = 80,
+  -- How many spaces past your overlength to start highlighting
+  grace_length = 1,
+  -- Highlight only the column or until the end of the line
+  highlight_to_eol = true,
+
+  -- List of filetypes to disable overlength highlighting
+  disable_ft = { 'qf', 'help', 'man', 'checkhealth', 'lazy', 'packer', 'NvimTree', 'Telescope', 'WhichKey' },
+})
+
+EOF
+
+" }}}
+" {{{ smart-tab
+
+lua << EOF
+
+require('smart-tab').setup({
+    -- default options:
+    -- list of tree-sitter node types to filter
+    skips = { "string_content" },
+    -- default mapping, set `false` if you don't want automatic mapping
+    mapping = "<tab>",
+    -- filetypes to exclude
+    exclude_filetypes = {}
+})
+
+vim.keymap.set("n", "<tab>", require('smart-tab').smart_tab)
+
+EOF
+
+" }}}
+" {{{ inlay-hints
+
+" lua << EOF
+"
+" require("inlay-hints").setup({
+"   -- Enable InlayHints commands, include `InlayHintsToggle`,
+"   -- `InlayHintsEnable` and `InlayHintsDisable`
+"   commands = { enable = true },
+"
+"   -- Enable the inlay hints on `LspAttach` event
+"   autocmd = { enable = true }
+" })
+"
+" EOF
+
+" }}}
+" {{{ vim-wiki
+
+" {{{ - data
+
+let g:x#wiki#fold#header_depth_regex = '/^#\+/'
+let g:x#wiki#fold#blank_line_regex = '/\v^\s*$/'
+let g:x#wiki#state#fold#valid = maktaba#enum#Create([
+  \   'INITIAL',
+  \   'EXPANDED',
+  \   'COLLAPSED',
+  \   'DIRTY',
+  \ ])
+
+let g:x#wiki#state#fold#default = g:x#wiki#state#fold#valid.INITIAL
+let g:x#wiki#state#fold = v:null
+
+" }}}
+" {{{ - functions
+
+" {{{ - s:xf_wiki_init
+
+" {{{   - s:xf_wiki_init()
+
+func! s:xf_wiki_init() abort
+  call <SID>xf_wiki_state_fold_init()
+
+  call <SID>xf_wiki_init_mappings()
+  call <SID>xf_wiki_init_folding()
+  call <SID>xf_wiki_init_syntax_sync()
+
+  call <SID>xf_wiki_log_info('custom wiki init complete')
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_init_syntax_sync()
+" Useful to fix highlighting in large files
+
+func! s:xf_wiki_init_syntax_sync() abort
+  setlocal syntax sync fromstart
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_init_mappings()
+
+func! s:xf_wiki_init_mappings() abort
+  noremap <buffer> <silent> <space>wl <SID>xf_wiki_links_generate()
+  noremap <buffer> <expr> <silent> fff <SID>xf_wiki_folds_toggle()
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_init_folding()
+
+func! s:xf_wiki_init_folding() abort
+  setlocal foldenable
+  setlocal foldlevel=20
+  setlocal foldmethod=expr
+  setlocal foldexpr=s:xf_wiki_folds_expr
+endfunc
+
+" }}}
+
+" }}}
+" {{{     - s:xf_wiki_links
+
+" {{{       - s:xf_wiki_links_validate_paths(path, def_path)
+
+func! s:xf_wiki_links_validate_paths(paths) abort
+  let s:paths = maktaba#ensure#IsList(a:paths)
+
+  for s:path in s:paths
+    exec maktaba#ensure#IsFile(s:path)
+  endfor
+
+  return v:true
+endfunc
+
+" }}}
+" {{{       - s:xf_wiki_links_prepare_paths(path, def_path)
+
+func! s:xf_wiki_links_prepare_paths(path, def_path) abort
+  let s:arg_path = maktaba#ensure#IsString(a:path)
+  let s:def_path = maktaba#ensure#IsString(a:def_path)
+  let s:path = empty(s:arg_path) ? s:def_path || s:arg_path
+
+  call <SID>xf_wiki_links_validate_paths([ s:path ])
+
+  return s:path
+endfunc
+
+" }}}
+" {{{       - s:xf_wiki_links_generate(params)
+
+" TODO: Consider refactoring
+func! s:xf_wiki_links_generate(params) abort
+  let s:params = maktaba#ensure#isDictionary(a:params)
+  let s:write = maktaba#ensure#isBool(s:params.write || 1)
+  let s:header = maktaba#ensure#isBool(s:params.header || 1)
+  let s:arg_path = maktaba#ensure#IsString(s:params.path)
+  let s:def_path = maktaba#ensure#isString(fnamemodify(@%, ':h'))
+  let s:path = s:xf_wiki_links_prepare_paths(s:arg_path, s:def_path)
+
+  if s:header == 1
+    let s:header_text = s:params.header_label || g:vimwiki#toc#header
+    let s:header_label = maktaba#ensure#isString(s:header_text)
+  else
+    let s:header_label = v:null
+  endif
+
+  let s:rel_path = fnamemodify(s:path, ':h')
+  let s:rel_file_paths = split(globpath(s:rel_path, '*'), '\n')
+  let s:rel_file_count = len(s:rel_file_paths)
+
+  if s:rel_file_count == 0
+    return
+  endif
+
+  if s:write
+    call appendbufline(bufname('%'), line('.'), s:rel_file_paths)
+
+    call <SID>xf_wiki_log_info('wrote %d links', s:rel_file_count)
+  else
+    call <SID>xf_wiki_log_info('found %d links', s:rel_file_count)
+
+    for s:file_path, s:i in s:rel_file_paths
+      call <SID>xf_wiki_log_success(' -> (%d/%d) %s', s:i + 1, s:rel_file_count, s:file_path)
+    endfor
+  endif
+endfunc
+
+" }}}
+
+" }}}
+" {{{     - s:xf_wiki_util
+
+" {{{        - s:xf_wiki_util_match_header_line(line)
+
+func! s:xf_wiki_util_match_header_line(line) abort
+  let s:regex = g:x#wiki#regex#header_depth
+  let s:line = maktaba#ensure#IsString(a:line)
+
+  return matchstr(s:line, s:regex)
+endfunc
+
+" }}}
+" {{{        - s:xf_wiki_util_match_blank_line(line)
+
+func! s:xf_wiki_util_match_blank_line(line) abort
+  let s:regex = g:x#wiki#regex#blank_line
+  let s:line = maktaba#ensure#IsString(a:line)
+
+  return matchstr(s:line, s:regex)
+endfunc
+
+" }}}
+" {{{        - s:xf_wiki_util_get_header_depth(line)
+
+func! s:xf_wiki_util_get_header_depth(line) abort
+  let s:regex = g:x#wiki#fold#header_depth_regex
+  let s:line = maktaba#ensure#IsString(a:line)
+
+  return strlen(s:xf_wiki_util_match_header_line(s:line))
+endfunc
+
+" }}}
+" {{{        - s:xf_wiki_util_is_line_blank(line)
+
+func! s:xf_wiki_util_is_line_blank(line) abort
+  let s:line = maktaba#ensure#IsString(a:line)
+  let s:regex = g:x#wiki#fold#header_depth_regex
+
+  return s:line =~? s:regex
+endfunc
+
+" }}}
+
+" }}}
+" {{{   - s:xf_wiki_state
+
+" {{{   - s:xf_wiki_state_fold
+
+" {{{     - s:xf_wiki_state_fold(state)
+
+func! s:xf_wiki_state_fold(state) abort
+  if empty(a:state)
+    return s:xf_wiki_state_fold
+  endif
+
+  let l:state = maktaba#ensure#IsString(a:state)
+  let l:current_state = g:x#wiki#state#fold
+
+  if maktaba#value#IsEqual(l:state, l:current_state)
+    call <SID>xf_wiki_log_debug('fold state unchaged')
+    return
+  endif
+
+  let s:xf_wiki_state_fold = X_wiki_state_fold_verify(l:state)
+
+  call <SID>xf_wiki_log_debug('wiki fold state now %s', X_wiki_state_fold)
+
+  return X#wiki#state#fold
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_state_fold_init()
+
+func! s:xf_wiki_state_fold_init() abort
+  let g:x#wiki#state#fold = g:x#wiki#state#fold#default
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_state_fold_verify(state)
+
+func! s:xf_wiki_state_fold_verify(state) abort
+  let l:state = maktaba#ensure#IsString(a:state)
+  let l:valid_states = g:x#wiki#state#fold#valid.Values()
+
+  return maktaba#ensure#IsIn(l:state, l:valid_states)
+endfunc
+
+" }}}
+
+" }}}
+
+" }}}
+" {{{   - s:xf_wiki_log
+
+const g:xf#wiki#log = maktaba#log#Logger('wiki')
+
+" {{{     - s:xf_wiki_log_debug(...)
+
+func! s:xf_wiki_log_debug(...) abort
+  call g:xf#wiki#log.LogDebug(a:000)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_log_info(...)
+
+func! s:xf_wiki_log_info(...) abort
+  call g:xf#wiki#log.LogInfo(a:000)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_log_warn(...)
+
+func! s:xf_wiki_log_warn(...) abort
+  call g:xf#wiki#log.LogWarn(a:000)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_log_error(...)
+
+func! s:xf_wiki_log_error(message, ...) abort
+  call g:xf#wiki#log.LogError(a:000)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_log_severe(...)
+
+func! s:xf_wiki_log_severe(...) abort
+  call g:xf#wiki#log.LogSevere(a:000)
+endfunc
+
+" }}}
+
+" }}}
+" {{{   - s:xf_wiki_folds
+
+" {{{     - s:xf_wiki_folds_toggle()
+
+func! s:xf_wiki_folds_toggle() abort
+  let l:state_id = g:x#wiki#state#fold
+  let l:state_name = g:x#wiki#state#fold#valid.Name(a:state_name)
+
+  call <SID>xf_wiki_state_fold_verify(l:state_name)
+
+  if l:state_name == g:x#wiki#state#fold#valid.INITIAL
+    call <SID>xf_wiki_folds_initial()
+  elseif l:state_name == g:x#wiki#state#fold#valid.EXPANDED
+    call <SID>xf_wiki_folds_expanded()
+  elseif l:state_name == g:x#wiki#state#fold#valid.COLLAPSED
+    call <SID>xf_wiki_folds_collapsed()
+  elseif l:state_name == g:x#wiki#state#fold#valid.DIRTY
+    call <SID>xf_wiki_folds_dirty()
+  endif
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_folds_initial()
+
+func! s:xf_wiki_folds_initial() abort
+  call <SID>xf_folds_expand()
+  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.EXPANDED)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_folds_expanded()
+
+func! s:xf_wiki_folds_expanded() abort
+  call <SID>xf_folds_collapse()
+  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.COLLAPSED)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_folds_collapsed()
+
+func! s:xf_wiki_folds_collapsed() abort
+  call <SID>xf_folds_expand()
+  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.EXPANDED)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_folds_dirty()
+
+func! s:xf_wiki_folds_dirty() abort
+  call <SID>xf_folds_collapse()
+  call <SID>xf_folds_expand()
+  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.INIT)
+endfunc
+
+" }}}
+" {{{     - s:xf_wiki_folds_expr(lnum)
+
+" TODO: Add validation to check incoming line number
+" TODO: Change returned strings to constants/an enum
+func! s:xf_wiki_folds_expr(line_n) abort
+  let s:line_n = maktaba#ensure#IsNumber(a:line_n)
+  let s:line = maktaba#ensure#IsString(trim(getline(s:line_n)))
+
+  if empty(s:line)
+    return '='
+  endif
+
+  if s:xf_wiki_util_match_header_line(s:line)
+    let s:indent_depth = s:xf_wiki_util_get_header_depth(s:line)
+
+    if s:indent_depth > 0
+      return '>' . s:indent_depth
+    endif
+
+    return '='
+  endif
+
+  let s:is_blank_line = s:xf_wiki_util_match_blank_line(s:line)
+
+  if not s:is_blank_line
+    return
+  endif
+
+  let s:next_line_n = s:line_n + 1
+
+  " Out of bounds
+  if s:next_line_n > getline('$')
+    return '='
+  endif
+
+  " Check if blank line follows header
+  let s:next_line = getline(s:next_line_n)
+  let s:next_line_is_header = s:xf_wiki_util_match_header_line(s:next_line)
+
+  if s:next_line_n <= s:line_count && s:next_line_is_header
+    return -1
+  endif
+
+  return '='
+endfunc
+
+" }}}
+
+" }}}
+
+" }}}
+" {{{   - configuration
+
+augroup xf_vimwiki
+  au BufEnter *.wiki :syntax sync fromstart
+  au BufEnter *.wiki :e!
+augroup END
+
+let g:vimwiki_list = [{
+  \ 'name': 'Personal Wiki',
+  \ 'path': $HOME . '/.src/github/f3rno64/vim-wiki/src',
+  \ 'path_html': $HOME . '/.src/github/f3rno64/vim-wiki/html',
+  \ 'ext': '.wiki',
+  \ 'links_space_char': '_',
+  \ 'cycle_bullets': 1,
+  \ 'diary_rel_path': 'journal/',
+  \ 'diary_index': 'index',
+  \ 'diary_header': 'Journal',
+  \ 'diary_caption_level': 1,
+  \ 'list_margin': 0,
+  \ 'index': 'index',
+  \ 'auto_toc': 1,
+  \ 'auto_tags': 1,
+  \ 'auto_export': 1,
+  \ 'auto_diary_index': 1,
+  \ 'auto_generate_links': 1,
+  \ 'auto_generate_tags': 1,
+  \ 'html_filename_parameterization': 0,
+  \ 'maxhi': 1,
+  \ 'nested_syntaxes': {
+  \   'ruby': 'ruby',
+  \   'python': 'python',
+  \   'css': 'css',
+  \   'scss': 'scss',
+  \   'go': 'go',
+  \   'js': 'javascript',
+  \   'json': 'json',
+  \   'c++': 'cpp',
+  \   'sh': 'sh',
+  \   'racket': 'racket',
+  \ }}]
+
+let g:vimwiki_auto_chdir = 0
+let g:vimwiki_listsyms = '.oOX'
+let g:vimwiki_listsym_rejected = '-'
+let g:vimwiki_auto_header = 1
+let g:vimwiki_toc_link_format = 0
+let g:vimwiki_hl_headers = 0
+let g:vimwiki_hl_cb_checked = 2
+let g:vimwiki_dir_link = 'index'
+let g:vimwiki_global_ext = 0
+let g:vimwiki_create_link = 1
+let g:vimwiki_markdown_link_ext = 1
+let g:vimwiki_table_auto_fmt = 1
+let g:vimwiki_conceallevel = 2
+let g:vimwiki_conceal_pre = 1
+let g:vimwiki_conceal_onechar_markers = 1
+let g:vimwiki_emoji_enable = 3
+let g:vimwiki_toc_header = 'Contents'
+let g:vimwiki_links_header = 'Links'
+let g:vimwiki_tags_header = 'Tags'
+let g:vimwiki_links_header_level = 2
+let g:vimwiki_tags_header_level = 2
+let g:vimwiki_toc_header_level = 2
+let g:vimwiki_folding='expr'
+let g:vimwiki_markdown_header_style = 1
+let g:vimwiki_valid_html_tags = 'b,i,s,u,sub,sup,kbd,br,hr,pre,script'
+" let g:vimwiki_folding='expr:quick'
+" let g:vimwiki_fold_lists = 0
+" let g:vimwiki_filetypes = ['vimwiki']
+
+" }}}
+" {{{ - autocmd init
+
+" autocmd FileType vimwiki UltiSnipsAddFiletypes <SID>xf_init()
+
+" }}}
+
+" }}}
 
 " {{{ custom quickfix
 
@@ -1726,7 +2474,7 @@ EOF
 lua << EOF
 
 require("themery").setup({
-  themeConfigFile = "~/.config/nvim/lua/settings/theme.lua",
+  themeConfigFile = "/home/f3rno64/.config/nvim/lua/settings/theme.lua",
   livePreview = true,
   themes = {{
     name = "fruchtig",

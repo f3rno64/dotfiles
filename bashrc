@@ -187,6 +187,11 @@ if [[ -d $XF_HOME_BASH_SCRIPTS_DIR ]]; then
 fi
 
 # }}}
+# {{{ OpenAI API Key
+
+source <(gpg --decrypt ./.openai.env.asc)
+
+# }}}
 
 # TODO: Extract/refactor
 complete -C /usr/bin/terraform terraform
