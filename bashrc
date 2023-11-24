@@ -187,11 +187,8 @@ if [[ -d $XF_HOME_BASH_SCRIPTS_DIR ]]; then
 fi
 
 # }}}
-# {{{ OpenAI API Key
 
-source <(gpg --decrypt ./.openai.env.asc)
-
-# }}}
+export GIT_EDITOR=nvim
 
 # TODO: Extract/refactor
 complete -C /usr/bin/terraform terraform

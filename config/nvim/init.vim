@@ -92,7 +92,7 @@ Plug 'Quramy/vim-js-pretty-template'
 " {{{ markdown
 
 Plug 'godlygeek/tabular'
-Plug 'preservim/vim-markdown'
+" Plug 'preservim/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 " }}}
@@ -107,9 +107,11 @@ Plug 'f3rno/vimwiki-footnotes'
 " }}}
 " {{{ other
 
+Plug 'David-Kunz/jester'
+Plug 'AndrewRadev/switch.vim'
 Plug 'joaohkfaria/vim-jest-snippets'
 " Plug 'MysticalDevil/inlay-hints.nvim'
-Plug 'boltlessengineer/smart-tab.nvim'
+" Plug 'boltlessengineer/smart-tab.nvim'
 " Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 Plug 'lcheylus/overlength.nvim'
 Plug 'phaazon/hop.nvim', { 'branch': 'v2' }
@@ -128,7 +130,7 @@ Plug 'axelvc/template-string.nvim'
 Plug 'sontungexpt/buffer-closer'
 Plug 'jamestthompson3/sort-import.nvim'
 Plug 'sbdchd/neoformat'
-" Plug 'github/copilot.vim'
+Plug 'github/copilot.vim'
 Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
 Plug 'preservim/vim-wheel'
@@ -198,6 +200,7 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'kamwitsta/flatwhite-vim'
 Plug 'jadnw/gemstones.nvim'
 Plug 'Yagua/nebulous.nvim'
 Plug 'rafamadriz/neon'
@@ -502,13 +505,14 @@ set background=light
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
 " colorscheme newpaper
+" colorscheme flatwhite
 
 " Dark color schemes
 " colorscheme lucid
 " colorscheme base16-ayu-mirage
 " colorscheme vn-night
 " colorscheme base16-summercamp
-" colorscheme base16-tokyodark-terminal
+colorscheme base16-tokyodark-terminal
 " colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
@@ -527,7 +531,7 @@ set background=light
 " colorscheme gemstones
 " colorscheme base16-material-palenight
 " colorscheme base16-horizon-terminal-dark
-colorscheme base16-irblack
+" colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
 " colorscheme material
@@ -1250,8 +1254,8 @@ cmp.setup({
     ['<C-k>'] = cmp.mapping.select_prev_item()
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp', group_index = 2 },
-    { name = 'ultisnips', group_index = 2 },
+    { name = 'ultisnips' },
+    { name = 'nvim_lsp' },
   }, {
     { name = 'buffer' },
   })
@@ -1281,13 +1285,15 @@ EOF
 autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
 
 let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsExpandTrigger = '<c-space>'
-let g:UltiSnipsListSnippets = '<c-space><c-space>'
+let g:UltiSnipsExpandTrigger = '<c-s>'
+let g:UltiSnipsListSnippets = '<c-s><c-l>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 let g:UltiSnipsSnippetDirectories = [
   \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
   \ ]
+
+nnoremap <c-r><c-s> :call UltiSnips#RefreshSnippets()<cr>
 
 " }}}
 " {{{ nvim-lightbulb
@@ -1968,21 +1974,21 @@ EOF
 " }}}
 " {{{ smart-tab
 
-lua << EOF
-
-require('smart-tab').setup({
-    -- default options:
-    -- list of tree-sitter node types to filter
-    skips = { "string_content" },
-    -- default mapping, set `false` if you don't want automatic mapping
-    mapping = "<tab>",
-    -- filetypes to exclude
-    exclude_filetypes = {}
-})
-
-vim.keymap.set("n", "<tab>", require('smart-tab').smart_tab)
-
-EOF
+" lua << EOF
+"
+" require('smart-tab').setup({
+"     -- default options:
+"     -- list of tree-sitter node types to filter
+"     skips = { "string_content" },
+"     -- default mapping, set `false` if you don't want automatic mapping
+"     mapping = "<tab>",
+"     -- filetypes to exclude
+"     exclude_filetypes = {}
+" })
+"
+" vim.keymap.set("n", "<tab>", require('smart-tab').smart_tab)
+"
+" EOF
 
 " }}}
 " {{{ inlay-hints
@@ -2448,6 +2454,41 @@ let g:vimwiki_valid_html_tags = 'b,i,s,u,sub,sup,kbd,br,hr,pre,script'
 " autocmd FileType vimwiki UltiSnipsAddFiletypes <SID>xf_init()
 
 " }}}
+
+" }}}
+" {{{ switch
+
+let g:switch_mapping = "-"
+
+" }}}
+" {{{ jester
+
+lua << EOF
+
+require("jester").setup({
+  cmd = "jest -t '$result' -- $file", -- run command
+  identifiers = {"test", "it"}, -- used to identify tests
+  prepend = {"describe"}, -- prepend describe blocks
+  expressions = {"call_expression"}, -- tree-sitter object used to scan for tests/describe blocks
+  path_to_jest_run = 'jest', -- used to run tests
+  path_to_jest_debug = './node_modules/.bin/jest', -- used for debugging
+  terminal_cmd = ":vsplit | terminal", -- used to spawn a terminal for running tests, for debugging refer to nvim-dap's config
+  dap = { -- debug adapter configuration
+    type = 'node2',
+    request = 'launch',
+    cwd = vim.fn.getcwd(),
+    runtimeArgs = {'--inspect-brk', '$path_to_jest', '--no-coverage', '-t', '$result', '--', '$file'},
+    args = { '--no-cache' },
+    sourceMaps = false,
+    protocol = 'inspector',
+    skipFiles = {'<node_internals>/**/*.js'},
+    console = 'integratedTerminal',
+    port = 9229,
+    disableOptimisticBPs = true
+  }
+})
+
+EOF
 
 " }}}
 
