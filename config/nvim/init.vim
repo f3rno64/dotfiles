@@ -30,7 +30,7 @@ Plug 'aznhe21/actions-preview.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 " Plug 'yioneko/nvim-yati', { 'tag': '*' }
 Plug 'm-demare/hlargs.nvim'
-Plug 'p00f/nvim-ts-rainbow'
+" Plug 'p00f/nvim-ts-rainbow'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'RRethy/nvim-treesitter-textsubjects'
 
@@ -1389,37 +1389,37 @@ lua require("colorful-winsep").setup()
 " }}}
 " {{{ bufresize
 
-lua require("bufresize").setup()
+" lua require("bufresize").setup()
 
 " }}}
 " {{{ smart-splits
 
-lua << EOF
-
-require('smart-splits').setup({
-  resize_mode = {
-    hooks = {
-      on_leave = require('bufresize').register,
-    },
-  },
-})
-
-vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
-vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
-vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
-vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
-
-vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
-vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
-vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
-vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
-
-vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
-vim.keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
-vim.keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
-vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
-
-EOF
+" lua << EOF
+"
+" require('smart-splits').setup({
+"   resize_mode = {
+"     hooks = {
+"       on_leave = require('bufresize').register,
+"     },
+"   },
+" })
+"
+" vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+" vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+" vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+" vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
+"
+" vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+" vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+" vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+" vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+"
+" vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
+" vim.keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
+" vim.keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
+" vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
+"
+" EOF
 
 " }}}
 " {{{ twilight
