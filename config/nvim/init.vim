@@ -512,11 +512,11 @@ set background=light
 " colorscheme base16-ayu-mirage
 " colorscheme vn-night
 " colorscheme base16-summercamp
-colorscheme base16-tokyodark-terminal
+" colorscheme base16-tokyodark-terminal
 " colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
-" colorscheme gruvbox-baby
+colorscheme gruvbox-baby
 " colorscheme nightly
 " colorscheme tender
 " colorscheme sherbet
@@ -525,8 +525,6 @@ colorscheme base16-tokyodark-terminal
 " colorscheme tempus_night
 " colorscheme tempus_warp
 " colorscheme desertink
-" colorscheme lighthaus
-" colorscheme midnight
 " colorscheme nebulous
 " colorscheme gemstones
 " colorscheme base16-material-palenight
