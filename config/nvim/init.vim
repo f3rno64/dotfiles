@@ -484,7 +484,7 @@ lua require("gemstones").setup {}
 
 " }}}
 
-set background=light
+set background=dark
 
 " Light color schemes
 " colorscheme fruchtig
@@ -516,7 +516,7 @@ set background=light
 " colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
-colorscheme gruvbox-baby
+" colorscheme gruvbox-baby
 " colorscheme nightly
 " colorscheme tender
 " colorscheme sherbet
@@ -531,7 +531,7 @@ colorscheme gruvbox-baby
 " colorscheme base16-horizon-terminal-dark
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
-" colorscheme kanagawa
+colorscheme kanagawa
 " colorscheme material
 " colorscheme nightfox
 " colorscheme oxocarbon
