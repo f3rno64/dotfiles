@@ -232,3 +232,5 @@ eval "$(pyenv init -)"
 . "$HOME/.cargo/env"
 
 alias ls='lsd'
+
+[[ -s "/home/f3rno64/.gvm/scripts/gvm" ]] && source "/home/f3rno64/.gvm/scripts/gvm"

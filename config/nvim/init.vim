@@ -143,7 +143,7 @@ Plug 'wincent/terminus'
 Plug 'stevearc/dressing.nvim'
 Plug 'jghauser/mkdir.nvim'
 Plug 'tpope/vim-eunuch'
-Plug 'beauwilliams/focus.nvim'
+" Plug 'beauwilliams/focus.nvim'
 Plug 'jinh0/eyeliner.nvim'
 Plug 'smitajit/bufutils.vim'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
@@ -513,7 +513,7 @@ set background=dark
 " colorscheme vn-night
 " colorscheme base16-summercamp
 " colorscheme base16-tokyodark-terminal
-" colorscheme sherbet
+colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
 " colorscheme gruvbox-baby
@@ -531,7 +531,7 @@ set background=dark
 " colorscheme base16-horizon-terminal-dark
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
-colorscheme kanagawa
+" colorscheme kanagawa
 " colorscheme material
 " colorscheme nightfox
 " colorscheme oxocarbon
@@ -1387,37 +1387,37 @@ lua require("colorful-winsep").setup()
 " }}}
 " {{{ bufresize
 
-" lua require("bufresize").setup()
+lua require("bufresize").setup()
 
 " }}}
 " {{{ smart-splits
 
-" lua << EOF
-"
-" require('smart-splits').setup({
-"   resize_mode = {
-"     hooks = {
-"       on_leave = require('bufresize').register,
-"     },
-"   },
-" })
-"
-" vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
-" vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
-" vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
-" vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
-"
-" vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
-" vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
-" vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
-" vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
-"
-" vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
-" vim.keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
-" vim.keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
-" vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
-"
-" EOF
+lua << EOF
+
+require('smart-splits').setup({
+  resize_mode = {
+    hooks = {
+      on_leave = require('bufresize').register,
+    },
+  },
+})
+
+vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
+
+vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+
+vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
+vim.keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
+vim.keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
+vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
+
+EOF
 
 " }}}
 " {{{ twilight
@@ -1648,7 +1648,42 @@ EOF
 " }}}
 " {{{ focus.nvim
 
-lua require("focus").setup()
+" lua << EOF
+"
+" require("focus").setup()
+"
+" local ignore_filetypes = { 'NvimTree' }
+" local ignore_buftypes = { 'nofile', 'prompt', 'popup' }
+"
+" local augroup =
+"     vim.api.nvim_create_augroup('FocusDisable', { clear = true })
+"
+" vim.api.nvim_create_autocmd('WinEnter', {
+"     group = augroup,
+"     callback = function(_)
+"         if vim.tbl_contains(ignore_buftypes, vim.bo.buftype)
+"         then
+"             vim.w.focus_disable = true
+"         else
+"             vim.w.focus_disable = false
+"         end
+"     end,
+"     desc = 'Disable focus autoresize for BufType',
+" })
+"
+" vim.api.nvim_create_autocmd('FileType', {
+"     group = augroup,
+"     callback = function(_)
+"         if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+"             vim.b.focus_disable = true
+"         else
+"             vim.b.focus_disable = false
+"         end
+"     end,
+"     desc = 'Disable focus autoresize for FileType',
+" })
+"
+" EOF
 
 " }}}
 " {{{ dressing
