@@ -513,7 +513,7 @@ set background=dark
 " colorscheme vn-night
 " colorscheme base16-summercamp
 " colorscheme base16-tokyodark-terminal
-colorscheme sherbet
+" colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
 " colorscheme gruvbox-baby
@@ -537,7 +537,7 @@ colorscheme sherbet
 " colorscheme oxocarbon
 " colorscheme base16-gruvbox-dark-medium
 " colorscheme abscs
-" colorscheme tokyonight-night
+colorscheme tokyonight-night
 " colorscheme zephyr
 " colorscheme melange
 " colorscheme aurora
@@ -1753,7 +1753,7 @@ lua require('sort-import').setup()
 
 let g:neoformat_try_node_exe = 1
 
-autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Neoformat
+autocmd BufWritePre * Neoformat
 
 " }}}
 " {{{ buffer-closer
