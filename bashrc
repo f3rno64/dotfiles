@@ -223,12 +223,23 @@ export GPG_TTY
 # fi
 
 export RUSTC_WRAPPER=sccache
-
 export PYENV_ROOT="$HOME/.pyenv"
+
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-. "$HOME/.cargo/env"
 
-alias ls='lsd'
+if [[ -d "$HOME/.cargo" ]]; then
+  source "$HOME/.cargo/env"
+fi
 
-[[ -s "/home/f3rno64/.gvm/scripts/gvm" ]] && source "/home/f3rno64/.gvm/scripts/gvm"
+if [[ -x lsd ]]; then
+  alias ls='lsd'
+fi
+
+if [[ -x bat ]]; then
+  alias cat='bat'
+fi
+
+if [[ -s "$HOME/.gvm/scripts/gvm" ]]; then
+  source "$HOME/.gvm/scripts/gvm"
+fi
