@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 #
-# shellcheck disable=1090
+# shellcheck disable=1090,1091
 # Allow dynamic source
 
 # {{{ interactive check
@@ -165,18 +165,16 @@ fi
 
 xf_init_custom_scripts() {
   local -r SRC_TREE="$(tree -a -i -f "$XF_HOME_BASH_SCRIPTS_DIR" | grep '.sh')"
-  local -r SRC_FULL_PATHS="$(echo $SRC_TREE | awk '{ FS=" " } { print $2 }')"
+  local -r SRC_FULL_PATHS="$(echo "$SRC_TREE" | awk '{ FS=" " } { print $2 }')"
 
   local -r OLD_IFS="$IFS"
-  IFS="\n"
+  IFS=$'\n'
   local -r SCRIPTS_PATHS="$SRC_FULL_PATHS"
   IFS="$OLD_IFS"
 
   for SCRIPT in $SCRIPTS_PATHS
   do
-    if [ ! -z "$SCRIPT" ]; then
-      local -r SCRIPT_REL_PATH="$(realpath --relative-to="$HOME" "$SCRIPT")"
-
+    if [ -n "$SCRIPT" ]; then
       xf_safe_source "$SCRIPT"
     fi
   done
@@ -204,7 +202,7 @@ export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
 # ensure synchronization between bash memory and history file
 export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
 function hstrnotiocsti {
-    { READLINE_LINE="$( { </dev/tty hstr ${READLINE_LINE}; } 2>&1 1>&3 3>&- )"; } 3>&1;
+    { READLINE_LINE="$( { </dev/tty hstr "${READLINE_LINE}"; } 2>&1 1>&3 3>&- )"; } 3>&1;
     READLINE_POINT=${#READLINE_LINE}
 }
 # if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
