@@ -232,11 +232,11 @@ if [[ -d "$HOME/.cargo" ]]; then
   source "$HOME/.cargo/env"
 fi
 
-if [[ -x lsd ]]; then
+if command -v lsd >/dev/null 2>&1; then
   alias ls='lsd'
 fi
 
-if [[ -x bat ]]; then
+if command -v bat >/dev/null 2>&1; then
   alias cat='bat'
 fi
 
