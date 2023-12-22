@@ -732,9 +732,9 @@ set background=dark
 " colorscheme base16-ayu-mirage
 " colorscheme vn-night
 " colorscheme base16-summercamp
-colorscheme base16-tokyodark-terminal
+" colorscheme base16-tokyodark-terminal
 " colorscheme base16-onedark
-" colorscheme sherbet
+colorscheme sherbet
 " colorscheme slate
 " colorscheme murphy
 " colorscheme gruvbox-baby
