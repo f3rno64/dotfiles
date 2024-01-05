@@ -243,3 +243,13 @@ fi
 if [[ -s "$HOME/.gvm/scripts/gvm" ]]; then
   source "$HOME/.gvm/scripts/gvm"
 fi
+
+# pnpm
+export PNPM_HOME="/home/f3rno64/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+alias mc="make check"
