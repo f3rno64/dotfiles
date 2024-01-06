@@ -1,7 +1,7 @@
 [user]
 	name = Cris Mihalache
 	email = f3rno64@gmail.com
-	signingkey = /home/f3rno64/.ssh/id_rsa_github.pub
+	signingkey = /home/f3rno64/.ssh/id_rsa_signing.pub
 
 [color]
 	ui = auto
