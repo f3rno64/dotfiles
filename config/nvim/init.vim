@@ -109,9 +109,6 @@ Plug 'f3rno/vimwiki-footnotes'
 
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'christoomey/vim-sort-motion'
-Plug 'dense-analysis/neural'
-Plug 'muniftanjim/nui.nvim'
-Plug 'elpiloto/significant.nvim'
 Plug 'jbgutierrez/vim-better-comments'
 Plug 'fisadev/vim-isort'
 Plug 'voldikss/vim-floaterm'
@@ -2812,21 +2809,6 @@ let g:vim_isort_python_version = 'python3'
 " {{{ trouble 
 
 nnoremap <silent><leader>T :TroubleToggle<cr>
-
-" }}}
-" {{{  neural
-
-lua << EOF
-
-require('neural').setup({
-    source = {
-        openai = {
-            api_key = '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',
-        },
-    },
-})
-
-EOF
 
 " }}}
 " {{{ better-whitespace
