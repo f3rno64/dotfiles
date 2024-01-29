@@ -107,6 +107,11 @@ Plug 'f3rno/vimwiki-footnotes'
 " }}}
 " {{{ other
 
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'christoomey/vim-sort-motion'
+Plug 'dense-analysis/neural'
+Plug 'muniftanjim/nui.nvim'
+Plug 'elpiloto/significant.nvim'
 Plug 'jbgutierrez/vim-better-comments'
 Plug 'fisadev/vim-isort'
 Plug 'voldikss/vim-floaterm'
@@ -117,7 +122,7 @@ Plug 'joaohkfaria/vim-jest-snippets'
 " Plug 'MysticalDevil/inlay-hints.nvim'
 " Plug 'boltlessengineer/smart-tab.nvim'
 Plug 'lcheylus/overlength.nvim'
-Plug 'phaazon/hop.nvim', { 'branch': 'v2' }
+Plug 'smoka7/hop.nvim', { 'branch': 'master' }
 Plug 'anuvyklack/keymap-amend.nvim'
 Plug 'okuuva/auto-save.nvim'
 Plug 'declancm/cinnamon.nvim'
@@ -249,10 +254,14 @@ call plug#end()
 " }}}
 " {{{ general settings
 
+" {{{ config
+
 syntax enable
 
 filetype plugin on
 filetype indent on
+
+set maxmempattern=5000
 
 set expandtab
 set tabstop=2
@@ -298,6 +307,7 @@ set termguicolors
 set mouse+=a
 set splitkeep=screen
 
+" }}}
 " {{{ vim-thematic
 
 let g:thematic#defaults = {
@@ -703,8 +713,9 @@ EOF
 lua require("gemstones").setup {}
 
 " }}}
+" {{{ colorscheme
 
-set background=dark
+set background=light
 
 " Light color schemes
 " colorscheme fruchtig
@@ -724,12 +735,12 @@ set background=dark
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
-" colorscheme newpaper
+colorscheme newpaper
 " colorscheme flatwhite
 
 " Dark color schemes
 " colorscheme lucid
-colorscheme base16-ayu-mirage
+" colorscheme base16-ayu-mirage
 " colorscheme vn-night
 " colorscheme base16-summercamp
 " colorscheme base16-tokyodark-terminal
@@ -738,6 +749,7 @@ colorscheme base16-ayu-mirage
 " colorscheme slate
 " colorscheme murphy
 " colorscheme gruvbox-baby
+" colorscheme base16-tokyo-city-dark
 " colorscheme nightly
 " colorscheme tender
 " colorscheme dogrun
@@ -768,6 +780,8 @@ colorscheme base16-ayu-mirage
 " colorscheme everblush
 
 let mapleader=','
+
+" }}}
 
 " }}}
 " {{{ gui
@@ -2798,5 +2812,26 @@ let g:vim_isort_python_version = 'python3'
 " {{{ trouble 
 
 nnoremap <silent><leader>T :TroubleToggle<cr>
+
+" }}}
+" {{{  neural
+
+lua << EOF
+
+require('neural').setup({
+    source = {
+        openai = {
+            api_key = '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',
+        },
+    },
+})
+
+EOF
+
+" }}}
+" {{{ better-whitespace
+
+let g:better_whitespace_enabled=1
+let g:strip_whitespace_on_save=1
 
 " }}}
