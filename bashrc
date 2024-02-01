@@ -253,3 +253,5 @@ esac
 # pnpm end
 
 alias mc="make check"
+
+PATH=~/.console-ninja/.bin:$PATH

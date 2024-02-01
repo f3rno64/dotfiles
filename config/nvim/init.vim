@@ -716,7 +716,7 @@ lua require("gemstones").setup {}
 " }}}
 " {{{ colorscheme
 
-set background=light
+set background=dark
 
 " Light color schemes
 " colorscheme fruchtig
@@ -736,7 +736,7 @@ set background=light
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
-colorscheme newpaper
+" colorscheme newpaper
 " colorscheme flatwhite
 " colorscheme base16-github
 
@@ -763,7 +763,7 @@ colorscheme newpaper
 " colorscheme nebulous
 " colorscheme gemstones
 " colorscheme base16-material-palenight
-" colorscheme base16-horizon-terminal-dark
+colorscheme base16-horizon-terminal-dark
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
