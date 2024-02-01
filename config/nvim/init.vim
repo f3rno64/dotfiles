@@ -107,6 +107,8 @@ Plug 'f3rno/vimwiki-footnotes'
 " }}}
 " {{{ other
 
+Plug 'Pocco81/true-zen.nvim'
+Plug 'nvim-focus/focus.nvim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'christoomey/vim-sort-motion'
 Plug 'jbgutierrez/vim-better-comments'
@@ -178,7 +180,7 @@ Plug 'windwp/nvim-autopairs'
 Plug 'nvim-zh/colorful-winsep.nvim'
 Plug 'kwkarlwang/bufresize.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
-" Plug 'folke/twilight.nvim'
+Plug 'folke/twilight.nvim'
 Plug 'folke/zen-mode.nvim'
 " Plug 'glepnir/dashboard-nvim'
 Plug 'ojroques/nvim-bufdel'
@@ -710,6 +712,8 @@ EOF
 lua require("gemstones").setup {}
 
 " }}}
+
+" }}}
 " {{{ colorscheme
 
 set background=light
@@ -734,8 +738,10 @@ set background=light
 " colorscheme catppuccin-latte
 colorscheme newpaper
 " colorscheme flatwhite
+" colorscheme base16-github
 
 " Dark color schemes
+" colorscheme base16-blueish
 " colorscheme lucid
 " colorscheme base16-ayu-mirage
 " colorscheme vn-night
@@ -777,8 +783,6 @@ colorscheme newpaper
 " colorscheme everblush
 
 let mapleader=','
-
-" }}}
 
 " }}}
 " {{{ gui
@@ -1052,6 +1056,22 @@ function! ToggleQuickFix()
 endfunction
 
 nnoremap <silent> <leader>cc :call ToggleQuickFix()<cr>
+
+" }}}
+" {{{ shortcut to sort lines
+
+function! SortLines() range
+    execute a:firstline . "," . a:lastline . 's/^\(.*\)$/\=strdisplaywidth( submatch(0) ) . " " . submatch(0)/'
+    execute a:firstline . "," . a:lastline . 'sort n'
+    execute a:firstline . "," . a:lastline . 's/^\d\+\s//'
+endfunction
+
+vnoremap <silent> SS :'<,'> call SortLines()<cr><cr>
+
+" }}}
+" {{{ shortcut to select in braces
+
+nnoremap <silent> VB viB
 
 " }}}
 " {{{ tabnine-nvim
@@ -1654,7 +1674,7 @@ EOF
 " }}}
 " {{{ twilight
 
-" lua require("twilight").setup()
+lua require("twilight").setup()
 
 " }}}
 " {{{ zen-mode
@@ -2815,5 +2835,164 @@ nnoremap <silent><leader>T :TroubleToggle<cr>
 
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
+
+" }}}
+" {{{ focus.nvim
+
+lua << EOF
+
+require("focus").setup({
+    enable = true, -- Enable module
+    commands = true, -- Create Focus commands
+    autoresize = {
+        enable = true, -- Enable or disable auto-resizing of splits
+        width = 0, -- Force width for the focused window
+        height = 0, -- Force height for the focused window
+        minwidth = 0, -- Force minimum width for the unfocused window
+        minheight = 0, -- Force minimum height for the unfocused window
+        height_quickfix = 10, -- Set the height of quickfix panel
+    },
+    split = {
+        bufnew = false, -- Create blank buffer for new split windows
+        tmux = false, -- Create tmux splits instead of neovim splits
+    },
+    ui = {
+        number = false, -- Display line numbers in the focussed window only
+        relativenumber = false, -- Display relative line numbers in the focussed window only
+        hybridnumber = false, -- Display hybrid line numbers in the focussed window only
+        absolutenumber_unfocussed = false, -- Preserve absolute numbers in the unfocussed windows
+
+        cursorline = true, -- Display a cursorline in the focussed window only
+        cursorcolumn = false, -- Display cursorcolumn in the focussed window only
+        colorcolumn = {
+            enable = false, -- Display colorcolumn in the foccused window only
+            list = '+1', -- Set the comma-saperated list for the colorcolumn
+        },
+        signcolumn = true, -- Display signcolumn in the focussed window only
+        winhighlight = false, -- Auto highlighting for focussed/unfocussed windows
+    }
+})
+
+EOF
+
+" }}}
+" {{{ true-zen.nvim
+
+lua << EOF
+
+require('true-zen').setup({
+	modes = { -- configurations per mode
+		ataraxis = {
+			shade = "dark", -- if `dark` then dim the padding windows, otherwise if it's `light` it'll brighten said windows
+			backdrop = 0.25, -- percentage by which padding windows should be dimmed/brightened. Must be a number between 0 and 1. Set to 0 to keep the same background color
+			minimum_writing_area = { -- minimum size of main window
+				width = 81,
+				height = 40,
+			},
+			quit_untoggles = true, -- type :q or :qa to quit Ataraxis mode
+			padding = { -- padding windows
+				left = 52,
+				right = 52,
+				top = 0,
+				bottom = 0,
+			},
+			callbacks = { -- run functions when opening/closing Ataraxis mode
+				open_pre = nil,
+				open_pos = nil,
+				close_pre = nil,
+				close_pos = nil
+			},
+		},
+		minimalist = {
+			ignored_buf_types = { "nofile" }, -- save current options from any window except ones displaying these kinds of buffers
+			options = { -- options to be disabled when entering Minimalist mode
+				number = false,
+				relativenumber = false,
+				showtabline = 0,
+				signcolumn = "no",
+				statusline = "",
+				cmdheight = 1,
+				laststatus = 0,
+				showcmd = false,
+				showmode = false,
+				ruler = true,
+				numberwidth = 1
+			},
+			callbacks = { -- run functions when opening/closing Minimalist mode
+				open_pre = nil,
+				open_pos = nil,
+				close_pre = nil,
+				close_pos = nil
+			},
+		},
+		narrow = {
+			--- change the style of the fold lines. Set it to:
+			--- `informative`: to get nice pre-baked folds
+			--- `invisible`: hide them
+			--- function() end: pass a custom func with your fold lines. See :h foldtext
+			folds_style = "informative",
+			run_ataraxis = true, -- display narrowed text in a Ataraxis session
+			callbacks = { -- run functions when opening/closing Narrow mode
+				open_pre = nil,
+				open_pos = nil,
+				close_pre = nil,
+				close_pos = nil
+			},
+		},
+		focus = {
+			callbacks = { -- run functions when opening/closing Focus mode
+				open_pre = nil,
+				open_pos = nil,
+				close_pre = nil,
+				close_pos = nil
+			},
+		}
+	},
+	integrations = {
+		tmux = true,
+		kitty = {
+			enabled = false,
+			font = "+3"
+		},
+		twilight = true,
+		lualine = true
+	},
+})
+
+vim.api.nvim_set_keymap("n", "<leader>zn", ":TZNarrow<CR>", {})
+vim.api.nvim_set_keymap("v", "<leader>zn", ":'<,'>TZNarrow<CR>", {})
+vim.api.nvim_set_keymap("n", "<leader>zf", ":TZFocus<CR>", {})
+vim.api.nvim_set_keymap("n", "<leader>zm", ":TZMinimalist<CR>", {})
+vim.api.nvim_set_keymap("n", "<leader>za", ":TZAtaraxis<CR>", {})
+
+EOF
+
+" }}}
+" {{{ twilight.nvim
+
+lua << EOF
+
+require('twilight').setup({
+  dimming = {
+    alpha = 0.25, -- amount of dimming
+    -- we try to get the foreground from the highlight groups or fallback color
+    color = { "Normal", "#ffffff" },
+    term_bg = "#000000", -- if guibg=NONE, this will be used to calculate text color
+    inactive = false, -- when true, other windows will be fully dimmed (unless they contain the same buffer)
+  },
+  context = 10, -- amount of lines we will try to show around the current line
+  treesitter = true, -- use treesitter when available for the filetype
+  -- treesitter is used to automatically expand the visible text,
+  -- but you can further control the types of nodes that should always be fully expanded
+  expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
+    "function",
+    "method",
+    "table",
+    "if_statement",
+  },
+  exclude = {}, -- exclude these filetypes
+})
+
+EOF
 
 " }}}
