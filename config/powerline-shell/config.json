@@ -1,6 +1,9 @@
 {
   "theme": "/home/f3rno64/.powerline-shell-theme/theme/datsusara.py",
   "segments": [
+    "time",
+    "battery",
+    "virtual_env",
     "hostname",
     "username",
     "cwd",

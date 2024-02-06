@@ -1,17 +1,27 @@
-let s:f3_plugin_path = $HOME . '/.nvim-plugins'
+set encoding=utf-8
+scriptencoding utf-8
 
-" {{{ disable netrw, as we use nvim-tree instead
+" f3rno64's personal vim/neovim config
+"
+" https://github.com/f3rno64/dotfiles
 
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-
-" }}}
 " {{{ plugin loading
 
-call plug#begin(s:f3_plugin_path)
+" {{{ plugin directory resolution
+
+if has('nvim')
+  let s:plugin_dir_path = $HOME . '/.nvim-plugins'
+else
+  let s:plugin_dir_path = $HOME . '/.vim-plugins'
+endif
+
+" }}}
+
+call plug#begin(s:plugin_dir_path)
 
 " {{{ libs
 
+Plug 'MunifTanjim/nui.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-repeat'
 Plug 'google/vim-maktaba'
@@ -61,6 +71,7 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
+Plug 'f3fora/cmp-spell'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " }}}
@@ -92,8 +103,8 @@ Plug 'Quramy/vim-js-pretty-template'
 " {{{ markdown
 
 Plug 'godlygeek/tabular'
-" Plug 'preservim/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+Plug 'preservim/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 
 " }}}
 " {{{ wiki
@@ -107,6 +118,15 @@ Plug 'f3rno/vimwiki-footnotes'
 " }}}
 " {{{ other
 
+Plug 'MattesGroeger/vim-bookmarks'
+Plug 'tom-anders/telescope-vim-bookmarks.nvim'
+Plug 'rhysd/accelerated-jk'
+Plug 'dmmulroy/tsc.nvim'
+" Plug 'rcarriga/nvim-notify'
+Plug 'rafamadriz/friendly-snippets'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 Plug 'Pocco81/true-zen.nvim'
 Plug 'nvim-focus/focus.nvim'
 Plug 'ntpeters/vim-better-whitespace'
@@ -180,7 +200,7 @@ Plug 'windwp/nvim-autopairs'
 Plug 'nvim-zh/colorful-winsep.nvim'
 Plug 'kwkarlwang/bufresize.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
-Plug 'folke/twilight.nvim'
+" Plug 'folke/twilight.nvim'
 Plug 'folke/zen-mode.nvim'
 " Plug 'glepnir/dashboard-nvim'
 Plug 'ojroques/nvim-bufdel'
@@ -195,7 +215,7 @@ Plug 'mhinz/vim-signify'
 
 function! UpdateRemotePlugins(...)
   " Needed to refresh runtime files
-  let &rtp=&rtp
+  let &runtimepath=&runtimepath
   UpdateRemotePlugins
 endfunction
 
@@ -204,9 +224,9 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'yasukotelin/shirotelin'
 Plug 'cpea2506/one_monokai.nvim'
 Plug 'kamwitsta/flatwhite-vim'
-Plug 'jadnw/gemstones.nvim'
 Plug 'Yagua/nebulous.nvim'
 Plug 'rafamadriz/neon'
 Plug 'yashguptaz/calvera-dark.nvim'
@@ -239,7 +259,6 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'lighthaus-theme/vim-lighthaus'
 Plug 'daschw/leaf.nvim'
 Plug 'schickele/vim-fruchtig'
-" Plug 'yasukotelin/shirotelin'
 Plug 'toupeira/vim-desertink'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'https://gitlab.com/yorickpeterse/vim-paper.git'
@@ -251,8 +270,20 @@ Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 call plug#end()
 
 " }}}
+
 " {{{ general settings
 
+" {{{ leader key
+
+let mapleader=','
+
+" }}}
+" {{{ disable netrw, as we use nvim-tree instead
+
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
+" }}}
 " {{{ config
 
 syntax enable
@@ -262,6 +293,7 @@ filetype indent on
 
 set maxmempattern=5000
 
+set nospell
 set expandtab
 set tabstop=2
 set softtabstop=2
@@ -272,7 +304,6 @@ set timeoutlen=300    " default value
 set ttimeout          " for key codes
 set ttimeoutlen=10    " unnoticeable small value
 
-set encoding=utf-8
 set updatetime=100
 set number
 set nojoinspaces
@@ -293,8 +324,7 @@ set shortmess-=S
 set showcmd
 set smartcase
 set hidden
-set tw=79 " word wrap
-set nocompatible
+set textwidth=79 " word wrap
 set equalalways
 set wildignore+=*node_modules/**
 set noswapfile
@@ -310,249 +340,244 @@ set splitkeep=screen
 " {{{ vim-thematic
 
 let g:thematic#defaults = {
-\   "background": "dark",
-\   "laststatus": 2,
-\   "ruler": 1
+\   'background': 'dark',
+\   'laststatus': 2,
+\   'ruler': 1
 \ }
 
 let g:thematic#themes = {
-\   "lucid": {
-\     "colorscheme": "lucid",
-\     "background": "dark"
+\   'lucid': {
+\     'colorscheme': 'lucid',
+\     'background': 'dark'
 \   },
 \
-\   "base16-ayu-mirage": {
-\     "colorscheme": "base16-ayu-mirage",
-\     "background": "dark"
+\   'base16-ayu-mirage': {
+\     'colorscheme': 'base16-ayu-mirage',
+\     'background': 'dark'
 \   },
 \
-\   "base16-summercamp": {
-\     "colorscheme": "base16-summercamp",
-\     "background": "dark"
+\   'base16-summercamp': {
+\     'colorscheme': 'base16-summercamp',
+\     'background': 'dark'
 \   },
 \
-\   "base16-tokyodark-terminal": {
-\     "colorscheme": "base16-tokyodark-terminal",
-\     "background": "dark"
+\   'base16-tokyodark-terminal': {
+\     'colorscheme': 'base16-tokyodark-terminal',
+\     'background': 'dark'
 \   },
 \
-\   "slate": {
-\     "colorscheme": "slate",
-\     "background": "dark"
+\   'slate': {
+\     'colorscheme': 'slate',
+\     'background': 'dark'
 \   },
 \
-\   "murphy": {
-\     "colorscheme": "murphy",
-\     "background": "dark"
+\   'murphy': {
+\     'colorscheme': 'murphy',
+\     'background': 'dark'
 \   },
 \
-\   "gruvbox-baby": {
-\     "colorscheme": "gruvbox-baby",
-\     "background": "dark"
+\   'gruvbox-baby': {
+\     'colorscheme': 'gruvbox-baby',
+\     'background': 'dark'
 \   },
 \
-\   "nightly": {
-\     "colorscheme": "nightly",
-\     "background": "dark"
+\   'nightly': {
+\     'colorscheme': 'nightly',
+\     'background': 'dark'
 \   },
 \
-\   "tender": {
-\     "colorscheme": "tender",
-\     "background": "dark"
+\   'tender': {
+\     'colorscheme': 'tender',
+\     'background': 'dark'
 \   },
 \
-\   "sherbet": {
-\     "colorscheme": "sherbet",
-\     "background": "dark"
+\   'sherbet': {
+\     'colorscheme': 'sherbet',
+\     'background': 'dark'
 \   },
 \
-\   "dogrun": {
-\     "colorscheme": "dogrun",
-\     "background": "dark"
+\   'dogrun': {
+\     'colorscheme': 'dogrun',
+\     'background': 'dark'
 \   },
 \
-\   "tempus_future": {
-\     "colorscheme": "tempus_future",
-\     "background": "dark"
+\   'tempus_future': {
+\     'colorscheme': 'tempus_future',
+\     'background': 'dark'
 \   },
 \
-\   "tempus_night": {
-\     "colorscheme": "tempus_night",
-\     "background": "dark"
+\   'tempus_night': {
+\     'colorscheme': 'tempus_night',
+\     'background': 'dark'
 \   },
 \
-\   "tempus_warp": {
-\     "colorscheme": "tempus_warp",
-\     "background": "dark"
+\   'tempus_warp': {
+\     'colorscheme': 'tempus_warp',
+\     'background': 'dark'
 \   },
 \
-\   "desertink": {
-\     "colorscheme": "desertink",
-\     "background": "dark"
+\   'desertink': {
+\     'colorscheme': 'desertink',
+\     'background': 'dark'
 \   },
 \
-\   "nebulous": {
-\     "colorscheme": "nebulous",
-\     "background": "dark"
+\   'nebulous': {
+\     'colorscheme': 'nebulous',
+\     'background': 'dark'
 \   },
 \
-\   "gemstones": {
-\     "colorscheme": "gemstones",
-\     "background": "dark"
+\   'base16-material-palenight': {
+\     'colorscheme': 'base16-material-palenight',
+\     'background': 'dark'
 \   },
 \
-\   "base16-material-palenight": {
-\     "colorscheme": "base16-material-palenight",
-\     "background": "dark"
+\   'base16-horizon-terminal-dark': {
+\     'colorscheme': 'base16-horizon-terminal-dark',
+\     'background': 'dark'
 \   },
 \
-\   "base16-horizon-terminal-dark": {
-\     "colorscheme": "base16-horizon-terminal-dark",
-\     "background": "dark"
+\   'base16-irblack': {
+\     'colorscheme': 'base16-irblack',
+\     'background': 'dark'
 \   },
 \
-\   "base16-irblack": {
-\     "colorscheme": "base16-irblack",
-\     "background": "dark"
+\   'tequila-sunrise': {
+\     'colorscheme': 'tequila-sunrise',
+\     'background': 'dark'
 \   },
 \
-\   "tequila-sunrise": {
-\     "colorscheme": "tequila-sunrise",
-\     "background": "dark"
+\   'kanagawa': {
+\     'colorscheme': 'kanagawa',
+\     'background': 'dark'
 \   },
 \
-\   "kanagawa": {
-\     "colorscheme": "kanagawa",
-\     "background": "dark"
+\   'material': {
+\     'colorscheme': 'material',
+\     'background': 'dark'
 \   },
 \
-\   "material": {
-\     "colorscheme": "material",
-\     "background": "dark"
+\   'nightfox': {
+\     'colorscheme': 'nightfox',
+\     'background': 'dark'
 \   },
 \
-\   "nightfox": {
-\     "colorscheme": "nightfox",
-\     "background": "dark"
+\   'oxocarbon': {
+\     'colorscheme': 'oxocarbon',
+\     'background': 'dark'
 \   },
 \
-\   "oxocarbon": {
-\     "colorscheme": "oxocarbon",
-\     "background": "dark"
+\   'base16-gruvbox-dark-medium': {
+\     'colorscheme': 'base16-gruvbox-dark-medium',
+\     'background': 'dark'
 \   },
 \
-\   "base16-gruvbox-dark-medium": {
-\     "colorscheme": "base16-gruvbox-dark-medium",
-\     "background": "dark"
+\   'abscs': {
+\     'colorscheme': 'abscs',
+\     'background': 'dark'
 \   },
 \
-\   "abscs": {
-\     "colorscheme": "abscs",
-\     "background": "dark"
+\   'tokyonight-night': {
+\     'colorscheme': 'tokyonight-night',
+\     'background': 'dark'
 \   },
 \
-\   "tokyonight-night": {
-\     "colorscheme": "tokyonight-night",
-\     "background": "dark"
+\   'zephyr': {
+\     'colorscheme': 'zephyr',
+\     'background': 'dark'
 \   },
 \
-\   "zephyr": {
-\     "colorscheme": "zephyr",
-\     "background": "dark"
+\   'melange': {
+\     'colorscheme': 'melange',
+\     'background': 'dark'
 \   },
 \
-\   "melange": {
-\     "colorscheme": "melange",
-\     "background": "dark"
+\   'aurora': {
+\     'colorscheme': 'aurora',
+\     'background': 'dark'
 \   },
 \
-\   "aurora": {
-\     "colorscheme": "aurora",
-\     "background": "dark"
+\   'one-nvim': {
+\     'colorscheme': 'one-nvim',
+\     'background': 'dark'
 \   },
 \
-\   "one-nvim": {
-\     "colorscheme": "one-nvim",
-\     "background": "dark"
+\   'falcon': {
+\     'colorscheme': 'falcon',
+\     'background': 'dark'
 \   },
 \
-\   "falcon": {
-\     "colorscheme": "falcon",
-\     "background": "dark"
+\   'calvera': {
+\     'colorscheme': 'calvera',
+\     'background': 'dark'
 \   },
 \
-\   "calvera": {
-\     "colorscheme": "calvera",
-\     "background": "dark"
+\   'vn-night': {
+\     'colorscheme': 'vn-night',
+\     'background': 'dark'
 \   },
 \
-\   "vn-night": {
-\     "colorscheme": "vn-night",
-\     "background": "dark"
+\   'everblush': {
+\     'colorscheme': 'everblush',
+\     'background': 'dark'
+\   },
+\   'fruchtig': {
+\     'colorscheme': 'fruchtig',
+\     'background': 'light'
 \   },
 \
-\   "everblush": {
-\     "colorscheme": "everblush",
-\     "background": "dark"
-\   },
-\   "fruchtig": {
-\     "colorscheme": "fruchtig",
-\     "background": "light"
+\   'newpaper': {
+\     'colorscheme': 'newpaper',
+\     'background': 'light'
 \   },
 \
-\   "newpaper": {
-\     "colorscheme": "newpaper",
-\     "background": "light"
+\   'shirotelin': {
+\     'colorscheme': 'shirotelin',
+\     'background': 'light'
 \   },
 \
-\   "shirotelin": {
-\     "colorscheme": "shirotelin",
-\     "background": "light"
+\   'onehalflight': {
+\     'colorscheme': 'onehalflight',
+\     'background': 'light'
 \   },
 \
-\   "onehalflight": {
-\     "colorscheme": "onehalflight",
-\     "background": "light"
+\   'paper': {
+\     'colorscheme': 'paper',
+\     'background': 'light'
 \   },
 \
-\   "paper": {
-\     "colorscheme": "paper",
-\     "background": "light"
+\   'tempus_day': {
+\     'colorscheme': 'tempus_day',
+\     'background': 'light'
 \   },
 \
-\   "tempus_day": {
-\     "colorscheme": "tempus_day",
-\     "background": "light"
+\   'base16-one-light': {
+\     'colorscheme': 'base16-one-light',
+\     'background': 'light'
 \   },
 \
-\   "base16-one-light": {
-\     "colorscheme": "base16-one-light",
-\     "background": "light"
+\   'base16-railscasts': {
+\     'colorscheme': 'base16-railscasts',
+\     'background': 'light'
 \   },
 \
-\   "base16-railscasts": {
-\     "colorscheme": "base16-railscasts",
-\     "background": "light"
+\   'base16-github': {
+\     'colorscheme': 'base16-github',
+\     'background': 'light'
 \   },
 \
-\   "base16-github": {
-\     "colorscheme": "base16-github",
-\     "background": "light"
+\   'base16-mexico-light': {
+\     'colorscheme': 'base16-mexico-light',
+\     'background': 'light'
 \   },
 \
-\   "base16-mexico-light": {
-\     "colorscheme": "base16-mexico-light",
-\     "background": "light"
+\   'base16-still-alive': {
+\     'colorscheme': 'base16-still-alive',
+\     'background': 'light'
 \   },
 \
-\   "base16-still-alive": {
-\     "colorscheme": "base16-still-alive",
-\     "background": "light"
-\   },
-\
-\   "base16-unikitty-light": {
-\     "colorscheme": "base16-unikitty-light",
-\     "background": "light"
+\   'base16-unikitty-light': {
+\     'colorscheme': 'base16-unikitty-light',
+\     'background': 'light'
 \   },
 \ }
 
@@ -573,34 +598,50 @@ inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
 
 set foldmethod=marker
 set foldcolumn=1
-set foldlevel=1
+set foldlevel=0
 
 " }}}
 " {{{ autocommands
 
 augroup TerraformVarFiles
-  au!
-  au BufNewFile,BufRead *.tfvars.dev setf terraform
-  au BufNewFile,BufRead *.tfvars.prod setf terraform
+  autocmd!
+  autocmd BufNewFile,BufRead *.tfvars.dev setf terraform
+  autocmd BufNewFile,BufRead *.tfvars.prod setf terraform
 augroup END
 
 augroup editing
-  au!
-  au InsertLeave * set nopaste
-  au BufEnter * set number
-  au BufLeave * set nonumber
+  autocmd!
+  autocmd InsertLeave * set nopaste
+  autocmd BufEnter * set number
+  autocmd BufLeave * set nonumber
 augroup END
 
-autocmd FileType snippets setlocal foldmethod=marker
+augroup SnippetFoldMethod
+  autocmd!
+  autocmd FileType snippets setlocal foldmethod=marker
+augroup END
 
 " hacky fix for syntax highlighting in large files
-autocmd WinEnter,Filetype * syntax sync fromstart
+augroup syntax_fix
+  autocmd!
+  autocmd WinEnter,Filetype * syntax sync fromstart
+augroup END
 
-au BufNewFile,BufRead *.nvim setf vim
-au BufNewFile,BufRead */i3/config setf i3config
-au BufNewFile,BufRead */sway/config setf i3config
+augroup SetVimSyntax
+  autocmd!
+  autocmd BufNewFile,BufRead *.vim setf vim
+  autocmd BufNewFile,BufRead *.nvim setf vim
+augroup END
 
-au InsertLeave * write
+augroup SetI3ConfigSyntax
+  autocmd BufNewFile,BufRead */i3/config setf i3config
+  autocmd BufNewFile,BufRead */sway/config setf i3config
+augroup END
+
+augroup WriteOnInsertLeave
+  autocmd!
+  autocmd InsertLeave * write
+augroup END
 
 " }}}
 " {{{ colorscheme configs
@@ -707,23 +748,20 @@ setmap("n", "nrc", ":lua require('nebulous.functions').random_variant()<CR>", op
 EOF
 
 " }}}
-" {{{ gemstones
-
-lua require("gemstones").setup {}
-
-" }}}
 
 " }}}
 " {{{ colorscheme
 
-set background=dark
+set background=light
 
-" Light color schemes
+" {{{ light colorschemes
+
 " colorscheme fruchtig
 " colorscheme shirotelin
 " colorscheme onehalflight
 " colorscheme paper
-" colorscheme tempus_day
+colorscheme tempus_day
+" colorscheme tempus_totus,
 " colorscheme base16-one-light
 " colorscheme base16-railscasts
 " colorscheme base16-github
@@ -731,7 +769,9 @@ set background=dark
 " colorscheme base16-still-alive
 " colorscheme base16-unikitty-light
 
-" Light and dark color schemes
+" }}}
+" {{{ light and dark colorschemes
+
 " colorscheme toast
 " colorscheme leaf
 " colorscheme PaperColor
@@ -739,8 +779,13 @@ set background=dark
 " colorscheme newpaper
 " colorscheme flatwhite
 " colorscheme base16-github
+" colorscheme tempus_day
 
-" Dark color schemes
+" }}}
+" {{{ dark colorschemes
+
+" colorscheme tequila-sunrise
+" colorscheme melange
 " colorscheme base16-blueish
 " colorscheme lucid
 " colorscheme base16-ayu-mirage
@@ -761,9 +806,8 @@ set background=dark
 " colorscheme tempus_warp
 " colorscheme desertink
 " colorscheme nebulous
-" colorscheme gemstones
 " colorscheme base16-material-palenight
-colorscheme base16-horizon-terminal-dark
+" colorscheme base16-horizon-terminal-dark
 " colorscheme base16-irblack
 " colorscheme tequila-sunrise
 " colorscheme kanagawa
@@ -782,10 +826,11 @@ colorscheme base16-horizon-terminal-dark
 " colorscheme vn-night
 " colorscheme everblush
 
-let mapleader=','
+" }}}
 
 " }}}
-" {{{ gui
+
+" {{{ gui configuration
 
 if has('gui_running') || exists('g:GtkGuiLoaded')
 
@@ -809,7 +854,7 @@ if has('gui_running') || exists('g:GtkGuiLoaded')
 " {{{ functions
 
 func! SetFont()
-  let &guifont = g:font_name . " " . g:font_size
+  let &guifont = g:font_name . ' ' . g:font_size
 endfunc
 
 func! AdjustFontSize(delta)
@@ -849,7 +894,7 @@ if has('nvim') && ! has('gui_vimr')
   call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
   call rpcnotify(1, 'Gui', 'Option', 'Cmdline', 0)
 
-  let g:GuiInternalClipoard = 1
+  let g:GuiInternalClipboard = 1
 endif
 
 " }}}
@@ -913,31 +958,63 @@ local null_ls = require("null-ls")
 null_ls.setup({
   debounce = 500,
   sources = {
+    null_ls.builtins.diagnostics.actionlint,
     null_ls.builtins.diagnostics.tsc,
     null_ls.builtins.diagnostics.jsonlint,
     null_ls.builtins.diagnostics.markdownlint,
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.diagnostics.pylint,
     null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.diagnostics.mypy
+    null_ls.builtins.diagnostics.mypy,
+    null_ls.builtins.diagnostics.alex,
+    null_ls.builtins.diagnostics.codespell,
+    null_ls.builtins.diagnostics.commitlint,
+    null_ls.builtins.diagnostics.dotenv_linter,
+    null_ls.builtins.diagnostics.erb_lint,
+    null_ls.builtins.diagnostics.gitlint,
+    null_ls.builtins.diagnostics.jshint,
+    null_ls.builtins.diagnostics.misspell,
+    null_ls.builtins.diagnostics.pycodestyle,
+    null_ls.builtins.diagnostics.pydocstyle,
+    null_ls.builtins.diagnostics.rubocop,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.stylelint,
+    null_ls.builtins.diagnostics.stylint,
+    null_ls.builtins.diagnostics.tidy,
+    null_ls.builtins.diagnostics.todo_comments,
+    null_ls.builtins.diagnostics.typos,
+    null_ls.builtins.diagnostics.vint,
+    null_ls.builtins.diagnostics.yamllint,
+
+    null_ls.builtins.completion.spell,
+    null_ls.builtins.completion.tags,
+    null_ls.builtins.completion.vsnip,
+
+    null_ls.builtins.code_actions.eslint_d,
+    null_ls.builtins.code_actions.cspell,
+    null_ls.builtins.code_actions.refactoring,
+    null_ls.builtins.code_actions.shellcheck,
+
+    null_ls.builtins.formatting.blackd,
+    null_ls.builtins.formatting.codespell,
+    null_ls.builtins.formatting.eslint_d,
+    null_ls.builtins.formatting.fixjson,
+    null_ls.builtins.formatting.htmlbeautifier,
+    null_ls.builtins.formatting.isort,
+    null_ls.builtins.formatting.jq,
+    null_ls.builtins.formatting.markdownlint,
+    null_ls.builtins.formatting.ocdc,
+    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.rubocop,
+    null_ls.builtins.formatting.shellharden,
+    null_ls.builtins.formatting.shfmt,
+    null_ls.builtins.formatting.stylelint,
+    null_ls.builtins.formatting.yamlfix,
+
+    null_ls.builtins.hover.dictionary,
+    null_ls.builtins.hover.printenv
   },
 })
-
-EOF
-
-" }}}
-" {{{ lsp
-
-lua << EOF
-
-vim.keymap.set({ "v", "n" }, "ca", function() vim.lsp.buf.code_action() end, bufopts)
-vim.keymap.set({ "v", "n" }, "cp", require("actions-preview").code_actions)
-vim.api.nvim_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "single" })<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "single" })<CR>', { noremap = true, silent = true })
 
 EOF
 
@@ -1031,49 +1108,7 @@ nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
 
 " }}}
 
-" {{{ shortcut to edit config
 
-if has('nvim')
-  nnoremap <silent> <leader>rr :e ~/.config/nvim/init.vim<cr>
-else
-  nnoremap <silent> <leader>rr :e ~/.vimrc<cr>
-endif
-
-" }}}
-" {{{ shortcut to force write
-
-nnoremap <silent> <leader><S-w> :w!<cr>
-
-" }}}
-" {{{ shortcut to toggle quickfix
-
-function! ToggleQuickFix()
-    if empty(filter(getwininfo(), 'v:val.quickfix'))
-        copen
-    else
-        cclose
-    endif
-endfunction
-
-nnoremap <silent> <leader>cc :call ToggleQuickFix()<cr>
-
-" }}}
-" {{{ shortcut to sort lines
-
-function! SortLines() range
-    execute a:firstline . "," . a:lastline . 's/^\(.*\)$/\=strdisplaywidth( submatch(0) ) . " " . submatch(0)/'
-    execute a:firstline . "," . a:lastline . 'sort n'
-    execute a:firstline . "," . a:lastline . 's/^\d\+\s//'
-endfunction
-
-vnoremap <silent> SS :'<,'> call SortLines()<cr><cr>
-
-" }}}
-" {{{ shortcut to select in braces
-
-nnoremap <silent> VB viB
-
-" }}}
 " {{{ tabnine-nvim
 
 " lua << EOF
@@ -1506,6 +1541,15 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'ultisnips' },
     { name = 'nvim_lsp' },
+    {
+      name = 'spell',
+      option = {
+          keep_all_entries = false,
+          enable_in_context = function()
+              return true
+          end,
+      }
+    }
   }, {
     { name = 'buffer' },
   })
@@ -1532,7 +1576,10 @@ EOF
 " }}}
 " {{{ ultisnips
 
-autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
+augroup UltiSnipsAddFiletypes
+  autocmd!
+  autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
+augroup END
 
 let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsExpandTrigger = '<c-s>'
@@ -1548,7 +1595,10 @@ nnoremap <c-r><c-s> :call UltiSnips#RefreshSnippets()<cr>
 " }}}
 " {{{ nvim-lightbulb
 
-autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+augroup lightbulb
+  autocmd!
+  autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+augroup END
 
 " }}}
 " {{{ leap
@@ -1674,7 +1724,7 @@ EOF
 " }}}
 " {{{ twilight
 
-lua require("twilight").setup()
+" lua require("twilight").setup()
 
 " }}}
 " {{{ zen-mode
@@ -1689,10 +1739,13 @@ lua require("zen-mode").setup()
 " }}}
 " {{{ vim-jsx-pretty-template
 
-autocmd FileType javascript JsPreTmpl
-autocmd FileType javascript.jsx JsPreTmpl
-autocmd FileType typescript JsPreTmpl
-autocmd FileType typescript syn clear foldBraces
+augroup JsPreTemplate
+  autocmd!
+  autocmd FileType javascript JsPreTmpl
+  autocmd FileType javascript.jsx JsPreTmpl
+  autocmd FileType typescript JsPreTmpl
+  autocmd FileType typescript syn clear foldBraces
+augroup END
 
 " }}}
 " {{{ inc-rename
@@ -1724,11 +1777,6 @@ vim.keymap.set('n', '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>')
 vim.keymap.set('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
 
 EOF
-
-" }}}
-" {{{ python config
-
-autocmd FileType python syntax on
 
 " }}}
 " {{{ range-highlight
@@ -1816,7 +1864,7 @@ glance.setup({
     icon = '│',
   },
   winbar = {
-    enable = true, -- Available strating from nvim-0.8+
+    enable = true, -- Available starting from nvim-0.8+
   },
 })
 
@@ -1828,49 +1876,25 @@ EOF
 lua << EOF
 
 require('illuminate').configure({
-    -- providers: provider used to get references in the buffer, ordered by priority
     providers = {
         'lsp',
         'treesitter',
         'regex',
     },
-    -- delay: delay in milliseconds
     delay = 100,
-    -- filetype_overrides: filetype specific overrides.
-    -- The keys are strings to represent the filetype while the values are tables that
-    -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
     filetype_overrides = {},
-    -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
     filetypes_denylist = {
         'dirvish',
         'fugitive',
     },
-    -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
     filetypes_allowlist = {},
-    -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
-    -- See `:help mode()` for possible values
     modes_denylist = {},
-    -- modes_allowlist: modes to illuminate, this is overriden by modes_denylist
-    -- See `:help mode()` for possible values
     modes_allowlist = {},
-    -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
-    -- Only applies to the 'regex' provider
-    -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
     providers_regex_syntax_denylist = {},
-    -- providers_regex_syntax_allowlist: syntax to illuminate, this is overriden by providers_regex_syntax_denylist
-    -- Only applies to the 'regex' provider
-    -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
     providers_regex_syntax_allowlist = {},
-    -- under_cursor: whether or not to illuminate under the cursor
     under_cursor = true,
-    -- large_file_cutoff: number of lines at which to use large_file_config
-    -- The `under_cursor` option is disabled when this cutoff is hit
     large_file_cutoff = nil,
-    -- large_file_config: config to use for large files (based on large_file_cutoff).
-    -- Supports the same keys passed to .configure
-    -- If nil, vim-illuminate will be disabled for large files.
     large_file_overrides = nil,
-    -- min_count_to_highlight: minimum number of matches required to perform highlighting
     min_count_to_highlight = 1,
 })
 
@@ -1961,8 +1985,8 @@ nnoremap <silent> <leader>Gi :Glance implementations<cr>
 " }}}
 " {{{ vim-lexical
 
-let g:lexical#spelllang = ["en_us"]
-let g:lexical#thesaurus = ["/home/f3rno64/.src/github/f3rno64/dotfiles/moby_wordlist"]
+let g:lexical#spelllang = ['en_us']
+let g:lexical#thesaurus = [$HOME . '.src/github/f3rno64/dotfiles/moby_wordlist']
 
 augroup lexical
   autocmd!
@@ -2005,7 +2029,10 @@ lua require('sort-import').setup()
 
 let g:neoformat_try_node_exe = 1
 
-autocmd BufWritePre *.js,*.ts,*.tsx Neoformat
+augroup autoformat
+  autocmd!
+  autocmd BufWritePre *.js,*.ts,*.tsx Neoformat
+augroup END
 
 " }}}
 " {{{ buffer-closer
@@ -2109,105 +2136,6 @@ lua require('cinnamon').setup()
 lua require("auto-save").setup()
 
 " }}}
-" {{{ which-key
-
-" lua << EOF
-"
-" vim.o.timeout = true
-" vim.o.timeoutlen = 300
-"
-" require("which-key").setup({
-"   plugins = {
-"     marks = true, -- shows a list of your marks on ' and `
-"     registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-"     -- the presets plugin, adds help for a bunch of default keybindings in Neovim
-"     -- No actual key bindings are created
-"     spelling = {
-"       enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-"       suggestions = 20, -- how many suggestions should be shown in the list?
-"     },
-"     presets = {
-"       operators = true, -- adds help for operators like d, y, ...
-"       motions = true, -- adds help for motions
-"       text_objects = true, -- help for text objects triggered after entering an operator
-"       windows = true, -- default bindings on <c-w>
-"       nav = true, -- misc bindings to work with windows
-"       z = true, -- bindings for folds, spelling and others prefixed with z
-"       g = true, -- bindings for prefixed with g
-"     },
-"   },
-"   -- add operators that will trigger motion and text object completion
-"   -- to enable all native operators, set the preset / operators plugin above
-"   operators = { gc = "Comments" },
-"   key_labels = {
-"     -- override the label used to display some keys. It doesn't effect WK in any other way.
-"     -- For example:
-"     -- ["<space>"] = "SPC",
-"     -- ["<cr>"] = "RET",
-"     -- ["<tab>"] = "TAB",
-"   },
-"   motions = {
-"     count = true,
-"   },
-"   icons = {
-"     breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-"     separator = "➜", -- symbol used between a key and it's label
-"     group = "+", -- symbol prepended to a group
-"   },
-"   popup_mappings = {
-"     scroll_down = "<c-d>", -- binding to scroll down inside the popup
-"     scroll_up = "<c-u>", -- binding to scroll up inside the popup
-"   },
-"   window = {
-"     border = "none", -- none, single, double, shadow
-"     position = "bottom", -- bottom, top
-"     margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
-"     padding = { 1, 2, 1, 2 }, -- extra window padding [top, right, bottom, left]
-"     winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
-"     zindex = 1000, -- positive value to position WhichKey above other floating windows.
-"   },
-"   layout = {
-"     height = { min = 4, max = 25 }, -- min and max height of the columns
-"     width = { min = 20, max = 50 }, -- min and max width of the columns
-"     spacing = 3, -- spacing between columns
-"     align = "left", -- align columns left, center or right
-"   },
-"   ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-"   hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "^:", "^ ", "^call ", "^lua " }, -- hide mapping boilerplate
-"   show_help = true, -- show a help message in the command line for using WhichKey
-"   show_keys = true, -- show the currently pressed key and its label as a message in the command line
-"   triggers = "auto", -- automatically setup triggers
-"   -- triggers = {"<leader>"} -- or specifiy a list manually
-"   -- list of triggers, where WhichKey should not wait for timeoutlen and show immediately
-"   triggers_nowait = {
-"     -- marks
-"     "`",
-"     "'",
-"     "g`",
-"     "g'",
-"     -- registers
-"     '"',
-"     "<c-r>",
-"     -- spelling
-"     "z=",
-"   },
-"   triggers_blacklist = {
-"     -- list of mode / prefixes that should never be hooked by WhichKey
-"     -- this is mostly relevant for keymaps that start with a native binding
-"     i = { "j", "k" },
-"     v = { "j", "k" },
-"   },
-"   -- disable the WhichKey popup for certain buf types and file types.
-"   -- Disabled by default for Telescope
-"   disable = {
-"     buftypes = {},
-"     filetypes = {},
-"   }
-" })
-"
-" EOF
-
-" }}}
 " {{{ hop
 
 lua require'hop'.setup {}
@@ -2309,360 +2237,6 @@ let g:x#wiki#state#fold#default = g:x#wiki#state#fold#valid.INITIAL
 let g:x#wiki#state#fold = v:null
 
 " }}}
-" {{{ - functions
-
-" {{{ - s:xf_wiki_init
-
-" {{{   - s:xf_wiki_init()
-
-func! s:xf_wiki_init() abort
-  call <SID>xf_wiki_state_fold_init()
-
-  call <SID>xf_wiki_init_mappings()
-  call <SID>xf_wiki_init_folding()
-  call <SID>xf_wiki_init_syntax_sync()
-
-  call <SID>xf_wiki_log_info('custom wiki init complete')
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_init_syntax_sync()
-" Useful to fix highlighting in large files
-
-func! s:xf_wiki_init_syntax_sync() abort
-  setlocal syntax sync fromstart
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_init_mappings()
-
-func! s:xf_wiki_init_mappings() abort
-  noremap <buffer> <silent> <space>wl <SID>xf_wiki_links_generate()
-  noremap <buffer> <expr> <silent> fff <SID>xf_wiki_folds_toggle()
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_init_folding()
-
-func! s:xf_wiki_init_folding() abort
-  setlocal foldenable
-  setlocal foldlevel=20
-  setlocal foldmethod=expr
-  setlocal foldexpr=s:xf_wiki_folds_expr
-endfunc
-
-" }}}
-
-" }}}
-" {{{     - s:xf_wiki_links
-
-" {{{       - s:xf_wiki_links_validate_paths(path, def_path)
-
-func! s:xf_wiki_links_validate_paths(paths) abort
-  let s:paths = maktaba#ensure#IsList(a:paths)
-
-  for s:path in s:paths
-    exec maktaba#ensure#IsFile(s:path)
-  endfor
-
-  return v:true
-endfunc
-
-" }}}
-" {{{       - s:xf_wiki_links_prepare_paths(path, def_path)
-
-func! s:xf_wiki_links_prepare_paths(path, def_path) abort
-  let s:arg_path = maktaba#ensure#IsString(a:path)
-  let s:def_path = maktaba#ensure#IsString(a:def_path)
-  let s:path = empty(s:arg_path) ? s:def_path : s:arg_path
-
-  call <SID>xf_wiki_links_validate_paths([ s:path ])
-
-  return s:path
-endfunc
-
-" }}}
-" {{{       - s:xf_wiki_links_generate(params)
-
-" TODO: Consider refactoring
-func! s:xf_wiki_links_generate(params) abort
-  let s:params = maktaba#ensure#isDictionary(a:params)
-  let s:write = maktaba#ensure#isBool(s:params.write || 1)
-  let s:header = maktaba#ensure#isBool(s:params.header || 1)
-  let s:arg_path = maktaba#ensure#IsString(s:params.path)
-  let s:def_path = maktaba#ensure#isString(fnamemodify(@%, ':h'))
-  let s:path = s:xf_wiki_links_prepare_paths(s:arg_path, s:def_path)
-
-  if s:header == 1
-    let s:header_text = s:params.header_label || g:vimwiki#toc#header
-    let s:header_label = maktaba#ensure#isString(s:header_text)
-  else
-    let s:header_label = v:null
-  endif
-
-  let s:rel_path = fnamemodify(s:path, ':h')
-  let s:rel_file_paths = split(globpath(s:rel_path, '*'), '\n')
-  let s:rel_file_count = len(s:rel_file_paths)
-
-  if s:rel_file_count == 0
-    return
-  endif
-
-  if s:write
-    call appendbufline(bufname('%'), line('.'), s:rel_file_paths)
-
-    call <SID>xf_wiki_log_info('wrote %d links', s:rel_file_count)
-  else
-    call <SID>xf_wiki_log_info('found %d links', s:rel_file_count)
-
-    for s:file_path, s:i in s:rel_file_paths
-      call <SID>xf_wiki_log_success(' -> (%d/%d) %s', s:i + 1, s:rel_file_count, s:file_path)
-    endfor
-  endif
-endfunc
-
-" }}}
-
-" }}}
-" {{{     - s:xf_wiki_util
-
-" {{{        - s:xf_wiki_util_match_header_line(line)
-
-func! s:xf_wiki_util_match_header_line(line) abort
-  let s:regex = g:x#wiki#regex#header_depth
-  let s:line = maktaba#ensure#IsString(a:line)
-
-  return matchstr(s:line, s:regex)
-endfunc
-
-" }}}
-" {{{        - s:xf_wiki_util_match_blank_line(line)
-
-func! s:xf_wiki_util_match_blank_line(line) abort
-  let s:regex = g:x#wiki#regex#blank_line
-  let s:line = maktaba#ensure#IsString(a:line)
-
-  return matchstr(s:line, s:regex)
-endfunc
-
-" }}}
-" {{{        - s:xf_wiki_util_get_header_depth(line)
-
-func! s:xf_wiki_util_get_header_depth(line) abort
-  let s:regex = g:x#wiki#fold#header_depth_regex
-  let s:line = maktaba#ensure#IsString(a:line)
-
-  return strlen(s:xf_wiki_util_match_header_line(s:line))
-endfunc
-
-" }}}
-" {{{        - s:xf_wiki_util_is_line_blank(line)
-
-func! s:xf_wiki_util_is_line_blank(line) abort
-  let s:line = maktaba#ensure#IsString(a:line)
-  let s:regex = g:x#wiki#fold#header_depth_regex
-
-  return s:line =~? s:regex
-endfunc
-
-" }}}
-
-" }}}
-" {{{   - s:xf_wiki_state
-
-" {{{   - s:xf_wiki_state_fold
-
-" {{{     - s:xf_wiki_state_fold(state)
-
-func! s:xf_wiki_state_fold(state) abort
-  if empty(a:state)
-    return s:xf_wiki_state_fold
-  endif
-
-  let l:state = maktaba#ensure#IsString(a:state)
-  let l:current_state = g:x#wiki#state#fold
-
-  if maktaba#value#IsEqual(l:state, l:current_state)
-    call <SID>xf_wiki_log_debug('fold state unchaged')
-    return
-  endif
-
-  let s:xf_wiki_state_fold = X_wiki_state_fold_verify(l:state)
-
-  call <SID>xf_wiki_log_debug('wiki fold state now %s', X_wiki_state_fold)
-
-  return X#wiki#state#fold
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_state_fold_init()
-
-func! s:xf_wiki_state_fold_init() abort
-  let g:x#wiki#state#fold = g:x#wiki#state#fold#default
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_state_fold_verify(state)
-
-func! s:xf_wiki_state_fold_verify(state) abort
-  let l:state = maktaba#ensure#IsString(a:state)
-  let l:valid_states = g:x#wiki#state#fold#valid.Values()
-
-  return maktaba#ensure#IsIn(l:state, l:valid_states)
-endfunc
-
-" }}}
-
-" }}}
-
-" }}}
-" {{{   - s:xf_wiki_log
-
-const g:xf#wiki#log = maktaba#log#Logger('wiki')
-
-" {{{     - s:xf_wiki_log_debug(...)
-
-func! s:xf_wiki_log_debug(...) abort
-  call g:xf#wiki#log.LogDebug(a:000)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_log_info(...)
-
-func! s:xf_wiki_log_info(...) abort
-  call g:xf#wiki#log.LogInfo(a:000)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_log_warn(...)
-
-func! s:xf_wiki_log_warn(...) abort
-  call g:xf#wiki#log.LogWarn(a:000)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_log_error(...)
-
-func! s:xf_wiki_log_error(message, ...) abort
-  call g:xf#wiki#log.LogError(a:000)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_log_severe(...)
-
-func! s:xf_wiki_log_severe(...) abort
-  call g:xf#wiki#log.LogSevere(a:000)
-endfunc
-
-" }}}
-
-" }}}
-" {{{   - s:xf_wiki_folds
-
-" {{{     - s:xf_wiki_folds_toggle()
-
-func! s:xf_wiki_folds_toggle() abort
-  let l:state_id = g:x#wiki#state#fold
-  let l:state_name = g:x#wiki#state#fold#valid.Name(a:state_name)
-
-  call <SID>xf_wiki_state_fold_verify(l:state_name)
-
-  if l:state_name == g:x#wiki#state#fold#valid.INITIAL
-    call <SID>xf_wiki_folds_initial()
-  elseif l:state_name == g:x#wiki#state#fold#valid.EXPANDED
-    call <SID>xf_wiki_folds_expanded()
-  elseif l:state_name == g:x#wiki#state#fold#valid.COLLAPSED
-    call <SID>xf_wiki_folds_collapsed()
-  elseif l:state_name == g:x#wiki#state#fold#valid.DIRTY
-    call <SID>xf_wiki_folds_dirty()
-  endif
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_folds_initial()
-
-func! s:xf_wiki_folds_initial() abort
-  call <SID>xf_folds_expand()
-  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.EXPANDED)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_folds_expanded()
-
-func! s:xf_wiki_folds_expanded() abort
-  call <SID>xf_folds_collapse()
-  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.COLLAPSED)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_folds_collapsed()
-
-func! s:xf_wiki_folds_collapsed() abort
-  call <SID>xf_folds_expand()
-  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.EXPANDED)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_folds_dirty()
-
-func! s:xf_wiki_folds_dirty() abort
-  call <SID>xf_folds_collapse()
-  call <SID>xf_folds_expand()
-  call <SID>xf_wiki_state_fold(g:x_wiki_state_fold_valid.INIT)
-endfunc
-
-" }}}
-" {{{     - s:xf_wiki_folds_expr(lnum)
-
-" TODO: Add validation to check incoming line number
-" TODO: Change returned strings to constants/an enum
-func! s:xf_wiki_folds_expr(line_n) abort
-  let s:line_n = maktaba#ensure#IsNumber(a:line_n)
-  let s:line = maktaba#ensure#IsString(trim(getline(s:line_n)))
-
-  if empty(s:line)
-    return '='
-  endif
-
-  if s:xf_wiki_util_match_header_line(s:line)
-    let s:indent_depth = s:xf_wiki_util_get_header_depth(s:line)
-
-    if s:indent_depth > 0
-      return '>' . s:indent_depth
-    endif
-
-    return '='
-  endif
-
-  let s:is_blank_line = s:xf_wiki_util_match_blank_line(s:line)
-
-  if not s:is_blank_line
-    return
-  endif
-
-  let s:next_line_n = s:line_n + 1
-
-  " Out of bounds
-  if s:next_line_n > getline('$')
-    return '='
-  endif
-
-  " Check if blank line follows header
-  let s:next_line = getline(s:next_line_n)
-  let s:next_line_is_header = s:xf_wiki_util_match_header_line(s:next_line)
-
-  if s:next_line_n <= s:line_count && s:next_line_is_header
-    return -1
-  endif
-
-  return '='
-endfunc
-
-" }}}
-
-" }}}
-
-" }}}
 " {{{   - configuration
 
 augroup xf_vimwiki
@@ -2743,7 +2317,7 @@ let g:vimwiki_valid_html_tags = 'b,i,s,u,sub,sup,kbd,br,hr,pre,script'
 " }}}
 " {{{ switch
 
-let g:switch_mapping = "-"
+let g:switch_mapping = '-'
 
 " }}}
 " {{{ jester
@@ -2812,7 +2386,7 @@ EOF
 " }}}
 " {{{ vim-test
 
-let test#strategy = "floaterm"
+let test#strategy = 'floaterm'
 
 nmap <silent> <leader>tt :TestNearest<CR>
 nmap <silent> <leader>tf :TestFile<CR>
@@ -2954,7 +2528,7 @@ require('true-zen').setup({
 			enabled = false,
 			font = "+3"
 		},
-		twilight = true,
+		-- twilight = true,
 		lualine = true
 	},
 })
@@ -2970,29 +2544,393 @@ EOF
 " }}}
 " {{{ twilight.nvim
 
+" lua << EOF
+"
+" require('twilight').setup({
+"   dimming = {
+"     alpha = 0.25, -- amount of dimming
+"     -- we try to get the foreground from the highlight groups or fallback color
+"     color = { "Normal", "#ffffff" },
+"     term_bg = "#000000", -- if guibg=NONE, this will be used to calculate text color
+"     inactive = false, -- when true, other windows will be fully dimmed (unless they contain the same buffer)
+"   },
+"   context = 10, -- amount of lines we will try to show around the current line
+"   treesitter = true, -- use treesitter when available for the filetype
+"   -- treesitter is used to automatically expand the visible text,
+"   -- but you can further control the types of nodes that should always be fully expanded
+"   expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
+"     "function",
+"     "method",
+"     "table",
+"     "if_statement",
+"   },
+"   exclude = {}, -- exclude these filetypes
+" })
+"
+" EOF
+
+" }}}
+" {{{ vim-clap
+
+let g:clap_theme = 'shirotelin'
+
+" }}}
+" {{{ vim-vsnip
+
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+
+" Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+nmap        s   <Plug>(vsnip-select-text)
+xmap        s   <Plug>(vsnip-select-text)
+nmap        S   <Plug>(vsnip-cut-text)
+xmap        S   <Plug>(vsnip-cut-text)
+
+" If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
+let g:vsnip_filetypes = {}
+let g:vsnip_filetypes.javascriptreact = ['javascript']
+let g:vsnip_filetypes.typescriptreact = ['typescript']
+
+" }}}
+" {{{ vim-notify
+
+" lua << EOF
+
+" vim.notify = require("notify")
+
+" EOF
+
+" }}}
+" {{{ tsc
+
 lua << EOF
 
-require('twilight').setup({
-  dimming = {
-    alpha = 0.25, -- amount of dimming
-    -- we try to get the foreground from the highlight groups or fallback color
-    color = { "Normal", "#ffffff" },
-    term_bg = "#000000", -- if guibg=NONE, this will be used to calculate text color
-    inactive = false, -- when true, other windows will be fully dimmed (unless they contain the same buffer)
+require('tsc').setup({
+  auto_open_qflist = false,
+  auto_close_qflist = false,
+  auto_focus_qflist = false,
+  auto_start_watch_mode = true,
+  bin_path = require('tsc/utils').find_tsc_bin(),
+  enable_progress_notifications = false,
+  flags = {
+    noEmit = true,
+    project = function()
+      return require('tsc/utils').find_nearest_tsconfig()
+    end,
+    watch = true,
   },
-  context = 10, -- amount of lines we will try to show around the current line
-  treesitter = true, -- use treesitter when available for the filetype
-  -- treesitter is used to automatically expand the visible text,
-  -- but you can further control the types of nodes that should always be fully expanded
-  expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
-    "function",
-    "method",
-    "table",
-    "if_statement",
-  },
-  exclude = {}, -- exclude these filetypes
+  hide_progress_notifications_from_history = true,
+  spinner = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
+  pretty_errors = true,
 })
 
 EOF
+
+" }}}
+" {{{ accelerated-jk
+
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
+
+" }}}
+" {{{ bookmarks.nvim
+
+lua require('telescope').load_extension('vim_bookmarks')
+
+highlight BookmarkSign ctermbg=NONE ctermfg=160
+highlight BookmarkLine ctermbg=194 ctermfg=NONE
+
+let g:bookmark_sign = '🚩'
+let g:bookmark_highlight_lines = 1
+let g:bookmark_no_default_key_mappings = 1
+let g:bookmark_auto_save_file = $HOME . '/.vim-bookmarks'
+let g:bookmark_auto_save = 1
+let g:bookmark_center = 1
+let g:bookmark_location_list = 1
+
+nnoremap <silent> BB <Plug>BookmarkToggle
+nnoremap <silent> Bi <Plug>BookmarkAnnotate
+nnoremap <silent> Bs <Plug>BookmarkShowAll
+nnoremap <silent> Bj <Plug>BookmarkNext
+nnoremap <silent> Bk <Plug>BookmarkPrev
+nnoremap <silent> Bc <Plug>BookmarkClear
+nnoremap <silent> Bx <Plug>BookmarkClearAll
+nnoremap <silent> Bkk <Plug>BookmarkMoveUp
+nnoremap <silent> Bjj <Plug>BookmarkMoveDown
+nnoremap <silent> Bg <Plug>BookmarkMoveToLine
+nnoremap <silent> tba :Telescope vim_bookmarks all<cr>
+nnoremap <silent> tbf :Telescope vim_bookmarks current_file<cr>
+
+" }}}
+" {{{ actions-preview.nvim
+
+lua << EOF
+
+require("actions-preview").setup({
+  diff = {
+    ctxlen = 3,
+  },
+
+  highlight_command = {
+    -- require("actions-preview.highlight").delta(),
+    require("actions-preview.highlight").diff_so_fancy(),
+    -- require("actions-preview.highlight").diff_highlight(),
+  },
+
+  backend = { "telescope" },
+
+  telescope = {
+    sorting_strategy = "ascending",
+    layout_strategy = "vertical",
+    layout_config = {
+      width = 0.8,
+      height = 0.9,
+      prompt_position = "top",
+      preview_cutoff = 20,
+      preview_height = function(_, _, max_lines)
+        return max_lines - 15
+      end,
+    },
+  },
+})
+
+EOF
+
+" }}}
+" {{{ vim diagnostics config
+
+lua << EOF
+
+vim.diagnostic.config({
+  update_in_insert = true,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+  },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '✘',
+      [vim.diagnostic.severity.WARN] = '▲',
+      [vim.diagnostic.severity.HINT] = '⚑',
+      [vim.diagnostic.severity.INFO] = '»',
+    },
+  },
+})
+
+vim.api.nvim_create_autocmd('ModeChanged', {
+  pattern = {'n:i', 'v:s'},
+  desc = 'Disable diagnostics in insert and select mode',
+  callback = function(e) vim.diagnostic.disable(e.buf) end
+})
+
+vim.api.nvim_create_autocmd('ModeChanged', {
+  pattern = 'i:n',
+  desc = 'Enable diagnostics when leaving insert mode',
+  callback = function(e) vim.diagnostic.enable(e.buf) end
+})
+
+EOF
+
+" }}}
+" {{{ vim lsp config
+
+lua << EOF
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+  vim.lsp.handlers.hover,
+  {border = 'rounded'}
+)
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+  vim.lsp.handlers.signature_help,
+  {border = 'rounded'}
+)
+
+local function hide_semantic_highlights()
+  for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
+    vim.api.nvim_set_hl(0, group, {})
+  end
+end
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  desc = 'Clear LSP highlight groups',
+  callback = hide_semantic_highlights,
+})
+
+vim.api.nvim_set_hl(0, 'LspReferenceRead', {link = 'Search'})
+vim.api.nvim_set_hl(0, 'LspReferenceText', {link = 'Search'})
+vim.api.nvim_set_hl(0, 'LspReferenceWrite', {link = 'Search'})
+
+vim.opt.updatetime = 400
+
+local function highlight_symbol(event)
+  local id = vim.tbl_get(event, 'data', 'client_id')
+  local client = id and vim.lsp.get_client_by_id(id)
+  if client == nil or not client.supports_method('textDocument/documentHighlight') then
+    return
+  end
+
+  local group = vim.api.nvim_create_augroup('highlight_symbol', {clear = false})
+
+  vim.api.nvim_clear_autocmds({buffer = event.buf, group = group})
+
+  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+    group = group,
+    buffer = event.buf,
+    callback = vim.lsp.buf.document_highlight,
+  })
+
+  vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
+    group = group,
+    buffer = event.buf,
+    callback = vim.lsp.buf.clear_references,
+  })
+end
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'Setup highlight symbol',
+  callback = highlight_symbol,
+})
+
+EOF
+
+" }}}
+
+" {{{ custom keybindings
+
+" {{{ edit vim/nvim config
+
+if has('nvim')
+  nnoremap <silent> <leader>rr :e ~/.config/nvim/init.vim<cr>
+else
+  nnoremap <silent> <leader>rr :e ~/.vimrc<cr>
+endif
+
+" }}}
+" {{{ force write (save)
+
+nnoremap <silent> WW :w!<cr><cr>
+
+" }}}
+" {{{ force edit
+
+nnoremap <silent> EE :e!<cr>
+
+" }}}
+" {{{ toggle quickfix
+
+function! ToggleQuickFix()
+    if empty(filter(getwininfo(), 'v:val.quickfix'))
+        copen
+    else
+        cclose
+    endif
+endfunction
+
+nnoremap <silent> <leader>cc :call ToggleQuickFix()<cr>
+
+" }}}
+" {{{ sort lines
+
+function! SortLines() range
+    execute a:firstline . ',' . a:lastline . 's/^\(.*\)$/\=strdisplaywidth( submatch(0) ) . " " . submatch(0)/'
+    execute a:firstline . ',' . a:lastline . 'sort n'
+    execute a:firstline . ',' . a:lastline . 's/^\d\+\s//'
+endfunction
+
+vnoremap <silent> SS :'<,'> call SortLines()<cr><cr>
+
+" }}}
+" {{{ select in braces
+
+nnoremap <silent> VB viB
+
+" }}}
+" {{{ insert dynamic class name in react
+
+function! MakeClassNameAttributeDynamic()
+  execute "normal! :s/className=\"\\(.*\\)\"/className={cn('\\1')}/\r"
+endfunction
+
+nnoremap <silent> <leader>cn :call MakeClassNameAttributeDynamic()<cr>
+
+" }}}
+" {{{ reload vim/nvim config
+
+nnoremap <silent> <leader>RR :source $MYVIMRC<cr>
+
+" }}}
+" {{{ append comma
+
+nnoremap <silent> <leader>, A,<esc>
+
+" }}}
+" {{{ lsp format
+
+nnoremap <leader>FF :lua vim.lsp.buf.format()<cr>
+
+" }}}
+" {{{ insert snippet folds
+
+nnoremap <silent> FFS i<cr># {{{ 
+nnoremap <silent> FFE i<cr># }}}<esc>
+nnoremap <silent> FFM i<cr># }}}<cr># {{{ 
+
+" }}}
+" {{{ tabs
+
+nnoremap <silent> <leader>tn :tabnew<cr>
+nnoremap <silent> <leader>tc :tabclose<cr>
+nnoremap <silent> <leader>to :tabonly<cr>
+nnoremap <silent> <leader>tl :tabnext<cr>
+nnoremap <silent> <leader>th :tabprevious<cr>
+nnoremap <silent> <leader>tL :+tabmove<cr>
+nnoremap <silent> <leader>tH :-tabmove<cr>
+
+" }}}
+" {{{ diagnostics
+
+nnoremap <silent> <leader>dqf :lua vim.diagnostic.setqflist()<cr>
+nnoremap <silent> gl :lua vim.diagnostic.open_float()<cr>
+nnoremap <silent> [d :lua vim.diagnostic.goto_prev({ border = "single" })<cr>
+nnoremap <silent> ]d :lua vim.diagnostic.goto_next({ border = "single" })<cr>
+
+" }}}
+" {{{ lsp
+
+nnoremap <silent> ca :lua vim.lsp.buf.code_action()<cr>
+vnoremap <silent> ca :lua vim.lsp.buf.code_action()<cr>
+
+nnoremap <silent> cp :lua require('actions-preview').code_actions<cr>
+vnoremap <silent> cp :lua require('actions-preview').code_actions<cr>
+
+nnoremap <silent> gD :lua vim.lsp.buf.declaration()<cr>
+nnoremap <silent> gd :lua vim.lsp.buf.definition()<cr>
+nnoremap <silent> gt :lua vim.lsp.buf.type_definition()<cr>
+nnoremap <silent> gr :lua vim.lsp.buf.references()<cr>
+nnoremap <silent> gi :lua vim.lsp.buf.implementation()<cr>
+nnoremap <silent> K :lua vim.lsp.buf.hover()<cr>
+nnoremap <silent> <C-k> :lua vim.lsp.buf.signature_help()<cr>
+nnoremap <silent> rn :lua vim.lsp.buf.rename()<cr>
+nnoremap <silent> <leader>ff :lua vim.lsp.buf.format()<cr>
+
+" }}}
+" {{{ refactor insert _isUndefined
+
+nnoremap <silent> <leader>rd :s/typeof \(\w*\) === 'undefined'/_isUndefined(\1)/g<cr>
+nnoremap <silent> <leader>rud :s/typeof \(\w*\) !== 'undefined'/!_isUndefined(\1)/g<cr>
+
+" }}}
 
 " }}}
