@@ -256,3 +256,7 @@ if [[ -x "$HOME/bin/julia-1.8.1/bin" ]]; then
 fi
 
 alias kat='/usr/bin/cat'
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH

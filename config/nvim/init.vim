@@ -102,9 +102,13 @@ Plug 'Quramy/vim-js-pretty-template'
 " }}}
 " {{{ markdown
 
+Plug 'SidOfc/mkdx'
+Plug 'tadmccorkle/markdown.nvim'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
+Plug 'tpope/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+Plug 'wallpants/github-preview.nvim'
 
 " }}}
 " {{{ wiki
@@ -118,6 +122,10 @@ Plug 'f3rno/vimwiki-footnotes'
 " }}}
 " {{{ other
 
+Plug 'sheerun/vim-polyglot'
+Plug 'sindrets/diffview.nvim'
+Plug 'jghauser/follow-md-links.nvim'
+Plug 'David-Kunz/gen.nvim', {'branch': 'main'}
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'tom-anders/telescope-vim-bookmarks.nvim'
 Plug 'rhysd/accelerated-jk'
@@ -224,6 +232,7 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'sam4llis/nvim-tundra'
 Plug 'yasukotelin/shirotelin'
 Plug 'cpea2506/one_monokai.nvim'
 Plug 'kamwitsta/flatwhite-vim'
@@ -331,7 +340,7 @@ set noswapfile
 set nobackup
 set nowritebackup
 set concealcursor=nc
-set conceallevel=3
+set conceallevel=0
 set termguicolors
 set mouse+=a
 set splitkeep=screen
@@ -598,7 +607,7 @@ inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
 
 set foldmethod=marker
 set foldcolumn=1
-set foldlevel=0
+set foldlevel=3
 
 " }}}
 " {{{ autocommands
@@ -752,7 +761,7 @@ EOF
 " }}}
 " {{{ colorscheme
 
-set background=light
+set background=dark
 
 " {{{ light colorschemes
 
@@ -760,7 +769,7 @@ set background=light
 " colorscheme shirotelin
 " colorscheme onehalflight
 " colorscheme paper
-colorscheme tempus_day
+" colorscheme tempus_day
 " colorscheme tempus_totus,
 " colorscheme base16-one-light
 " colorscheme base16-railscasts
@@ -784,6 +793,7 @@ colorscheme tempus_day
 " }}}
 " {{{ dark colorschemes
 
+colorscheme tundra
 " colorscheme tequila-sunrise
 " colorscheme melange
 " colorscheme base16-blueish
@@ -966,8 +976,8 @@ null_ls.setup({
     null_ls.builtins.diagnostics.pylint,
     null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.diagnostics.mypy,
-    null_ls.builtins.diagnostics.alex,
-    null_ls.builtins.diagnostics.codespell,
+    -- null_ls.builtins.diagnostics.alex,
+    -- null_ls.builtins.diagnostics.codespell,
     null_ls.builtins.diagnostics.commitlint,
     null_ls.builtins.diagnostics.dotenv_linter,
     null_ls.builtins.diagnostics.erb_lint,
@@ -986,7 +996,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.yamllint,
 
-    null_ls.builtins.completion.spell,
+    -- null_ls.builtins.completion.spell,
     null_ls.builtins.completion.tags,
     null_ls.builtins.completion.vsnip,
 
@@ -996,7 +1006,7 @@ null_ls.setup({
     null_ls.builtins.code_actions.shellcheck,
 
     null_ls.builtins.formatting.blackd,
-    null_ls.builtins.formatting.codespell,
+    -- null_ls.builtins.formatting.codespell,
     null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.fixjson,
     null_ls.builtins.formatting.htmlbeautifier,
@@ -1011,7 +1021,7 @@ null_ls.setup({
     null_ls.builtins.formatting.stylelint,
     null_ls.builtins.formatting.yamlfix,
 
-    null_ls.builtins.hover.dictionary,
+    -- null_ls.builtins.hover.dictionary,
     null_ls.builtins.hover.printenv
   },
 })
@@ -1541,15 +1551,15 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'ultisnips' },
     { name = 'nvim_lsp' },
-    {
-      name = 'spell',
-      option = {
-          keep_all_entries = false,
-          enable_in_context = function()
-              return true
-          end,
-      }
-    }
+    -- {
+    --   name = 'spell',
+    --   option = {
+    --       keep_all_entries = false,
+    --       enable_in_context = function()
+    --           return true
+    --       end,
+    --   }
+    -- }
   }, {
     { name = 'buffer' },
   })
@@ -2806,9 +2816,239 @@ vim.api.nvim_create_autocmd('LspAttach', {
 EOF
 
 " }}}
+" {{{ gen
+
+lua << EOF
+
+-- https://github.com/David-Kunz/gen.nvim
+--- {{{ all models
+
+--  mode = "llava",
+--  mode = "mistral",
+--  mode = "mixtral",
+--  mode = "starling-lm",
+--  mode = "neural-chat",
+--  mode = "codellama",
+--  mode = "dolphin-mixtral",
+--  mode = "mistral-openorca",
+--  mode = "orca-mini",
+--  mode = "deepseek-coder",
+--  mode = "vicuna",
+--  mode = "wizard-vicuna-uncensored",
+--  mode = "phi",
+--  mode = "dolphin-mistral",
+--  mode = "zephyr",
+--  mode = "wizardcoder",
+--  mode = "openhermes",
+--  mode = "phind-codellama",
+--  mode = "openchat",
+--  mode = "wizard-math",
+--  mode = "nous-hermes",
+--  mode = "falcon",
+--  mode = "tinyllama",
+--  mode = "codeup",
+--  mode = "dolphin-phi",
+--  mode = "starcoder",
+--  mode = "everythinglm",
+--  mode = "stable-beluga",
+--  mode = "wizardlm-uncensored",
+--  mode = "yi",
+--  mode = "bakllava",
+--  mode = "solar",
+--  mode = "yarn-mistral",
+--  mode = "sqlcoder",
+--  mode = "wizard-vicuna",
+--  mode = "samantha-mistral",
+--  mode = "stable-code",
+--  mode = "stablelm-zephyr",
+--  mode = "qwen",
+--  mode = "meditron",
+--  mode = "magicoder",
+--  mode = "deepseek-llm",
+--  mode = "codebooga",
+--  mode = "mistrallite",
+--  mode = "llama-pro",
+--  mode = "goliath",
+--  mode = "nexusraven",
+--  mode = "notux",
+--  mode = "tinydolphin",
+--  mode = "wizardlm",
+--  mode = "alfred",
+--  mode = "xwinlm",
+--  mode = "megadolphin",
+--  mode = "notus",
+
+-- }}}
+
+local gen = require('gen')
+local prompts = gen.prompts
+
+gen.setup({
+  debug = false,
+  show_prompt = true,
+  show_model = false,
+  model = "wizardcoder",
+  no_auto_close = false,
+  display_mode = "float",
+  list_models = '<omitted lua function>',
+  init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
+  command = "curl --silent --no-buffer -X POST http://localhost:11434/api/generate -d $body"
+})
+
+prompts['Generate'] = {
+  replace = true,
+  prompt = "$input"
+}
+
+prompts['Ask'] = {
+  prompt = "Regarding the following text, $input:\n$text"
+}
+
+prompts['Review Code'] = {
+  prompt = "Review the following code and make concise suggestions:\n```$filetype\n$text\n```"
+}
+
+prompts['Elaborate_Text'] = {
+  replace = true,
+  prompt = "Elaborate the following text:\n$text"
+}
+
+prompts['Enhance_Code'] = {
+  replace = true,
+  extract = "```$filetype\n(.-)```",
+  prompt = "Enhance the following code, only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
+}
+
+prompts['Fix_Code'] = {
+  replace = true,
+  extract = "```$filetype\n(.-)```",
+  prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
+}
+
+EOF
+
+" }}}
+" {{{ markdown.nvim
+
+lua require('markdown').setup()
+
+" }}}
+" {{{ mkdx
+
+if !has('nvim')
+  augroup MKDX
+    au!
+    au FileType markdown so $HOME/.vim/pack/plugins/start/mkdx/ftplugin/markdown.vim
+  augroup END
+endif
+
+let g:polyglot_disabled = ['markdown']
+let g:mkdx#settings = {
+      \ 'image_extension_pattern': 'a\?png\|jpe\?g\|gif',
+      \ 'insert_indent_mappings':  1,
+      \ 'gf_on_steroids':          1,
+      \ 'restore_visual':          1,
+      \ 'enter':                   { 'enable': 1, 'shift': 1, 'o': 1,
+      \                              'shifto': 1, 'malformed': 1 },
+      \ 'tab':                     { 'enable': 1 },
+      \ 'map':                     { 'prefix': '<leader>', 'enable': 1 },
+      \ 'tokens':                  { 'enter':  ['-', '*', '>'],
+      \                              'bold':   '**', 'italic': '*',
+      \                              'strike': '',
+      \                              'list':   '-',  'fence':  '',
+      \                              'header': '#' },
+      \ 'checkbox':                { 'toggles': [' ', '_', 'o', 'O', 'X'],
+      \                              'update_tree': 2,
+      \                              'initial_state': ' ',
+      \                              'match_attrs': {
+      \                                 'mkdxCheckboxEmpty': 'conceal cchar=1',
+      \                                 'mkdxCheckboxPending': 'conceal cchar=2',
+      \                                 'mkdxCheckboxComplete': 'conceal cchar=3',
+      \                               }, },
+      \ 'toc':                     { 'text':       'TOC',
+      \                              'list_token': '-',
+      \                              'position':   0,
+      \                              'update_on_write':   1,
+      \                              'details':    {
+      \                                 'enable':  1,
+      \                                 'summary': '{{toc.text}}',
+      \                                 'nesting_level': 3,
+      \                                 'child_count': 5,
+      \                                 'child_summary': 'show {{count}} items'
+      \                              }
+      \                            },
+      \ 'table':                   { 'divider': '|',
+      \                              'header_divider': '-',
+      \                              'align': {
+      \                                 'left':    [],
+      \                                 'right':   [],
+      \                                 'center':  [],
+      \                                 'default': 'center'
+      \                              }
+      \                            },
+      \ 'links':                   { 'external': {
+      \                                 'enable':     1,
+      \                                 'timeout':    3,
+      \                                 'host':       '',
+      \                                 'relative':   1,
+      \                                 'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/9001.0.0000.000 vim-mkdx/1.10.0'
+      \                              },
+      \                              'fragment': {
+      \                                 'jumplist': 1,
+      \                                 'complete': 1
+      \                              },
+      \                              'conceal': 1
+      \                            },
+      \ 'highlight':               {
+      \                              'enable': 1,
+      \                              'frontmatter': {
+      \                                'yaml': 1,
+      \                                'toml': 0,
+      \                                'json': 0
+      \                              }
+      \                            },
+      \ 'auto_update':             { 'enable': 1 },
+      \ 'fold':                    { 'enable': 1, 'components': ['toc', 'fence'] }
+      \ }
+
+" }}}
+" {{{ github-preview.nvim
+
+lua << EOF
+
+require("github-preview").setup({
+    host = "localhost",
+    port = 6666,
+    single_file = false,
+    theme = {
+        name = "system",
+        high_contrast = false,
+    },
+    details_tags_open = true,
+    cursor_line = {
+        disable = false,
+        color = "#c86414",
+        opacity = 0.2,
+    },
+    scroll = {
+        disable = false,
+        top_offset_pct = 35,
+    },
+    log_level = nil,
+})
+
+EOF
+
+" }}}
 
 " {{{ custom keybindings
 
+" {{{ plugin management
+
+nnoremap <silent> PI :PlugInstall<cr>
+nnoremap <silent> PU :PlugUpdate<cr>
+
+" }}}
 " {{{ edit vim/nvim config
 
 if has('nvim')
@@ -2909,19 +3149,20 @@ nnoremap <silent> ]d :lua vim.diagnostic.goto_next({ border = "single" })<cr>
 " }}}
 " {{{ lsp
 
-nnoremap <silent> ca :lua vim.lsp.buf.code_action()<cr>
-vnoremap <silent> ca :lua vim.lsp.buf.code_action()<cr>
+nnoremap <silent> CA :lua vim.lsp.buf.code_action()<cr>
+vnoremap <silent> CA :lua vim.lsp.buf.code_action()<cr>
 
-nnoremap <silent> cp :lua require('actions-preview').code_actions<cr>
-vnoremap <silent> cp :lua require('actions-preview').code_actions<cr>
+nnoremap <silent> CAP :lua require('actions-preview').code_actions<cr>
+vnoremap <silent> CAP :lua require('actions-preview').code_actions<cr>
 
-nnoremap <silent> gD :lua vim.lsp.buf.declaration()<cr>
-nnoremap <silent> gd :lua vim.lsp.buf.definition()<cr>
-nnoremap <silent> gt :lua vim.lsp.buf.type_definition()<cr>
-nnoremap <silent> gr :lua vim.lsp.buf.references()<cr>
-nnoremap <silent> gi :lua vim.lsp.buf.implementation()<cr>
-nnoremap <silent> K :lua vim.lsp.buf.hover()<cr>
-nnoremap <silent> <C-k> :lua vim.lsp.buf.signature_help()<cr>
+nnoremap <silent> GD :lua vim.lsp.buf.declaration()<cr>
+nnoremap <silent> Gd :lua vim.lsp.buf.definition()<cr>
+nnoremap <silent> Gt :lua vim.lsp.buf.type_definition()<cr>
+nnoremap <silent> Gr :lua vim.lsp.buf.references()<cr>
+nnoremap <silent> Gi :lua vim.lsp.buf.implementation()<cr>
+nnoremap <silent> GH :lua vim.lsp.buf.hover()<cr>
+nnoremap <silent> GS :lua vim.lsp.buf.signature_help()<cr>
+nnoremap <silent> GT :lua vim.lsp.buf.type_definition()<cr>
 nnoremap <silent> rn :lua vim.lsp.buf.rename()<cr>
 nnoremap <silent> <leader>ff :lua vim.lsp.buf.format()<cr>
 
@@ -2930,6 +3171,11 @@ nnoremap <silent> <leader>ff :lua vim.lsp.buf.format()<cr>
 
 nnoremap <silent> <leader>rd :s/typeof \(\w*\) === 'undefined'/_isUndefined(\1)/g<cr>
 nnoremap <silent> <leader>rud :s/typeof \(\w*\) !== 'undefined'/!_isUndefined(\1)/g<cr>
+
+" }}}
+" {{{ gen.nvim
+
+lua vim.keymap.set({ 'n', 'v' }, 'GAI', ':Gen<CR>')
 
 " }}}
 
