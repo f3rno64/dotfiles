@@ -1,3 +1,4 @@
+
 set encoding=utf-8
 scriptencoding utf-8
 
@@ -14,7 +15,6 @@ if has('nvim')
 else
   let s:plugin_dir_path = $HOME . '/.vim-plugins'
 endif
-
 
 " }}}
 
@@ -289,19 +289,55 @@ Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 call plug#end()
 
 " }}}
-" {{{ general variables
+" {{{ functions
 
-let g:comment_string = split(&commentstring, '%s')[0]
+" {{{ s:GetUserSnippetsDirPath
 
-" {{{ user github source folder
+function s:GetUserSnippetsDirPath()
+  if empty($XF_SRC_DIR)
+    return ''
+  endif
 
-if !empty($XF_SRC_DIR)
-  let g:user_gh_repos_dir_path = $XF_SRC_DIR . '/github/' . $USER
-  let g:user_gh_repos_dir_exists = maktaba#path#Exists(g:user_gh_repos_dir_path)
-  let g:user_snippets_dir_path = g:user_gh_repos_dir_path . '/vim-snippets'
-else
-  let g:user_snippets_dir_path = ''
-endif
+  let l:path = $XF_SRC_DIR . '/github/' . $USER . '/vim-snippets'
+
+  if !maktaba#path#Exists(l:path)
+    return ''
+  else
+    return l:path
+  endif
+endfunction
+
+" }}}
+" {{{ s:GetUserSnippetFilePath
+
+function s:GetUserSnippetFilePath(filetype)
+  let l:snippets_path = s:GetUserSnippetsDirPath()
+
+  if empty(l:snippets_path)
+    return ''
+  else
+    let l:ft_snippets_path = l:snippets_path . '/ultisnips/' . a:filetype . '.snippets'
+
+    if maktaba#path#Exists(l:ft_snippets_path)
+      return l:ft_snippets_path
+    else
+      return ''
+    endif
+  endif
+endfunction
+
+" }}}
+" {{{ s:GetCommentString
+
+function s:GetCommentString()
+  let l:comment_string_parts = split(&commentstring, '%s')
+
+  if len(l:comment_string_parts) == 0
+    return ''
+  else
+    return l:comment_string_parts[0]
+  endif
+endfunction
 
 " }}}
 
@@ -1629,7 +1665,7 @@ let g:UltiSnipsExpandTrigger = '<c-s>'
 let g:UltiSnipsListSnippets = '<c-s><c-l>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-let g:UltiSnipsSnippetDirectories = [g:user_snippets_dir_path . '/ultisnips']
+let g:UltiSnipsSnippetDirectories = [s:GetUserSnippetsDirPath() . '/ultisnips']
 
 nnoremap <c-r><c-s> :call UltiSnips#RefreshSnippets()<cr>
 
@@ -3184,9 +3220,20 @@ nnoremap <leader>FF :lua vim.lsp.buf.format()<cr>
 " }}}
 " {{{ insert snippet folds
 
-execute 'nnoremap <silent> FFS i<cr>' . g:comment_string . ' {{{ '
-execute 'nnoremap <silent> FFE i<cr>' . g:comment_string . ' }}}<esc>'
-execute 'nnoremap <silent> FFM i<cr>' . g:comment_string . ' }}}<cr>' . g:comment_string . ' {{{ '
+function! s:GetFoldShortcutExecString(fold_str)
+  return s:GetCommentString() . ' ' . a:fold_str
+endfunction
+
+function! s:InsertFoldEndAndStart()
+  execute 'normal! o' . <SID>GetFoldShortcutExecString('}}}')
+  execute 'normal! o' . <SID>GetFoldShortcutExecString('{{{ ')
+  execute 'normal! o'
+  execute 'normal! k'
+endfunction
+
+nnoremap <silent> FFS :put=(<SID>GetFoldShortcutExecString('{{{ '))<cr>kddA
+nnoremap <silent> FFE :put=(<SID>GetFoldShortcutExecString('}}}'))<cr>kdd<esc>
+nnoremap <silent> FFM :call <SID>InsertFoldEndAndStart()<cr>
 
 " }}}
 " {{{ tabs
@@ -3252,12 +3299,16 @@ nnoremap <silent> IEL :call s:InsertEmojiList()<cr>
 " }}}
 " {{{ edit snippets
 
-function s:GetSnippetFilePath(filetype)
-  return g:user_snippets_dir_path . '/ultisnips/' . a:filetype . '.snippets'
-endfunction
+let s:ts_snippets_path = s:GetUserSnippetFilePath('typescript')
+let s:tsreact_snippets_path = s:GetUserSnippetFilePath('typescriptreact')
 
-execute 'nnoremap <silent> est :e ' . s:GetSnippetFilePath('typescript') . '<cr>'
-execute 'nnoremap <silent> estr :e ' . s:GetSnippetFilePath('typescriptreact') . '<cr>'
+if !empty(s:ts_snippets_path)
+  execute 'nnoremap <silent> est :e ' . s:ts_snippets_path . '<cr>'
+endif
+
+if !empty(s:tsreact_snippets_path)
+  execute 'nnoremap <silent> estr :e ' . s:tsreact_snippets_path . '<cr>'
+endif
 
 " }}}
 
