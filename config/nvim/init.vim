@@ -25,6 +25,7 @@ Plug 'MunifTanjim/nui.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-repeat'
 Plug 'google/vim-maktaba'
+Plug 'Shougo/vimproc.vim', { 'do' : 'make' }
 
 " }}}
 " {{{ telescope
@@ -72,6 +73,7 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'f3fora/cmp-spell'
+Plug 'hrsh7th/cmp-emoji'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " }}}
@@ -122,7 +124,12 @@ Plug 'f3rno/vimwiki-footnotes'
 " }}}
 " {{{ other
 
-Plug 'sheerun/vim-polyglot'
+" let g:polyglot_disabled = ['markdown']
+
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/vim-emoji'
+" Plug 'sheerun/vim-polyglot'
 Plug 'sindrets/diffview.nvim'
 Plug 'jghauser/follow-md-links.nvim'
 Plug 'David-Kunz/gen.nvim', {'branch': 'main'}
@@ -770,9 +777,8 @@ set background=dark
 " colorscheme onehalflight
 " colorscheme paper
 " colorscheme tempus_day
-" colorscheme tempus_totus,
+" colorscheme tempus_totus
 " colorscheme base16-one-light
-" colorscheme base16-railscasts
 " colorscheme base16-github
 " colorscheme base16-mexico-light
 " colorscheme base16-still-alive
@@ -793,8 +799,9 @@ set background=dark
 " }}}
 " {{{ dark colorschemes
 
-colorscheme tundra
-" colorscheme tequila-sunrise
+" colorscheme tundra
+" colorscheme base16-railscasts
+colorscheme tequila-sunrise
 " colorscheme melange
 " colorscheme base16-blueish
 " colorscheme lucid
@@ -1536,21 +1543,22 @@ cmp.setup({
     end,
   },
   window = {
-    -- completion = cmp.config.window.bordered(),
-    -- documentation = cmp.config.window.bordered(),
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-J>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-K>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
     ['<C-k>'] = cmp.mapping.select_next_item(),
-    ['<C-k>'] = cmp.mapping.select_prev_item()
+    ['<C-j>'] = cmp.mapping.select_prev_item()
   }),
   sources = cmp.config.sources({
     { name = 'ultisnips' },
     { name = 'nvim_lsp' },
+    { name = 'emoji' },
     -- {
     --   name = 'spell',
     --   option = {
@@ -1749,13 +1757,13 @@ lua require("zen-mode").setup()
 " }}}
 " {{{ vim-jsx-pretty-template
 
-augroup JsPreTemplate
-  autocmd!
-  autocmd FileType javascript JsPreTmpl
-  autocmd FileType javascript.jsx JsPreTmpl
-  autocmd FileType typescript JsPreTmpl
-  autocmd FileType typescript syn clear foldBraces
-augroup END
+" augroup JsPreTemplate
+"   autocmd!
+"   autocmd FileType javascript JsPreTmpl
+"   autocmd FileType javascript.jsx JsPreTmpl
+"   autocmd FileType typescript JsPreTmpl
+"   autocmd FileType typescript syn clear foldBraces
+" augroup END
 
 " }}}
 " {{{ inc-rename
@@ -2410,7 +2418,7 @@ let g:vim_isort_map = '<C-i>'
 let g:vim_isort_python_version = 'python3'
 
 " }}}
-" {{{ trouble 
+" {{{ trouble
 
 nnoremap <silent><leader>T :TroubleToggle<cr>
 
@@ -2662,25 +2670,13 @@ highlight BookmarkSign ctermbg=NONE ctermfg=160
 highlight BookmarkLine ctermbg=194 ctermfg=NONE
 
 let g:bookmark_sign = '🚩'
+let g:bookmark_annotation_sign = '⭐'
 let g:bookmark_highlight_lines = 1
 let g:bookmark_no_default_key_mappings = 1
 let g:bookmark_auto_save_file = $HOME . '/.vim-bookmarks'
 let g:bookmark_auto_save = 1
 let g:bookmark_center = 1
 let g:bookmark_location_list = 1
-
-nnoremap <silent> BB <Plug>BookmarkToggle
-nnoremap <silent> Bi <Plug>BookmarkAnnotate
-nnoremap <silent> Bs <Plug>BookmarkShowAll
-nnoremap <silent> Bj <Plug>BookmarkNext
-nnoremap <silent> Bk <Plug>BookmarkPrev
-nnoremap <silent> Bc <Plug>BookmarkClear
-nnoremap <silent> Bx <Plug>BookmarkClearAll
-nnoremap <silent> Bkk <Plug>BookmarkMoveUp
-nnoremap <silent> Bjj <Plug>BookmarkMoveDown
-nnoremap <silent> Bg <Plug>BookmarkMoveToLine
-nnoremap <silent> tba :Telescope vim_bookmarks all<cr>
-nnoremap <silent> tbf :Telescope vim_bookmarks current_file<cr>
 
 " }}}
 " {{{ actions-preview.nvim
@@ -2758,24 +2754,24 @@ EOF
 lua << EOF
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-  vim.lsp.handlers.hover,
-  {border = 'rounded'}
+vim.lsp.handlers.hover,
+{border = 'rounded'}
 )
 
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-  vim.lsp.handlers.signature_help,
-  {border = 'rounded'}
+vim.lsp.handlers.signature_help,
+{border = 'rounded'}
 )
 
 local function hide_semantic_highlights()
-  for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-    vim.api.nvim_set_hl(0, group, {})
-  end
+for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
+  vim.api.nvim_set_hl(0, group, {})
+end
 end
 
 vim.api.nvim_create_autocmd('ColorScheme', {
-  desc = 'Clear LSP highlight groups',
-  callback = hide_semantic_highlights,
+desc = 'Clear LSP highlight groups',
+callback = hide_semantic_highlights,
 })
 
 vim.api.nvim_set_hl(0, 'LspReferenceRead', {link = 'Search'})
@@ -2785,32 +2781,32 @@ vim.api.nvim_set_hl(0, 'LspReferenceWrite', {link = 'Search'})
 vim.opt.updatetime = 400
 
 local function highlight_symbol(event)
-  local id = vim.tbl_get(event, 'data', 'client_id')
-  local client = id and vim.lsp.get_client_by_id(id)
-  if client == nil or not client.supports_method('textDocument/documentHighlight') then
-    return
-  end
+local id = vim.tbl_get(event, 'data', 'client_id')
+local client = id and vim.lsp.get_client_by_id(id)
+if client == nil or not client.supports_method('textDocument/documentHighlight') then
+  return
+end
 
-  local group = vim.api.nvim_create_augroup('highlight_symbol', {clear = false})
+local group = vim.api.nvim_create_augroup('highlight_symbol', {clear = false})
 
-  vim.api.nvim_clear_autocmds({buffer = event.buf, group = group})
+vim.api.nvim_clear_autocmds({buffer = event.buf, group = group})
 
-  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-    group = group,
-    buffer = event.buf,
-    callback = vim.lsp.buf.document_highlight,
-  })
+vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+  group = group,
+  buffer = event.buf,
+  callback = vim.lsp.buf.document_highlight,
+})
 
-  vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
-    group = group,
-    buffer = event.buf,
-    callback = vim.lsp.buf.clear_references,
-  })
+vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
+  group = group,
+  buffer = event.buf,
+  callback = vim.lsp.buf.clear_references,
+})
 end
 
 vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'Setup highlight symbol',
-  callback = highlight_symbol,
+desc = 'Setup highlight symbol',
+callback = highlight_symbol,
 })
 
 EOF
@@ -2884,45 +2880,45 @@ local gen = require('gen')
 local prompts = gen.prompts
 
 gen.setup({
-  debug = false,
-  show_prompt = true,
-  show_model = false,
-  model = "wizardcoder",
-  no_auto_close = false,
-  display_mode = "float",
-  list_models = '<omitted lua function>',
-  init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
-  command = "curl --silent --no-buffer -X POST http://localhost:11434/api/generate -d $body"
+debug = false,
+show_prompt = true,
+show_model = false,
+model = "wizardcoder",
+no_auto_close = false,
+display_mode = "float",
+list_models = '<omitted lua function>',
+init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
+command = "curl --silent --no-buffer -X POST http://localhost:11434/api/generate -d $body"
 })
 
 prompts['Generate'] = {
-  replace = true,
-  prompt = "$input"
+replace = true,
+prompt = "$input"
 }
 
 prompts['Ask'] = {
-  prompt = "Regarding the following text, $input:\n$text"
+prompt = "Regarding the following text, $input:\n$text"
 }
 
 prompts['Review Code'] = {
-  prompt = "Review the following code and make concise suggestions:\n```$filetype\n$text\n```"
+prompt = "Review the following code and make concise suggestions:\n```$filetype\n$text\n```"
 }
 
 prompts['Elaborate_Text'] = {
-  replace = true,
-  prompt = "Elaborate the following text:\n$text"
+replace = true,
+prompt = "Elaborate the following text:\n$text"
 }
 
 prompts['Enhance_Code'] = {
-  replace = true,
-  extract = "```$filetype\n(.-)```",
-  prompt = "Enhance the following code, only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
+replace = true,
+extract = "```$filetype\n(.-)```",
+prompt = "Enhance the following code, only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
 }
 
 prompts['Fix_Code'] = {
-  replace = true,
-  extract = "```$filetype\n(.-)```",
-  prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
+replace = true,
+extract = "```$filetype\n(.-)```",
+prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
 }
 
 EOF
@@ -2936,80 +2932,79 @@ lua require('markdown').setup()
 " {{{ mkdx
 
 if !has('nvim')
-  augroup MKDX
-    au!
-    au FileType markdown so $HOME/.vim/pack/plugins/start/mkdx/ftplugin/markdown.vim
-  augroup END
+augroup MKDX
+  au!
+  au FileType markdown so $HOME/.vim/pack/plugins/start/mkdx/ftplugin/markdown.vim
+augroup END
 endif
 
-let g:polyglot_disabled = ['markdown']
 let g:mkdx#settings = {
-      \ 'image_extension_pattern': 'a\?png\|jpe\?g\|gif',
-      \ 'insert_indent_mappings':  1,
-      \ 'gf_on_steroids':          1,
-      \ 'restore_visual':          1,
-      \ 'enter':                   { 'enable': 1, 'shift': 1, 'o': 1,
-      \                              'shifto': 1, 'malformed': 1 },
-      \ 'tab':                     { 'enable': 1 },
-      \ 'map':                     { 'prefix': '<leader>', 'enable': 1 },
-      \ 'tokens':                  { 'enter':  ['-', '*', '>'],
-      \                              'bold':   '**', 'italic': '*',
-      \                              'strike': '',
-      \                              'list':   '-',  'fence':  '',
-      \                              'header': '#' },
-      \ 'checkbox':                { 'toggles': [' ', '_', 'o', 'O', 'X'],
-      \                              'update_tree': 2,
-      \                              'initial_state': ' ',
-      \                              'match_attrs': {
-      \                                 'mkdxCheckboxEmpty': 'conceal cchar=1',
-      \                                 'mkdxCheckboxPending': 'conceal cchar=2',
-      \                                 'mkdxCheckboxComplete': 'conceal cchar=3',
-      \                               }, },
-      \ 'toc':                     { 'text':       'TOC',
-      \                              'list_token': '-',
-      \                              'position':   0,
-      \                              'update_on_write':   1,
-      \                              'details':    {
-      \                                 'enable':  1,
-      \                                 'summary': '{{toc.text}}',
-      \                                 'nesting_level': 3,
-      \                                 'child_count': 5,
-      \                                 'child_summary': 'show {{count}} items'
-      \                              }
-      \                            },
-      \ 'table':                   { 'divider': '|',
-      \                              'header_divider': '-',
-      \                              'align': {
-      \                                 'left':    [],
-      \                                 'right':   [],
-      \                                 'center':  [],
-      \                                 'default': 'center'
-      \                              }
-      \                            },
-      \ 'links':                   { 'external': {
-      \                                 'enable':     1,
-      \                                 'timeout':    3,
-      \                                 'host':       '',
-      \                                 'relative':   1,
-      \                                 'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/9001.0.0000.000 vim-mkdx/1.10.0'
-      \                              },
-      \                              'fragment': {
-      \                                 'jumplist': 1,
-      \                                 'complete': 1
-      \                              },
-      \                              'conceal': 1
-      \                            },
-      \ 'highlight':               {
-      \                              'enable': 1,
-      \                              'frontmatter': {
-      \                                'yaml': 1,
-      \                                'toml': 0,
-      \                                'json': 0
-      \                              }
-      \                            },
-      \ 'auto_update':             { 'enable': 1 },
-      \ 'fold':                    { 'enable': 1, 'components': ['toc', 'fence'] }
-      \ }
+    \ 'image_extension_pattern': 'a\?png\|jpe\?g\|gif',
+    \ 'insert_indent_mappings':  1,
+    \ 'gf_on_steroids':          1,
+    \ 'restore_visual':          1,
+    \ 'enter':                   { 'enable': 1, 'shift': 1, 'o': 1,
+    \                              'shifto': 1, 'malformed': 1 },
+    \ 'tab':                     { 'enable': 1 },
+    \ 'map':                     { 'prefix': '<leader>', 'enable': 1 },
+    \ 'tokens':                  { 'enter':  ['-', '*', '>'],
+    \                              'bold':   '**', 'italic': '*',
+    \                              'strike': '',
+    \                              'list':   '-',  'fence':  '',
+    \                              'header': '#' },
+    \ 'checkbox':                { 'toggles': [' ', '_', 'o', 'O', 'X'],
+    \                              'update_tree': 2,
+    \                              'initial_state': ' ',
+    \                              'match_attrs': {
+    \                                 'mkdxCheckboxEmpty': 'conceal cchar=1',
+    \                                 'mkdxCheckboxPending': 'conceal cchar=2',
+    \                                 'mkdxCheckboxComplete': 'conceal cchar=3',
+    \                               }, },
+    \ 'toc':                     { 'text':       'TOC',
+    \                              'list_token': '-',
+    \                              'position':   0,
+    \                              'update_on_write':   1,
+    \                              'details':    {
+    \                                 'enable':  1,
+    \                                 'summary': '{{toc.text}}',
+    \                                 'nesting_level': 3,
+    \                                 'child_count': 5,
+    \                                 'child_summary': 'show {{count}} items'
+    \                              }
+    \                            },
+    \ 'table':                   { 'divider': '|',
+    \                              'header_divider': '-',
+    \                              'align': {
+    \                                 'left':    [],
+    \                                 'right':   [],
+    \                                 'center':  [],
+    \                                 'default': 'center'
+    \                              }
+    \                            },
+    \ 'links':                   { 'external': {
+    \                                 'enable':     1,
+    \                                 'timeout':    3,
+    \                                 'host':       '',
+    \                                 'relative':   1,
+    \                                 'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/9001.0.0000.000 vim-mkdx/1.10.0'
+    \                              },
+    \                              'fragment': {
+    \                                 'jumplist': 1,
+    \                                 'complete': 1
+    \                              },
+    \                              'conceal': 1
+    \                            },
+    \ 'highlight':               {
+    \                              'enable': 1,
+    \                              'frontmatter': {
+    \                                'yaml': 1,
+    \                                'toml': 0,
+    \                                'json': 0
+    \                              }
+    \                            },
+    \ 'auto_update':             { 'enable': 1 },
+    \ 'fold':                    { 'enable': 1, 'components': ['toc', 'fence'] }
+    \ }
 
 " }}}
 " {{{ github-preview.nvim
@@ -3017,27 +3012,35 @@ let g:mkdx#settings = {
 lua << EOF
 
 require("github-preview").setup({
-    host = "localhost",
-    port = 6666,
-    single_file = false,
-    theme = {
-        name = "system",
-        high_contrast = false,
-    },
-    details_tags_open = true,
-    cursor_line = {
-        disable = false,
-        color = "#c86414",
-        opacity = 0.2,
-    },
-    scroll = {
-        disable = false,
-        top_offset_pct = 35,
-    },
-    log_level = nil,
+  host = "localhost",
+  port = 6666,
+  single_file = false,
+  theme = {
+      name = "system",
+      high_contrast = false,
+  },
+  details_tags_open = true,
+  cursor_line = {
+      disable = false,
+      color = "#c86414",
+      opacity = 0.2,
+  },
+  scroll = {
+      disable = false,
+      top_offset_pct = 35,
+  },
+  log_level = nil,
 })
 
 EOF
+
+" }}}
+" {{{ vim-gitgutter
+
+let g:gitgutter_sign_added = emoji#for('white_check_mark')
+let g:gitgutter_sign_modified = emoji#for('pencil2')
+let g:gitgutter_sign_removed = emoji#for('x')
+let g:gitgutter_sign_modified_removed = emoji#for('red_circle')
 
 " }}}
 
@@ -3047,6 +3050,24 @@ EOF
 
 nnoremap <silent> PI :PlugInstall<cr>
 nnoremap <silent> PU :PlugUpdate<cr>
+nnoremap <silent> PG :PlugUpgrade<cr>
+nnoremap <silent> PC :PlugClean<cr>
+
+" }}}
+" {{{ bookmarks
+
+nnoremap <silent> BB <Plug>BookmarkToggle
+nnoremap <silent> Bi <Plug>BookmarkAnnotate
+nnoremap <silent> Bs <Plug>BookmarkShowAll
+nnoremap <silent> Bj <Plug>BookmarkNext
+nnoremap <silent> Bk <Plug>BookmarkPrev
+nnoremap <silent> Bc <Plug>BookmarkClear
+nnoremap <silent> Bx <Plug>BookmarkClearAll
+nnoremap <silent> Bkk <Plug>BookmarkMoveUp
+nnoremap <silent> Bjj <Plug>BookmarkMoveDown
+nnoremap <silent> Bg <Plug>BookmarkMoveToLine
+nnoremap <silent> tba :Telescope vim_bookmarks all<cr>
+nnoremap <silent> tbf :Telescope vim_bookmarks current_file<cr>
 
 " }}}
 " {{{ edit vim/nvim config
@@ -3176,6 +3197,17 @@ nnoremap <silent> <leader>rud :s/typeof \(\w*\) !== 'undefined'/!_isUndefined(\1
 " {{{ gen.nvim
 
 lua vim.keymap.set({ 'n', 'v' }, 'GAI', ':Gen<CR>')
+
+" }}}
+" {{{ insert emoji list
+
+function! InsertEmojiList()
+for e in emoji#list()
+  call append(line('$'), printf('%s (%s)', emoji#for(e), e))
+endfor
+endfunction
+
+nnoremap <silent> IEL :call InsertEmojiList()<cr>
 
 " }}}
 

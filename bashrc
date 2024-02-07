@@ -260,3 +260,5 @@ alias kat='/usr/bin/cat'
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
+
+xf_safe_source "$HOME/.github_api_token"
