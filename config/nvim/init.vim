@@ -15,6 +15,7 @@ else
   let s:plugin_dir_path = $HOME . '/.vim-plugins'
 endif
 
+
 " }}}
 
 call plug#begin(s:plugin_dir_path)
@@ -68,6 +69,7 @@ Plug 'pwntester/nvim-lsp'
 " {{{ cmp
 
 Plug 'hrsh7th/nvim-cmp'
+Plug 'petertriho/cmp-git'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
@@ -126,6 +128,7 @@ Plug 'f3rno/vimwiki-footnotes'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/vim-emoji'
@@ -286,7 +289,23 @@ Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 call plug#end()
 
 " }}}
+" {{{ general variables
 
+let g:comment_string = split(&commentstring, '%s')[0]
+
+" {{{ user github source folder
+
+if !empty($XF_SRC_DIR)
+  let g:user_gh_repos_dir_path = $XF_SRC_DIR . '/github/' . $USER
+  let g:user_gh_repos_dir_exists = maktaba#path#Exists(g:user_gh_repos_dir_path)
+  let g:user_snippets_dir_path = g:user_gh_repos_dir_path . '/vim-snippets'
+else
+  let g:user_snippets_dir_path = ''
+endif
+
+" }}}
+
+" }}}
 " {{{ general settings
 
 " {{{ leader key
@@ -1125,24 +1144,24 @@ nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
 
 " }}}
 
-
 " {{{ tabnine-nvim
 
-" lua << EOF
-"
-" require('tabnine').setup({
-"   disable_auto_comment=true,
-"   accept_keymap="<C-t>",
-"   dismiss_keymap = "<C-]>",
-"   debounce_ms = 800,
-"   suggestion_color = {gui = "#808080", cterm = 244},
-"   exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-"   log_file_path = nil, -- absolute path to Tabnine log file
-" })
-"
-" EOF
+lua << EOF
+
+require('tabnine').setup({
+  disable_auto_comment=true,
+  accept_keymap="<C-t>",
+  dismiss_keymap = "<C-]>",
+  debounce_ms = 800,
+  suggestion_color = {gui = "#808080", cterm = 244},
+  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+  log_file_path = nil, -- absolute path to Tabnine log file
+})
+
+EOF
 
 " }}}
+
 " {{{ lualine
 
 lua << EOF
@@ -1537,15 +1556,18 @@ cmp.setup({
       end
     })
   },
+
   snippet = {
     expand = function(args)
       vim.fn["UltiSnips#Anon"](args.body)
     end,
   },
+
   window = {
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
   },
+
   mapping = cmp.mapping.preset.insert({
     ['<C-J>'] = cmp.mapping.scroll_docs(-4),
     ['<C-K>'] = cmp.mapping.scroll_docs(4),
@@ -1555,19 +1577,22 @@ cmp.setup({
     ['<C-k>'] = cmp.mapping.select_next_item(),
     ['<C-j>'] = cmp.mapping.select_prev_item()
   }),
+
   sources = cmp.config.sources({
-    { name = 'ultisnips' },
-    { name = 'nvim_lsp' },
-    { name = 'emoji' },
-    -- {
-    --   name = 'spell',
-    --   option = {
-    --       keep_all_entries = false,
-    --       enable_in_context = function()
-    --           return true
-    --       end,
-    --   }
-    -- }
+    { name = 'ultisnips', priority = 10 },
+    { name = 'tabnine', priority = 20, ignore_pattern = "[(|,]" },
+    { name = 'nvim_lsp', priority = 30 },
+    { name = 'emoji', priority = 40 },
+    {
+      name = 'spell',
+      priority = 50,
+      option = {
+          keep_all_entries = false,
+          enable_in_context = function()
+              return true
+          end,
+      }
+    }
   }, {
     { name = 'buffer' },
   })
@@ -1604,9 +1629,7 @@ let g:UltiSnipsExpandTrigger = '<c-s>'
 let g:UltiSnipsListSnippets = '<c-s><c-l>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-let g:UltiSnipsSnippetDirectories = [
-  \   $HOME . '/.src/github/f3rno64/vim-snippets/ultisnips',
-  \ ]
+let g:UltiSnipsSnippetDirectories = [g:user_snippets_dir_path . '/ultisnips']
 
 nnoremap <c-r><c-s> :call UltiSnips#RefreshSnippets()<cr>
 
@@ -3043,6 +3066,23 @@ let g:gitgutter_sign_removed = emoji#for('x')
 let g:gitgutter_sign_modified_removed = emoji#for('red_circle')
 
 " }}}
+" {{{ tabnine-nvim
+
+lua << EOF
+
+require('tabnine').setup({
+  disable_auto_comment=true,
+  accept_keymap="<Tab>",
+  dismiss_keymap = "<C-]>",
+  debounce_ms = 300,
+  suggestion_color = {gui = "#808080", cterm = 244},
+  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+  log_file_path = nil
+})
+
+EOF
+
+" }}}
 
 " {{{ custom keybindings
 
@@ -3105,9 +3145,9 @@ nnoremap <silent> <leader>cc :call ToggleQuickFix()<cr>
 " {{{ sort lines
 
 function! SortLines() range
-    execute a:firstline . ',' . a:lastline . 's/^\(.*\)$/\=strdisplaywidth( submatch(0) ) . " " . submatch(0)/'
-    execute a:firstline . ',' . a:lastline . 'sort n'
-    execute a:firstline . ',' . a:lastline . 's/^\d\+\s//'
+  execute a:firstline . ',' . a:lastline . 's/^\(.*\)$/\=strdisplaywidth( submatch(0) ) . " " . submatch(0)/'
+  execute a:firstline . ',' . a:lastline . 'sort n'
+  execute a:firstline . ',' . a:lastline . 's/^\d\+\s//'
 endfunction
 
 vnoremap <silent> SS :'<,'> call SortLines()<cr><cr>
@@ -3144,9 +3184,9 @@ nnoremap <leader>FF :lua vim.lsp.buf.format()<cr>
 " }}}
 " {{{ insert snippet folds
 
-nnoremap <silent> FFS i<cr># {{{ 
-nnoremap <silent> FFE i<cr># }}}<esc>
-nnoremap <silent> FFM i<cr># }}}<cr># {{{ 
+execute 'nnoremap <silent> FFS i<cr>' . g:comment_string . ' {{{ '
+execute 'nnoremap <silent> FFE i<cr>' . g:comment_string . ' }}}<esc>'
+execute 'nnoremap <silent> FFM i<cr>' . g:comment_string . ' }}}<cr>' . g:comment_string . ' {{{ '
 
 " }}}
 " {{{ tabs
@@ -3201,13 +3241,23 @@ lua vim.keymap.set({ 'n', 'v' }, 'GAI', ':Gen<CR>')
 " }}}
 " {{{ insert emoji list
 
-function! InsertEmojiList()
-for e in emoji#list()
-  call append(line('$'), printf('%s (%s)', emoji#for(e), e))
-endfor
+function s:InsertEmojiList()
+  for e in emoji#list()
+    call append(line('$'), printf('%s (%s)', emoji#for(e), e))
+  endfor
 endfunction
 
-nnoremap <silent> IEL :call InsertEmojiList()<cr>
+nnoremap <silent> IEL :call s:InsertEmojiList()<cr>
+
+" }}}
+" {{{ edit snippets
+
+function s:GetSnippetFilePath(filetype)
+  return g:user_snippets_dir_path . '/ultisnips/' . a:filetype . '.snippets'
+endfunction
+
+execute 'nnoremap <silent> est :e ' . s:GetSnippetFilePath('typescript') . '<cr>'
+execute 'nnoremap <silent> estr :e ' . s:GetSnippetFilePath('typescriptreact') . '<cr>'
 
 " }}}
 
