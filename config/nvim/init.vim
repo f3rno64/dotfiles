@@ -1,4 +1,3 @@
-
 set encoding=utf-8
 scriptencoding utf-8
 
@@ -59,8 +58,6 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'reksar/nvim-lsp-python'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
-Plug 'jose-elias-alvarez/null-ls.nvim'
-Plug 'jay-babu/mason-null-ls.nvim'
 Plug 'RubixDev/mason-update-all'
 Plug 'dnlhc/glance.nvim'
 Plug 'pwntester/nvim-lsp'
@@ -128,6 +125,7 @@ Plug 'f3rno/vimwiki-footnotes'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'piersolenski/wtf.nvim'
 Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -1005,90 +1003,9 @@ require("mason-lspconfig").setup_handlers(handlers)
 EOF
 
 " }}}
-" {{{ mason-null-ls
-
-lua << EOF
-
-require("mason-null-ls").setup({
-  automatic_setup = true,
-})
-
-EOF
-
-" }}}
 " {{{ mason-update-all
 
 lua require("mason-update-all").setup()
-
-" }}}
-" {{{ null-ls
-
-lua << EOF
-
-local null_ls = require("null-ls")
-
-null_ls.setup({
-  debounce = 500,
-  sources = {
-    null_ls.builtins.diagnostics.actionlint,
-    null_ls.builtins.diagnostics.tsc,
-    null_ls.builtins.diagnostics.jsonlint,
-    null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.diagnostics.mypy,
-    -- null_ls.builtins.diagnostics.alex,
-    -- null_ls.builtins.diagnostics.codespell,
-    null_ls.builtins.diagnostics.commitlint,
-    null_ls.builtins.diagnostics.dotenv_linter,
-    null_ls.builtins.diagnostics.erb_lint,
-    null_ls.builtins.diagnostics.gitlint,
-    null_ls.builtins.diagnostics.jshint,
-    null_ls.builtins.diagnostics.misspell,
-    null_ls.builtins.diagnostics.pycodestyle,
-    null_ls.builtins.diagnostics.pydocstyle,
-    null_ls.builtins.diagnostics.rubocop,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.stylelint,
-    null_ls.builtins.diagnostics.stylint,
-    null_ls.builtins.diagnostics.tidy,
-    null_ls.builtins.diagnostics.todo_comments,
-    null_ls.builtins.diagnostics.typos,
-    null_ls.builtins.diagnostics.vint,
-    null_ls.builtins.diagnostics.yamllint,
-
-    -- null_ls.builtins.completion.spell,
-    null_ls.builtins.completion.tags,
-    null_ls.builtins.completion.vsnip,
-
-    null_ls.builtins.code_actions.eslint_d,
-    null_ls.builtins.code_actions.cspell,
-    null_ls.builtins.code_actions.refactoring,
-    null_ls.builtins.code_actions.shellcheck,
-
-    null_ls.builtins.formatting.blackd,
-    -- null_ls.builtins.formatting.codespell,
-    null_ls.builtins.formatting.eslint_d,
-    null_ls.builtins.formatting.fixjson,
-    null_ls.builtins.formatting.htmlbeautifier,
-    null_ls.builtins.formatting.isort,
-    null_ls.builtins.formatting.jq,
-    null_ls.builtins.formatting.markdownlint,
-    null_ls.builtins.formatting.ocdc,
-    null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.formatting.rubocop,
-    null_ls.builtins.formatting.shellharden,
-    null_ls.builtins.formatting.shfmt,
-    null_ls.builtins.formatting.stylelint,
-    null_ls.builtins.formatting.yamlfix,
-
-    -- null_ls.builtins.hover.dictionary,
-    null_ls.builtins.hover.printenv
-  },
-})
-
-EOF
 
 " }}}
 " {{{ ctrl+backspace delete word
@@ -1202,6 +1119,8 @@ EOF
 
 lua << EOF
 
+local wtf = require("wtf")
+
 require("lualine").setup {
   options = {
     icons_enabled = true,
@@ -1231,7 +1150,7 @@ require("lualine").setup {
       },
       "require('lsp-progress').progress()"
     },
-    lualine_x = {"tabnine", "fileformat", "filetype"},
+    lualine_x = {"tabnine", wtf.get_status, "fileformat", "filetype"},
     lualine_y = {"progress"},
     lualine_z = {"location"}
   },
@@ -3119,6 +3038,27 @@ require('tabnine').setup({
 EOF
 
 " }}}
+" {{{ vim-wtf
+
+lua << EOF
+
+require("wtf").setup({
+    popup_type = "popup",
+    openai_api_key = vim.env.VIM_WTF_OPENAI_API_KEY,
+    openai_model_id = "gpt-3.5-turbo",
+    context = true,
+    language = "english",
+    search_engine = "google",
+    hooks = {
+        request_started = nil,
+        request_finished = nil,
+    },
+    winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+})
+
+EOF
+
+" }}}
 
 " {{{ custom keybindings
 
@@ -3309,6 +3249,13 @@ endif
 if !empty(s:tsreact_snippets_path)
   execute 'nnoremap <silent> estr :e ' . s:tsreact_snippets_path . '<cr>'
 endif
+
+" }}}
+" {{{ vim-wtf
+
+xnoremap <silent> <leader>gw :lua require('wtf').ai()<cr>
+nnoremap <silent> <leader>gw :lua require('wtf').ai()<cr>
+nnoremap <silent> <leader>gW :lua require('wtf').search()<cr>
 
 " }}}
 

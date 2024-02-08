@@ -19,9 +19,12 @@ shopt -s direxpand dirspell dotglob execfail
 export XF_SHELL="bash"
 export XF_TERM="tmux-256color"
 export XF_LIB_DIR="$HOME/.modules-dotfiles/xf-bash-lib"
-export XF_VIM_EDITORS=('nvim-gtk' 'nvim' 'vim' 'vi')
+export XF_VIM_EDITORS=('nvim' 'vim' 'vi')
 export XF_DESIRED_EDITORS=("${XF_VIM_EDITORS[@]} nano")
-export XF_HOME_SRC_DIR
+export XF_SRC_DIR="$HOME/.src"
+export XF_HOME_BIN_DIR="$HOME/.bin"
+export XF_HOME_LOCAL_BIN_DIR="$HOME/.local/bin"
+export XF_HOME_BASH_SCRIPTS_DIR="$HOME/.bash"
 
 export XF_NVIM_CONFIG_PATH="$HOME/.config/nvim/init.vim"
 export XF_NVIM_GTK_CONFIG_PATH="$HOME/.config/nvim/ginit.vim"
@@ -70,10 +73,6 @@ fi
 # }}}
 # {{{ ensure home folder structure
 
-export XF_SRC_DIR="$HOME/.src"
-export XF_HOME_BIN_DIR="$HOME/.bin"
-export XF_HOME_LOCAL_BIN_DIR="$HOME/.local/bin"
-export XF_HOME_BASH_SCRIPTS_DIR="$HOME/.bash"
 
 xf_ensure_dir "$XF_SRC_DIR"
 xf_ensure_dir "$XF_HOME_BIN_DIR"
@@ -262,3 +261,8 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
 
 xf_safe_source "$HOME/.github_api_token"
+xf_safe_source "$HOME/.openai_api_token_vim_wtf"
+
+# tabtab source for packages
+# uninstall by removing these lines
+[ -f ~/.config/tabtab/bash/__tabtab.bash ] && . ~/.config/tabtab/bash/__tabtab.bash || true
