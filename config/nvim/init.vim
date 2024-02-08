@@ -61,6 +61,7 @@ Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'RubixDev/mason-update-all'
 Plug 'dnlhc/glance.nvim'
 Plug 'pwntester/nvim-lsp'
+Plug 'jose-elias-alvarez/null-ls.nvim'
 
 " }}}
 " {{{ cmp
@@ -74,6 +75,13 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'f3fora/cmp-spell'
 Plug 'hrsh7th/cmp-emoji'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+Plug 'rasulomaroff/cmp-bufname'
+Plug 'amarakon/nvim-cmp-buffer-lines'
+Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+Plug 'JMarkin/cmp-diag-codes'
+Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+Plug 'jcha0713/cmp-tw2css'
 
 " }}}
 " {{{ snipppets
@@ -112,6 +120,12 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' 
 Plug 'wallpants/github-preview.nvim'
 
 " }}}
+" {{{ tags
+
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
+
+" }}}
 " {{{ wiki
 
 Plug 'powerman/vim-plugin-AnsiEsc', { 'on': 'AnsiEsc' }
@@ -125,6 +139,9 @@ Plug 'f3rno/vimwiki-footnotes'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'james1236/backseat.nvim'
+Plug 'nvim-lua/lsp-status.nvim'
+Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 Plug 'piersolenski/wtf.nvim'
 Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 Plug 'tpope/vim-fugitive'
@@ -325,9 +342,9 @@ function s:GetUserSnippetFilePath(filetype)
 endfunction
 
 " }}}
-" {{{ s:GetCommentString
+" {{{ GetCommentString
 
-function s:GetCommentString()
+function GetCommentString()
   let l:comment_string_parts = split(&commentstring, '%s')
 
   if len(l:comment_string_parts) == 0
@@ -821,7 +838,7 @@ EOF
 " }}}
 " {{{ colorscheme
 
-set background=dark
+set background=light
 
 " {{{ light colorschemes
 
@@ -830,7 +847,7 @@ set background=dark
 " colorscheme onehalflight
 " colorscheme paper
 " colorscheme tempus_day
-" colorscheme tempus_totus
+colorscheme tempus_totus
 " colorscheme base16-one-light
 " colorscheme base16-github
 " colorscheme base16-mexico-light
@@ -854,7 +871,7 @@ set background=dark
 
 " colorscheme tundra
 " colorscheme base16-railscasts
-colorscheme tequila-sunrise
+" colorscheme tequila-sunrise
 " colorscheme melange
 " colorscheme base16-blueish
 " colorscheme lucid
@@ -991,14 +1008,60 @@ lua require("mason").setup()
 
 lua << EOF
 
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local handlers = {
   function (server_name) -- default handler (optional)
-    require("lspconfig")[server_name].setup {}
+    require("lspconfig")[server_name].setup {
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        require("lsp-status").on_attach(client, bufnr)
+      end
+      }
   end,
 }
 
-require("mason-lspconfig").setup({ handlers = handlers })
-require("mason-lspconfig").setup_handlers(handlers)
+require('mason-lspconfig').setup({
+  handlers = handlers,
+  automatic_installation = true,
+  ensure_installed = {
+    'typos_lsp',
+    'bashls',
+    'cssls',
+    'unocss',
+    'dockerls',
+    'eslint',
+    'grammarly',
+    'graphql',
+    'html',
+    'jsonls',
+    'quick_lint_js',
+    'tsserver',
+    'biome',
+    'vtsls',
+    'jqls',
+    'marksman',
+    'prosemd_lsp',
+    'remark_ls',
+    'jedi_language_server',
+    'pyright',
+    'pylyzer',
+    'pylsp',
+    'ruby_ls',
+    'solargraph',
+    'rubocop',
+    'stylelint_lsp',
+    'lua_ls',
+    'rust_analyzer',
+    'tailwindcss',
+    'terraformls',
+    'tflint',
+    'vimls',
+    'lemminx',
+    'hydra_lsp'
+  }
+})
+
+require('mason-lspconfig').setup_handlers(handlers)
 
 EOF
 
@@ -1006,6 +1069,76 @@ EOF
 " {{{ mason-update-all
 
 lua require("mason-update-all").setup()
+
+" }}}
+" {{{ null-ls
+
+lua << EOF
+
+local null_ls = require("null-ls")
+
+null_ls.setup({
+  debounce = 200,
+  sources = {
+    null_ls.builtins.diagnostics.actionlint,
+    null_ls.builtins.diagnostics.tsc,
+    null_ls.builtins.diagnostics.jsonlint,
+    null_ls.builtins.diagnostics.markdownlint,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.pylint,
+    null_ls.builtins.diagnostics.eslint_d,
+    null_ls.builtins.diagnostics.mypy,
+    -- null_ls.builtins.diagnostics.alex,
+    -- null_ls.builtins.diagnostics.codespell,
+    null_ls.builtins.diagnostics.commitlint,
+    null_ls.builtins.diagnostics.dotenv_linter,
+    null_ls.builtins.diagnostics.erb_lint,
+    null_ls.builtins.diagnostics.gitlint,
+    null_ls.builtins.diagnostics.jshint,
+    null_ls.builtins.diagnostics.misspell,
+    null_ls.builtins.diagnostics.pycodestyle,
+    null_ls.builtins.diagnostics.pydocstyle,
+    null_ls.builtins.diagnostics.rubocop,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.stylelint,
+    null_ls.builtins.diagnostics.stylint,
+    null_ls.builtins.diagnostics.tidy,
+    null_ls.builtins.diagnostics.todo_comments,
+    null_ls.builtins.diagnostics.typos,
+    null_ls.builtins.diagnostics.vint,
+    null_ls.builtins.diagnostics.yamllint,
+
+    -- null_ls.builtins.completion.spell,
+    null_ls.builtins.completion.tags,
+    null_ls.builtins.completion.vsnip,
+
+    null_ls.builtins.code_actions.eslint_d,
+    null_ls.builtins.code_actions.cspell,
+    null_ls.builtins.code_actions.refactoring,
+    null_ls.builtins.code_actions.shellcheck,
+
+    null_ls.builtins.formatting.blackd,
+    -- null_ls.builtins.formatting.codespell,
+    null_ls.builtins.formatting.eslint_d,
+    null_ls.builtins.formatting.fixjson,
+    null_ls.builtins.formatting.htmlbeautifier,
+    null_ls.builtins.formatting.isort,
+    null_ls.builtins.formatting.jq,
+    null_ls.builtins.formatting.markdownlint,
+    null_ls.builtins.formatting.ocdc,
+    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.rubocop,
+    null_ls.builtins.formatting.shellharden,
+    null_ls.builtins.formatting.shfmt,
+    null_ls.builtins.formatting.stylelint,
+    null_ls.builtins.formatting.yamlfix,
+
+    -- null_ls.builtins.hover.dictionary,
+    null_ls.builtins.hover.printenv
+  },
+})
+
+EOF
 
 " }}}
 " {{{ ctrl+backspace delete word
@@ -1490,6 +1623,30 @@ EOF
 lua require("hlargs").setup()
 
 " }}}
+" {{{ cmp-tabnine
+
+lua << EOF
+
+local tabnine = require('cmp_tabnine.config')
+
+tabnine:setup({
+	max_lines = 1000,
+	max_num_results = 20,
+	sort = true,
+	run_on_every_keystroke = true,
+	snippet_placeholder = '..',
+	ignored_file_types = {
+		-- default is not to ignore
+		-- uncomment to ignore in lua:
+		-- lua = true
+	},
+	show_prediction_strength = false,
+	min_percent = 0
+})
+
+EOF
+
+" }}}
 " {{{ cmp
 
 set completeopt=menu,menuone,noselect
@@ -1502,7 +1659,13 @@ local lspkind = require('lspkind')
 cmp.setup({
   formatting = {
     format = lspkind.cmp_format({
-      mode = 'symbol',
+      mode = "symbol_text",
+      menu = ({
+        buffer = "[Buffer]",
+        nvim_lsp = "[LSP]",
+        nvim_lua = "[Lua]"
+      }),
+
       maxwidth = 50,
       ellipsis_char = '...',
 
@@ -1534,13 +1697,22 @@ cmp.setup({
   }),
 
   sources = cmp.config.sources({
-    { name = 'ultisnips', priority = 10 },
-    { name = 'tabnine', priority = 20, ignore_pattern = "[(|,]" },
-    { name = 'nvim_lsp', priority = 30 },
-    { name = 'emoji', priority = 40 },
+    { name = 'ultisnips' },
+    { name = 'nvim_lsp' },
+    { name = 'bufname' },
+    { name = 'buffer-lines' },
+    { name = 'cmp_tabnine' },
+    { name = 'cmp-tw2css' },
+    { name = 'nvim_lsp_document_symbol' },
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'tabnine', ignore_pattern = "[(|,]" },
+    {
+      name = "diag-codes",
+      option = { in_comment = true }
+    },
+    { name = 'emoji' },
     {
       name = 'spell',
-      priority = 50,
       option = {
           keep_all_entries = false,
           enable_in_context = function()
@@ -3060,6 +3232,58 @@ EOF
 
 " }}}
 
+lua << EOF
+
+require("wtf").setup({
+    popup_type = "popup",
+    openai_api_key = vim.env.VIM_WTF_OPENAI_API_KEY,
+    openai_model_id = "gpt-3.5-turbo",
+    context = true,
+    language = "english",
+    search_engine = "google",
+    hooks = {
+        request_started = nil,
+        request_finished = nil,
+    },
+    winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+})
+
+EOF
+
+" }}}
+" {{{ codeium
+
+let g:codeium_disable_bindings = 1
+
+" }}}
+" {{{ backseat.nvim
+
+lua << EOF
+
+require("backseat").setup({
+    openai_api_key = vim.env.OPENAI_API_KEY,
+    openai_model_id = 'gpt-4',
+    language = 'english',
+    split_threshold = 100,
+    additional_instruction = "Respond precisely",
+    highlight = {
+      icon = '', -- ''
+      group = 'Comment',
+    }
+})
+
+EOF
+
+" }}}
+" {{{ gutentags
+
+let g:gutentags_modules = ['ctags']
+let g:gutentags_project_root = ['.root']
+let g:gutentags_cache_dir = expand($HOME . '/.cache/tags')
+let g:gutentags_plus_switch = 1
+let g:gutentags_file_list_command = 'fd -e c -e h'
+
+" }}}
 " {{{ custom keybindings
 
 " {{{ plugin management
@@ -3161,7 +3385,7 @@ nnoremap <leader>FF :lua vim.lsp.buf.format()<cr>
 " {{{ insert snippet folds
 
 function! s:GetFoldShortcutExecString(fold_str)
-  return s:GetCommentString() . ' ' . a:fold_str
+  return GetCommentString() . ' ' . a:fold_str
 endfunction
 
 function! s:InsertFoldEndAndStart()
@@ -3256,6 +3480,14 @@ endif
 xnoremap <silent> <leader>gw :lua require('wtf').ai()<cr>
 nnoremap <silent> <leader>gw :lua require('wtf').ai()<cr>
 nnoremap <silent> <leader>gW :lua require('wtf').search()<cr>
+
+" }}}
+" {{{ codeium
+
+imap <script><silent><nowait><expr> <S-tab> codeium#Accept()
+imap jj <cmd>call codeium#CycleCompletions(-1)<cr>
+imap kk <cmd>call codeium#CycleCompletions(-1)<cr>
+imap cc <cmd>call codeium#Clear()<cr>
 
 " }}}
 

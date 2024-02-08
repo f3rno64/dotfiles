@@ -1,3 +1,11 @@
+### Added by Codeium. These lines cannot be automatically removed if modified
+if command -v termium > /dev/null 2>&1; then
+  eval "$(termium shell-hook show pre)"
+fi
+### End of Codeium integration
+
+
+
 #! /usr/bin/env bash
 
 BASHRC_PATH="$HOME/.bashrc"
@@ -11,3 +19,11 @@ fi
 
 # opam configuration
 test -r /home/f3rno64/.opam/opam-init/init.sh && . /home/f3rno64/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+
+
+
+### Added by Codeium. These lines cannot be automatically removed if modified
+if command -v termium > /dev/null 2>&1; then
+  eval "$(termium shell-hook show post)"
+fi
+### End of Codeium integration
