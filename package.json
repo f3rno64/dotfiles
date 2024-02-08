@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "lodash": "^4.17.21",
+    "remark": "^15.0.1",
     "serve-markdown-it-lib": "^1.0.5",
     "standard-version": "^9.3.2",
     "updates": "^13.0.4"
