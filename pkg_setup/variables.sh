@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+PKG_LISTS_DIR_PATH="$(dirname "$0")/lists"
+GLOBAL_NODE_PKG_LIST_FN="node_packages"
+GLOBAL_NODE_PKG_LIST_FPATH="${PKG_LISTS_DIR_PATH}/${GLOBAL_NODE_PKG_LIST_FN}"
+
+export PKG_LISTS_DIR_PATH
+export GLOBAL_NODE_PKG_LIST_FPATH

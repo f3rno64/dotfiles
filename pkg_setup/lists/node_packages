@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+
+LIST=(
+  '@commitlint/cli' '@commitlint/config-conventional' '@fsouza/prettierd'
+  '@tailwindcss/language-server' 'corepack' 'cspell'
+  'cssmodules-language-server' 'eslint_d' 'fixjson' 'http-server' 'mocha'
+  'neovim' 'npm-name-cli' 'npm-upgrade' 'npm' 'pnpm' 'stylelint' 'stylint'
+  'taskbook' 'textlint' 'track-time-cli' 'tsc' 'uninstall' 'updates' 'vtop'
+  'write-good'
+)
