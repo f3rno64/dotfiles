@@ -66,7 +66,6 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 " }}}
 " {{{ cmp
 
-Plug 'hrsh7th/nvim-cmp'
 Plug 'petertriho/cmp-git'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -82,6 +81,7 @@ Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'JMarkin/cmp-diag-codes'
 Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'jcha0713/cmp-tw2css'
+Plug 'hrsh7th/nvim-cmp'
 
 " }}}
 " {{{ snipppets
@@ -161,7 +161,7 @@ Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 Plug 'Pocco81/true-zen.nvim'
-Plug 'nvim-focus/focus.nvim'
+" Plug 'nvim-focus/focus.nvim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'christoomey/vim-sort-motion'
 Plug 'jbgutierrez/vim-better-comments'
@@ -1004,68 +1004,6 @@ endif
 lua require("mason").setup()
 
 " }}}
-" {{{ mason-lspconfig
-
-lua << EOF
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local handlers = {
-  function (server_name) -- default handler (optional)
-    require("lspconfig")[server_name].setup {
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        require("lsp-status").on_attach(client, bufnr)
-      end
-      }
-  end,
-}
-
-require('mason-lspconfig').setup({
-  handlers = handlers,
-  automatic_installation = true,
-  ensure_installed = {
-    'typos_lsp',
-    'bashls',
-    'cssls',
-    'unocss',
-    'dockerls',
-    'eslint',
-    'grammarly',
-    'graphql',
-    'html',
-    'jsonls',
-    'quick_lint_js',
-    'tsserver',
-    'biome',
-    'vtsls',
-    'jqls',
-    'marksman',
-    'prosemd_lsp',
-    'remark_ls',
-    'jedi_language_server',
-    'pyright',
-    'pylyzer',
-    'pylsp',
-    'ruby_ls',
-    'solargraph',
-    'rubocop',
-    'stylelint_lsp',
-    'lua_ls',
-    'rust_analyzer',
-    'tailwindcss',
-    'terraformls',
-    'tflint',
-    'vimls',
-    'lemminx',
-    'hydra_lsp'
-  }
-})
-
-require('mason-lspconfig').setup_handlers(handlers)
-
-EOF
-
-" }}}
 " {{{ mason-update-all
 
 lua require("mason-update-all").setup()
@@ -1677,7 +1615,7 @@ cmp.setup({
 
   snippet = {
     expand = function(args)
-      vim.fn["UltiSnips#Anon"](args.body)
+      vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
 
@@ -1744,6 +1682,68 @@ cmp.setup.cmdline(':', {
 EOF
 
 " }}}
+" {{{ mason-lspconfig,
+
+lua << EOF
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local handlers = {
+  function (server_name) -- default handler (optional)
+    require("lspconfig")[server_name].setup {
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        require("lsp-status").on_attach(client, bufnr)
+      end
+      }
+  end,
+}
+
+require('mason-lspconfig').setup({
+  handlers = handlers,
+  automatic_installation = true,
+  ensure_installed = {
+    'typos_lsp',
+    'bashls',
+    'cssls',
+    'unocss',
+    'dockerls',
+    'eslint',
+    'grammarly',
+    'graphql',
+    'html',
+    'jsonls',
+    'quick_lint_js',
+    'tsserver',
+    'biome',
+    'vtsls',
+    'jqls',
+    'marksman',
+    'prosemd_lsp',
+    'remark_ls',
+    'jedi_language_server',
+    'pyright',
+    'pylyzer',
+    'pylsp',
+    'ruby_ls',
+    'solargraph',
+    'rubocop',
+    'stylelint_lsp',
+    'lua_ls',
+    'rust_analyzer',
+    'tailwindcss',
+    'terraformls',
+    'tflint',
+    'vimls',
+    'lemminx',
+    'hydra_lsp'
+  }
+})
+
+require('mason-lspconfig').setup_handlers(handlers)
+
+EOF
+
+" }}}
 " {{{ ultisnips
 
 augroup UltiSnipsAddFiletypes
@@ -1752,7 +1752,7 @@ augroup UltiSnipsAddFiletypes
 augroup END
 
 let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsExpandTrigger = '<c-s>'
+let g:UltiSnipsExpandTrigger = '<cr>'
 let g:UltiSnipsListSnippets = '<c-s><c-l>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
@@ -2579,45 +2579,45 @@ let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 
 " }}}
-" {{{ focus.nvim
-
-lua << EOF
-
-require("focus").setup({
-    enable = true, -- Enable module
-    commands = true, -- Create Focus commands
-    autoresize = {
-        enable = true, -- Enable or disable auto-resizing of splits
-        width = 0, -- Force width for the focused window
-        height = 0, -- Force height for the focused window
-        minwidth = 0, -- Force minimum width for the unfocused window
-        minheight = 0, -- Force minimum height for the unfocused window
-        height_quickfix = 10, -- Set the height of quickfix panel
-    },
-    split = {
-        bufnew = false, -- Create blank buffer for new split windows
-        tmux = false, -- Create tmux splits instead of neovim splits
-    },
-    ui = {
-        number = false, -- Display line numbers in the focussed window only
-        relativenumber = false, -- Display relative line numbers in the focussed window only
-        hybridnumber = false, -- Display hybrid line numbers in the focussed window only
-        absolutenumber_unfocussed = false, -- Preserve absolute numbers in the unfocussed windows
-
-        cursorline = true, -- Display a cursorline in the focussed window only
-        cursorcolumn = false, -- Display cursorcolumn in the focussed window only
-        colorcolumn = {
-            enable = false, -- Display colorcolumn in the foccused window only
-            list = '+1', -- Set the comma-saperated list for the colorcolumn
-        },
-        signcolumn = true, -- Display signcolumn in the focussed window only
-        winhighlight = false, -- Auto highlighting for focussed/unfocussed windows
-    }
-})
-
-EOF
-
-" }}}
+" " {{{ focus.nvim
+"
+" lua << EOF
+"
+" require("focus").setup({
+"     enable = true, -- Enable module
+"     commands = true, -- Create Focus commands
+"     autoresize = {
+"         enable = true, -- Enable or disable auto-resizing of splits
+"         width = 0, -- Force width for the focused window
+"         height = 0, -- Force height for the focused window
+"         minwidth = 0, -- Force minimum width for the unfocused window
+"         minheight = 0, -- Force minimum height for the unfocused window
+"         height_quickfix = 10, -- Set the height of quickfix panel
+"     },
+"     split = {
+"         bufnew = false, -- Create blank buffer for new split windows
+"         tmux = false, -- Create tmux splits instead of neovim splits
+"     },
+"     ui = {
+"         number = false, -- Display line numbers in the focussed window only
+"         relativenumber = false, -- Display relative line numbers in the focussed window only
+"         hybridnumber = false, -- Display hybrid line numbers in the focussed window only
+"         absolutenumber_unfocussed = false, -- Preserve absolute numbers in the unfocussed windows
+"
+"         cursorline = true, -- Display a cursorline in the focussed window only
+"         cursorcolumn = false, -- Display cursorcolumn in the focussed window only
+"         colorcolumn = {
+"             enable = false, -- Display colorcolumn in the foccused window only
+"             list = '+1', -- Set the comma-saperated list for the colorcolumn
+"         },
+"         signcolumn = true, -- Display signcolumn in the focussed window only
+"         winhighlight = false, -- Auto highlighting for focussed/unfocussed windows
+"     }
+" })
+"
+" EOF
+"
+" " }}}
 " {{{ true-zen.nvim
 
 lua << EOF
@@ -3231,26 +3231,6 @@ require("wtf").setup({
 EOF
 
 " }}}
-
-lua << EOF
-
-require("wtf").setup({
-    popup_type = "popup",
-    openai_api_key = vim.env.VIM_WTF_OPENAI_API_KEY,
-    openai_model_id = "gpt-3.5-turbo",
-    context = true,
-    language = "english",
-    search_engine = "google",
-    hooks = {
-        request_started = nil,
-        request_finished = nil,
-    },
-    winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
-})
-
-EOF
-
-" }}}
 " {{{ codeium
 
 let g:codeium_disable_bindings = 1
@@ -3284,6 +3264,7 @@ let g:gutentags_plus_switch = 1
 let g:gutentags_file_list_command = 'fd -e c -e h'
 
 " }}}
+
 " {{{ custom keybindings
 
 " {{{ plugin management
@@ -3488,6 +3469,11 @@ imap <script><silent><nowait><expr> <S-tab> codeium#Accept()
 imap jj <cmd>call codeium#CycleCompletions(-1)<cr>
 imap kk <cmd>call codeium#CycleCompletions(-1)<cr>
 imap cc <cmd>call codeium#Clear()<cr>
+
+" }}}
+" {{{ exec current line
+
+nnoremap <silent> <leader>ex :exec '!'.getline('.')<cr>
 
 " }}}
 
