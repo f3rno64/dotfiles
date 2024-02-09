@@ -1,4 +1,4 @@
-# [f3rno's dotfiles](#title)
+# f3rno's dotfiles
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
@@ -6,19 +6,19 @@
 
 > Deployed since *Thu Dec 25 20:03:34 2014 +0100*
 
-Accumulated since 2012, from my [dwm](dwm-url) days and beyond
-[awesome](awesome-url), now settled on a combination of [i3](i3-url),
-[dunst](dunst-url), and [rofi](rofi-url) powered by [fzf](fzf-url) and the
-classic [silver-searcher-ag](ag-url), then finally full-circle to a populated
+Accumulated since 2012, from my [dwm][dwm-url] days and beyond
+[awesome][awesomewm-url], now settled on a combination of [i3][i3-url],
+[dunst][dunst-url], and [rofi][rofi-url] powered by [fzf][fzf-url] and the
+classic [silver-searcher-ag][ag-url], then finally full-circle to a populated
 [.bashrc](.bashrc) requiring a personal [xf-bash-lib](xf-bash-lib-url) to
 operate sanely across a variety of environments.
 
-### [Setup](#setup)
+## Setup
 
-Since the beginning I've utilised the outdated [dotfiles](dotfiles-url) package
+Since the beginning I've utilised the outdated [dotfiles][dotfiles-url] package
 to deploy this configuration. As of this moment, *Fri Oct  8 05:50:45 PM UTC
-2021*, it still clobbers existing directories. Hence a re-install of local
-_pip_ packages is required after each sync. Regardless:
+2021*, it still clobbers existing directories. Hence a re-installation of local
+*pip* packages is required after each sync. Regardless:
 
 ```bash
 cd ~
@@ -36,11 +36,12 @@ git submodule init
 git submodule update
 ```
 
-Edit the config at [dotfilesrc](dotfilesrc) to point to the cloned repo. Example follows.
+Edit the config at [dotfilesrc](dotfilesrc) to point to the cloned repo.
+Example follows.
 
 ```rc
 // ...
-repository = /home/USER/.src/github/mf3rnol/dotfiles
+repository = /home/user/.dotfiles
 // ...
 ```
 
@@ -52,7 +53,7 @@ dotfiles -f -s
 pip install --user dotfiles
 ```
 
-### [Bash Utility Examples](#bash-utility-examples)
+### Bash Utility Examples
 
 Highly opinionated and plentiful, below are some examples:
 
@@ -70,35 +71,33 @@ ll
 pass-gen g/google
 ```
 
-### [VIM Eye Candy](#vim-hotness)
+### VIM Eye Candy
 
-![vim config](/readme_assets/vim_screenie.png)
+![VIM config](readme_assets/vim_screenie.png)
 
-### [Dependencies](#dependencies)
+### Dependencies
 
-Since [xf-bash-lib](xf-bash-lib-url) only enables then features that have the
-require dependencies present on the system, all of the following are optional:
+Since [xf-bash-lib][xf-bash-lib-url] only enables then features that have the
+required dependencies present on the system, all the following are optional:
 
 > NOTE: one may consider these bare essentials
 
-* [sharkdp/bat](bat-url) - `cat` with syntax
-  highlighting and themes, bells, whistles, ets..
-* [wting/autojump](autojump-url) - a *fuzzy* `cd`
-* [nvm-sh/nvm](nvm-url) - node version manager
-* [rvm/rvm](rvm-url) - ruby version manager
-* [junegunn/fzf](fzf-url) - recursive CLI fuzzy file finder
-* [zx2c4/password-store](pass-url) - unix pass
-  * [website](pass-website-url)
-  * [upstream](pass-upstream-url)
-* [i3/i3](i3-url) - i3 tiling window manager
-* [i3/i3lock](i3lock-url) - minimalist lockscreen for i3
-  * _NOTE:_ a display manager _is_ required, otherwise one can bypass *i3lock*
-    by switching to a different tty. [gdm](gdm-url) is an option.
-* [dunst-project/dunst](dunst-url) - minimalist
-  desktop growl notifiation daemon
-* [davatorium/rofi](rofi-url) - multi-purpose
-  graphical list selector (i.e. can render results from fzf and pipe your
-  selection onwards)
+* [sharkdp/bat][bat-url] -- `cat` with syntax highlighting and themes, bells,
+    whistles, etc..
+* [wting/autojump][autojump-url] -- a **fuzzy** `cd`
+* [nvm-sh/nvm][nvm-url] -- node version manager
+* [rvm/rvm][rvm-url] -- ruby version manager
+* [junegunn/fzf][fzf-url] -- recursive CLI fuzzy file finder
+* [zx2c4/password-store][pass-url] -- unix pass
+  * [website][pass-web-url]
+  * [upstream][pass-upstream-url]
+* [i3/i3][i3-url] -- i3 tiling window manager
+* [i3/i3lock][i3lock-url] -- minimalist lockscreen for i3
+  * **NOTE:** a display manager **is** required, otherwise one can bypass
+        **i3lock** by switching to a different tty. [gdm][gdm-url] is an option.
+* [dunst-project/dunst][dunst-url] -- minimalist desktop growl notification
+* [davatorium/rofi][rofi-url] -- multi-purpose graphical list selector (i.e.
+    can render results from fzf and pipe your selection onwards)
 
 ---
 
@@ -121,16 +120,13 @@ KEYMAP="us"
 FONT="ter-u12n.psf.gz"
 ```
 
-### [License](#license)
+### License
 
-Distributed under the **MIT** license. See [LICENSE.md](LICENSE.md) for more information.
+Distributed under the **MIT** license. See [LICENSE.md](/LICENSE.md) for more
+information.
 
-
----
-
-<!-- link slugs -->
-[bat-ur]: https://github.com/sharkdp/bat
-[autojummp-url]: https:/github.com/wting/autojump
+[bat-url]: https://github.com/sharkdp/bat
+[autojump-url]: https:/github.com/wting/autojump
 [nvm-url]: https://github.com/nvm-sh/nvm
 [rvm-url]: https//github.com/rvm/rvm
 [fzf-url]: https://github.com/junegunn/fzf
@@ -145,10 +141,9 @@ Distributed under the **MIT** license. See [LICENSE.md](LICENSE.md) for more inf
 [awesomewm-url]: https://github.com/awesomeWM/awesome
 [dwm-url]: https://git.suckless.org/dwm
 [ag-url]: https://github.com/ggreer/the_silver_searcher
-[xf-bash-lib-url]: https://github.com/mf3rnol/xf-bash-lib
-[dotfiles-url]: https://github.com/jbernard/dotfiles 
+[xf-bash-lib-url]: https://github.com/f3rno64/xf-bash-lib
+[dotfiles-url]: https://github.com/jbernard/dotfiles
 
-<!-- Markdown link & img dfn's -->
 [npm-image]: https://img.shields.io/npm/v/@f3rno64/dotfiles.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@f3rno64/dotfiles
 [npm-downloads]: https://img.shields.io/npm/dm/@f3rno64/dotfiles.svg?style=flat-square
