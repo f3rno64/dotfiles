@@ -185,6 +185,12 @@ if [[ -d $XF_HOME_BASH_SCRIPTS_DIR ]]; then
 fi
 
 # }}}
+#  {{{ source bash-completion
+
+[[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
+    . /usr/share/bash-completion/bash_completion
+
+#  }}}
 
 export GIT_EDITOR=nvim
 
@@ -274,3 +280,5 @@ fi
 # End of Codeium integration
 
 eval "$(gh completion -s bash)"
+
+
