@@ -724,10 +724,16 @@ augroup SetI3ConfigSyntax
   autocmd BufNewFile,BufRead */sway/config setf i3config
 augroup END
 
-augroup WriteOnInsertLeave
-  autocmd!
-  autocmd InsertLeave * write
-augroup END
+function! s:WriteIfBufferHasName()
+  if empty(@%) == 0; then
+    write
+  fi
+endfunction
+
+" augroup WriteOnInsertLeave
+"   autocmd!
+"   autocmd InsertLeave * <SID>WriteIfBufferHasName()
+" augroup END
 
 " }}}
 " {{{ colorscheme configs
