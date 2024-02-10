@@ -281,4 +281,8 @@ fi
 
 eval "$(gh completion -s bash)"
 
+LUA_LANGUAGE_SERVER_BIN_DIR_PATH="$XF_SRC_DIR/github/LuaLS/lua-language-server/bin"
 
+if [[ -d "$LUA_LANGUAGE_SERVER_BIN_DIR_PATH" ]]; then
+  xf_safe_add_dir_to_path "$LUA_LANGUAGE_SERVER_BIN_DIR_PATH"
+fi
