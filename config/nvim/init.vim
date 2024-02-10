@@ -698,7 +698,7 @@ inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
 
 set foldmethod=marker
 set foldcolumn=1
-set foldlevel=3
+set foldlevel=0
 
 " }}}
 " {{{ autocommands
@@ -867,7 +867,7 @@ set background=light
 " colorscheme onehalflight
 " colorscheme paper
 " colorscheme tempus_day
-colorscheme tempus_totus
+" colorscheme tempus_totus
 " colorscheme base16-one-light
 " colorscheme base16-github
 " colorscheme base16-mexico-light
@@ -880,7 +880,7 @@ colorscheme tempus_totus
 " colorscheme toast
 " colorscheme leaf
 " colorscheme PaperColor
-" colorscheme catppuccin-latte
+colorscheme catppuccin-latte
 " colorscheme newpaper
 " colorscheme flatwhite
 " colorscheme base16-github
@@ -1044,7 +1044,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.markdownlint,
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.eslint_d,
+    null_ls.builtins.diagnostics.eslint,
     null_ls.builtins.diagnostics.mypy,
     -- null_ls.builtins.diagnostics.alex,
     -- null_ls.builtins.diagnostics.codespell,
@@ -1052,7 +1052,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.dotenv_linter,
     null_ls.builtins.diagnostics.erb_lint,
     null_ls.builtins.diagnostics.gitlint,
-    null_ls.builtins.diagnostics.jshint,
+    -- null_ls.builtins.diagnostics.jshint,
     null_ls.builtins.diagnostics.misspell,
     null_ls.builtins.diagnostics.pycodestyle,
     null_ls.builtins.diagnostics.pydocstyle,
@@ -1739,75 +1739,64 @@ EOF
 " }}}
 " {{{ mason-lspconfig,
 
-" lua << EOF
-"
-" local capabilities = require('cmp_nvim_lsp').default_capabilities()
-" local handlers = {
-"   function (server_name)
-"     if server_name == "tsserver" then
-"       require('lspconfig')('tsserver').setup({
-"         capabilities = capabilities,
-"         filetypes = { "typescript", "typescriptreact" },
-"         root_dir = function() return vim.loop.cwd() end,
-"         on_attach = function(client, bufnr)
-"           require("lsp-status").on_attach(client, bufnr)
-"         end
-"       })
-"     else
-"       require("lspconfig")[server_name].setup({
-"         capabilities = capabilities,
-"         on_attach = function(client, bufnr)
-"           require("lsp-status").on_attach(client, bufnr)
-"         end
-"       })
-"     end
-"   end
-" }
-"
-" require('mason-lspconfig').setup({
-"   handlers = handlers,
-"   automatic_installation = true,
-"   ensure_installed = {
-"     'typos_lsp',
-"     'bashls',
-"     'cssls',
-"     'unocss',
-"     'dockerls',
-"     'eslint',
-"     'grammarly',
-"     'graphql',
-"     'html',
-"     'jsonls',
-"     'quick_lint_js',
-"     'tsserver',
-"     'biome',
-"     'vtsls',
-"     'jqls',
-"     'marksman',
-"     'prosemd_lsp',
-"     'remark_ls',
-"     'jedi_language_server',
-"     'pyright',
-"     'pylyzer',
-"     'pylsp',
-"     'ruby_ls',
-"     'solargraph',
-"     'rubocop',
-"     'stylelint_lsp',
-"     'lua_ls',
-"     'rust_analyzer',
-"     'tailwindcss',
-"     'terraformls',
-"     'tflint',
-"     'vimls',
-"     'lemminx',
-"     'hydra_lsp'
-"   }
-" })
-"
-" require('mason-lspconfig').setup_handlers(handlers)
-"
-" EOF
+lua << EOF
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local handlers = {
+  function (server_name)
+    require("lspconfig")[server_name].setup({
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        require("lsp-status").on_attach(client, bufnr)
+      end
+    })
+  end
+}
+
+require('mason-lspconfig').setup({
+  handlers = handlers,
+  automatic_installation = true,
+  ensure_installed = {
+    'typos_lsp',
+    'bashls',
+    'cssls',
+    'unocss',
+    'dockerls',
+    'eslint',
+    'grammarly',
+    'graphql',
+    'html',
+    'jsonls',
+    'quick_lint_js',
+    'tsserver',
+    'biome',
+    'vtsls',
+    'jqls',
+    'marksman',
+    'prosemd_lsp',
+    'remark_ls',
+    'jedi_language_server',
+    'pyright',
+    'pylyzer',
+    'pylsp',
+    'ruby_ls',
+    'solargraph',
+    'rubocop',
+    'stylelint_lsp',
+    'lua_ls',
+    'rust_analyzer',
+    'tailwindcss',
+    'terraformls',
+    'tflint',
+    'vimls',
+    'lemminx',
+    'hydra_lsp'
+  }
+})
+
+require('mason-lspconfig').setup_handlers(handlers)
+
+EOF
 
 " }}}
 " {{{ ultisnips
