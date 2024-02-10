@@ -1,4 +1,4 @@
-/home/f3rno64/.config/home/f3rno64/.config//set encoding=utf-8
+set encoding=utf-8
 scriptencoding utf-8
 
 " f3rno64's personal vim/neovim config
