@@ -1,11 +1,23 @@
-set encoding=utf-8
+/home/f3rno64/.config/home/f3rno64/.config//set encoding=utf-8
 scriptencoding utf-8
 
 " f3rno64's personal vim/neovim config
 "
 " https://github.com/f3rno64/dotfiles
 
-" {{{ plugin loading
+" {{{ leader key
+
+let mapleader=','
+
+" }}}
+" {{{ disable netrw, as we use nvim-tree instead
+
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
+" }}}
+
+" {{{ plugins
 
 " {{{ plugin directory resolution
 
@@ -31,9 +43,19 @@ Plug 'Shougo/vimproc.vim', { 'do' : 'make' }
 " {{{ telescope
 
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'aznhe21/actions-preview.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', {
+  \   'do': join([
+  \     'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release',
+  \     'cmake --build build --config Release',
+  \     'cmake --install build --prefix build'
+  \   ], ' && ')
+  \ }
+
+function! OpenPluginDirectory()
+
+endfunction
 
 " }}}
 " {{{ treesitter
@@ -139,6 +161,8 @@ Plug 'f3rno/vimwiki-footnotes'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'liangxianzhe/floating-input.nvim'
+Plug 'danilamihailov/vim-tips-wiki'
 Plug 'james1236/backseat.nvim'
 Plug 'nvim-lua/lsp-status.nvim'
 Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
@@ -161,7 +185,7 @@ Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 Plug 'Pocco81/true-zen.nvim'
-" Plug 'nvim-focus/focus.nvim'
+Plug 'nvim-focus/focus.nvim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'christoomey/vim-sort-motion'
 Plug 'jbgutierrez/vim-better-comments'
@@ -359,17 +383,6 @@ endfunction
 " }}}
 " {{{ general settings
 
-" {{{ leader key
-
-let mapleader=','
-
-" }}}
-" {{{ disable netrw, as we use nvim-tree instead
-
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-
-" }}}
 " {{{ config
 
 syntax enable
@@ -1049,7 +1062,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.tidy,
     null_ls.builtins.diagnostics.todo_comments,
     null_ls.builtins.diagnostics.typos,
-    null_ls.builtins.diagnostics.vint,
+    -- null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.yamllint,
 
     -- null_ls.builtins.completion.spell,
@@ -1349,109 +1362,139 @@ nnoremap <leader>fd <cmd>Telescope diagnostics<cr>
 " }}}
 " {{{ nvim-tree
 
-" {{{ on_attach
-
 lua << EOF
 
-local function on_attach(bufnr)
-  local api = require('nvim-tree.api')
+ntree_api = require('nvim-tree.api')
+floating_input = require('floating-input')
 
-  local function opts(desc)
-    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+-- {{{ functions
+
+-- {{{ OpenNvimTreeAtPath()
+
+function OpenNvimTreePathInput(on_confirm)
+  local opts = { prompt = 'Path: ' }
+	local win_opts = {
+    height = 2,
+    style = 'minimal',
+    border = 'rounded',
+    title_pos = 'center',
+    footer = 'Specify path...',
+    title = 'Open Path In Tree'
+  }
+
+	floating_input.input(opts, on_confirm, win_opts)
+end
+
+-- }}}
+-- {{{ OnGetNvinTreeOpenPath
+
+function OnGetNvimTreeOpenPath(path)
+  ntree_api.tree.open()
+  ntree_api.tree.change_root(path)
+end
+
+-- }}}
+-- {{{ OpenPathInputAndNavigate
+
+function OpenPathInputAndNavigate()
+  OpenNvimTreePathInput(OnGetNvimTreeOpenPath)
+end
+
+-- }}}
+-- {{{ on_attach
+
+function on_attach(bufnr)
+  function opts(desc)
+    return {
+      desc = 'nvim-tree: ' .. desc,
+      buffer = bufnr,
+      noremap = true,
+      silent = true,
+      nowait = true
+    }
   end
 
-
-  -- Default mappings. Feel free to modify or remove as you wish.
-  --
-  -- BEGIN_DEFAULT_ON_ATTACH
-  vim.keymap.set('n', '<C-]>', api.tree.change_root_to_node,          opts('CD'))
-  vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer,     opts('Open: In Place'))
-  vim.keymap.set('n', '<C-k>', api.node.show_info_popup,              opts('Info'))
-  vim.keymap.set('n', '<C-r>', api.fs.rename_sub,                     opts('Rename: Omit Filename'))
-  vim.keymap.set('n', '<C-t>', api.node.open.tab,                     opts('Open: New Tab'))
-  vim.keymap.set('n', '<C-v>', api.node.open.vertical,                opts('Open: Vertical Split'))
-  vim.keymap.set('n', '<C-x>', api.node.open.horizontal,              opts('Open: Horizontal Split'))
-  vim.keymap.set('n', '<BS>',  api.node.navigate.parent_close,        opts('Close Directory'))
-  vim.keymap.set('n', '<CR>',  api.node.open.edit,                    opts('Open'))
-  vim.keymap.set('n', '<Tab>', api.node.open.preview,                 opts('Open Preview'))
-  vim.keymap.set('n', '>',     api.node.navigate.sibling.next,        opts('Next Sibling'))
-  vim.keymap.set('n', '<',     api.node.navigate.sibling.prev,        opts('Previous Sibling'))
-  vim.keymap.set('n', '.',     api.node.run.cmd,                      opts('Run Command'))
-  vim.keymap.set('n', '-',     api.tree.change_root_to_parent,        opts('Up'))
-  vim.keymap.set('n', 'a',     api.fs.create,                         opts('Create'))
-  vim.keymap.set('n', 'bmv',   api.marks.bulk.move,                   opts('Move Bookmarked'))
-  vim.keymap.set('n', 'B',     api.tree.toggle_no_buffer_filter,      opts('Toggle No Buffer'))
-  vim.keymap.set('n', 'c',     api.fs.copy.node,                      opts('Copy'))
-  vim.keymap.set('n', 'C',     api.tree.toggle_git_clean_filter,      opts('Toggle Git Clean'))
-  vim.keymap.set('n', '[c',    api.node.navigate.git.prev,            opts('Prev Git'))
-  vim.keymap.set('n', ']c',    api.node.navigate.git.next,            opts('Next Git'))
-  vim.keymap.set('n', 'd',     api.fs.remove,                         opts('Delete'))
-  vim.keymap.set('n', 'D',     api.fs.trash,                          opts('Trash'))
-  vim.keymap.set('n', 'E',     api.tree.expand_all,                   opts('Expand All'))
-  vim.keymap.set('n', 'e',     api.fs.rename_basename,                opts('Rename: Basename'))
-  vim.keymap.set('n', ']e',    api.node.navigate.diagnostics.next,    opts('Next Diagnostic'))
-  vim.keymap.set('n', '[e',    api.node.navigate.diagnostics.prev,    opts('Prev Diagnostic'))
-  vim.keymap.set('n', 'F',     api.live_filter.clear,                 opts('Clean Filter'))
-  vim.keymap.set('n', 'f',     api.live_filter.start,                 opts('Filter'))
-  vim.keymap.set('n', 'g?',    api.tree.toggle_help,                  opts('Help'))
-  vim.keymap.set('n', 'gy',    api.fs.copy.absolute_path,             opts('Copy Absolute Path'))
-  vim.keymap.set('n', 'H',     api.tree.toggle_hidden_filter,         opts('Toggle Dotfiles'))
-  vim.keymap.set('n', 'I',     api.tree.toggle_gitignore_filter,      opts('Toggle Git Ignore'))
-  vim.keymap.set('n', 'J',     api.node.navigate.sibling.last,        opts('Last Sibling'))
-  vim.keymap.set('n', 'K',     api.node.navigate.sibling.first,       opts('First Sibling'))
-  vim.keymap.set('n', 'm',     api.marks.toggle,                      opts('Toggle Bookmark'))
-  vim.keymap.set('n', 'o',     api.node.open.edit,                    opts('Open'))
-  vim.keymap.set('n', 'O',     api.node.open.no_window_picker,        opts('Open: No Window Picker'))
-  vim.keymap.set('n', 'p',     api.fs.paste,                          opts('Paste'))
-  vim.keymap.set('n', 'P',     api.node.navigate.parent,              opts('Parent Directory'))
-  vim.keymap.set('n', 'q',     api.tree.close,                        opts('Close'))
-  vim.keymap.set('n', 'r',     api.fs.rename,                         opts('Rename'))
-  vim.keymap.set('n', 'R',     api.tree.reload,                       opts('Refresh'))
-  vim.keymap.set('n', 's',     api.node.run.system,                   opts('Run System'))
-  vim.keymap.set('n', 'S',     api.tree.search_node,                  opts('Search'))
-  vim.keymap.set('n', 'U',     api.tree.toggle_custom_filter,         opts('Toggle Hidden'))
-  vim.keymap.set('n', 'W',     api.tree.collapse_all,                 opts('Collapse'))
-  vim.keymap.set('n', 'x',     api.fs.cut,                            opts('Cut'))
-  vim.keymap.set('n', 'y',     api.fs.copy.filename,                  opts('Copy Name'))
-  vim.keymap.set('n', 'Y',     api.fs.copy.relative_path,             opts('Copy Relative Path'))
-  vim.keymap.set('n', '<2-LeftMouse>',  api.node.open.edit,           opts('Open'))
-  vim.keymap.set('n', '<2-RightMouse>', api.tree.change_root_to_node, opts('CD'))
-  -- END_DEFAULT_ON_ATTACH
-
-
-  -- Mappings migrated from view.mappings.list
-  --
-  -- You will need to insert "your code goes here" for any mappings with a custom action_cb
-  vim.keymap.set('n', 'u', api.tree.change_root_to_parent, opts('Up'))
+  vim.keymap.set('n', '<C-]>', ntree_api.tree.change_root_to_node,          opts('CD'))
+  vim.keymap.set('n', '<C-e>', ntree_api.node.open.replace_tree_buffer,     opts('Open: In Place'))
+  vim.keymap.set('n', '<C-k>', ntree_api.node.show_info_popup,              opts('Info'))
+  vim.keymap.set('n', '<C-r>', ntree_api.fs.rename_sub,                     opts('Rename: Omit Filename'))
+  vim.keymap.set('n', '<C-t>', ntree_api.node.open.tab,                     opts('Open: New Tab'))
+  vim.keymap.set('n', '<C-v>', ntree_api.node.open.vertical,                opts('Open: Vertical Split'))
+  vim.keymap.set('n', '<C-x>', ntree_api.node.open.horizontal,              opts('Open: Horizontal Split'))
+  vim.keymap.set('n', '<BS>',  ntree_api.node.navigate.parent_close,        opts('Close Directory'))
+  vim.keymap.set('n', '<CR>',  ntree_api.node.open.edit,                    opts('Open'))
+  vim.keymap.set('n', '<Tab>', ntree_api.node.open.preview,                 opts('Open Preview'))
+  vim.keymap.set('n', '>',     ntree_api.node.navigate.sibling.next,        opts('Next Sibling'))
+  vim.keymap.set('n', '<',     ntree_api.node.navigate.sibling.prev,        opts('Previous Sibling'))
+  vim.keymap.set('n', '.',     ntree_api.node.run.cmd,                      opts('Run Command'))
+  vim.keymap.set('n', '-',     ntree_api.tree.change_root_to_parent,        opts('Up'))
+  vim.keymap.set('n', 'a',     ntree_api.fs.create,                         opts('Create'))
+  vim.keymap.set('n', 'bmv',   ntree_api.marks.bulk.move,                   opts('Move Bookmarked'))
+  vim.keymap.set('n', 'B',     ntree_api.tree.toggle_no_buffer_filter,      opts('Toggle No Buffer'))
+  vim.keymap.set('n', 'c',     ntree_api.fs.copy.node,                      opts('Copy'))
+  vim.keymap.set('n', 'C',     ntree_api.tree.toggle_git_clean_filter,      opts('Toggle Git Clean'))
+  vim.keymap.set('n', '[c',    ntree_api.node.navigate.git.prev,            opts('Prev Git'))
+  vim.keymap.set('n', ']c',    ntree_api.node.navigate.git.next,            opts('Next Git'))
+  vim.keymap.set('n', 'd',     ntree_api.fs.remove,                         opts('Delete'))
+  vim.keymap.set('n', 'D',     ntree_api.fs.trash,                          opts('Trash'))
+  vim.keymap.set('n', 'E',     ntree_api.tree.expand_all,                   opts('Expand All'))
+  vim.keymap.set('n', 'e',     ntree_api.fs.rename_basename,                opts('Rename: Basename'))
+  vim.keymap.set('n', ']e',    ntree_api.node.navigate.diagnostics.next,    opts('Next Diagnostic'))
+  vim.keymap.set('n', '[e',    ntree_api.node.navigate.diagnostics.prev,    opts('Prev Diagnostic'))
+  vim.keymap.set('n', 'F',     ntree_api.live_filter.clear,                 opts('Clean Filter'))
+  vim.keymap.set('n', 'f',     ntree_api.live_filter.start,                 opts('Filter'))
+  vim.keymap.set('n', 'g?',    ntree_api.tree.toggle_help,                  opts('Help'))
+  vim.keymap.set('n', 'gy',    ntree_api.fs.copy.absolute_path,             opts('Copy Absolute Path'))
+  vim.keymap.set('n', 'H',     ntree_api.tree.toggle_hidden_filter,         opts('Toggle Dotfiles'))
+  vim.keymap.set('n', 'I',     ntree_api.tree.toggle_gitignore_filter,      opts('Toggle Git Ignore'))
+  vim.keymap.set('n', 'J',     ntree_api.node.navigate.sibling.last,        opts('Last Sibling'))
+  vim.keymap.set('n', 'K',     ntree_api.node.navigate.sibling.first,       opts('First Sibling'))
+  vim.keymap.set('n', 'm',     ntree_api.marks.toggle,                      opts('Toggle Bookmark'))
+  vim.keymap.set('n', 'o',     ntree_api.node.open.edit,                    opts('Open'))
+  vim.keymap.set('n', 'O',     ntree_api.node.open.no_window_picker,        opts('Open: No Window Picker'))
+  vim.keymap.set('n', 'p',     ntree_api.fs.paste,                          opts('Paste'))
+  vim.keymap.set('n', 'P',     ntree_api.node.navigate.parent,              opts('Parent Directory'))
+  vim.keymap.set('n', 'q',     ntree_api.tree.close,                        opts('Close'))
+  vim.keymap.set('n', 'r',     ntree_api.fs.rename,                         opts('Rename'))
+  vim.keymap.set('n', 'R',     ntree_api.tree.reload,                       opts('Refresh'))
+  vim.keymap.set('n', 's',     ntree_api.node.run.system,                   opts('Run System'))
+  vim.keymap.set('n', 'S',     ntree_api.tree.search_node,                  opts('Search'))
+  vim.keymap.set('n', 'U',     ntree_api.tree.toggle_custom_filter,         opts('Toggle Hidden'))
+  vim.keymap.set('n', 'W',     ntree_api.tree.collapse_all,                 opts('Collapse'))
+  vim.keymap.set('n', 'x',     ntree_api.fs.cut,                            opts('Cut'))
+  vim.keymap.set('n', 'y',     ntree_api.fs.copy.filename,                  opts('Copy Name'))
+  vim.keymap.set('n', 'Y',     ntree_api.fs.copy.relative_path,             opts('Copy Relative Path'))
+  vim.keymap.set('n', '<2-LeftMouse>',  ntree_api.node.open.edit,           opts('Open'))
+  vim.keymap.set('n', '<2-RightMouse>', ntree_api.tree.change_root_to_node, opts('CD'))
+  vim.keymap.set('n', 'u', ntree_api.tree.change_root_to_parent, opts('Up'))
 
 end
 
-EOF
-
-" }}}
-
-lua << EOF
+-- }}}
+-- {{{ nvim-tree setup
 
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
   on_attach = on_attach,
   view = {
-    width = 50,
+    width = 30
   },
   renderer = {
-    group_empty = true,
+    group_empty = true
   },
   filters = {
-    dotfiles = true,
-  },
+    dotfiles = false
+  }
 })
+
+-- }}}
+
+-- }}}
 
 EOF
 
-nnoremap <silent> <leader>e :NvimTreeToggle<cr>
-nnoremap <silent> <leader>E :NvimTreeFindFile<cr>
-
 " }}}
+
 " {{{ vim-grepper
 
 let g:grepper = {}
@@ -1690,64 +1733,75 @@ EOF
 " }}}
 " {{{ mason-lspconfig,
 
-lua << EOF
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local handlers = {
-  function (server_name) -- default handler (optional)
-    require("lspconfig")[server_name].setup {
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        require("lsp-status").on_attach(client, bufnr)
-      end
-      }
-  end,
-}
-
-require('mason-lspconfig').setup({
-  handlers = handlers,
-  automatic_installation = true,
-  ensure_installed = {
-    'typos_lsp',
-    'bashls',
-    'cssls',
-    'unocss',
-    'dockerls',
-    'eslint',
-    'grammarly',
-    'graphql',
-    'html',
-    'jsonls',
-    'quick_lint_js',
-    'tsserver',
-    'biome',
-    'vtsls',
-    'jqls',
-    'marksman',
-    'prosemd_lsp',
-    'remark_ls',
-    'jedi_language_server',
-    'pyright',
-    'pylyzer',
-    'pylsp',
-    'ruby_ls',
-    'solargraph',
-    'rubocop',
-    'stylelint_lsp',
-    'lua_ls',
-    'rust_analyzer',
-    'tailwindcss',
-    'terraformls',
-    'tflint',
-    'vimls',
-    'lemminx',
-    'hydra_lsp'
-  }
-})
-
-require('mason-lspconfig').setup_handlers(handlers)
-
-EOF
+" lua << EOF
+"
+" local capabilities = require('cmp_nvim_lsp').default_capabilities()
+" local handlers = {
+"   function (server_name)
+"     if server_name == "tsserver" then
+"       require('lspconfig')('tsserver').setup({
+"         capabilities = capabilities,
+"         filetypes = { "typescript", "typescriptreact" },
+"         root_dir = function() return vim.loop.cwd() end,
+"         on_attach = function(client, bufnr)
+"           require("lsp-status").on_attach(client, bufnr)
+"         end
+"       })
+"     else
+"       require("lspconfig")[server_name].setup({
+"         capabilities = capabilities,
+"         on_attach = function(client, bufnr)
+"           require("lsp-status").on_attach(client, bufnr)
+"         end
+"       })
+"     end
+"   end
+" }
+"
+" require('mason-lspconfig').setup({
+"   handlers = handlers,
+"   automatic_installation = true,
+"   ensure_installed = {
+"     'typos_lsp',
+"     'bashls',
+"     'cssls',
+"     'unocss',
+"     'dockerls',
+"     'eslint',
+"     'grammarly',
+"     'graphql',
+"     'html',
+"     'jsonls',
+"     'quick_lint_js',
+"     'tsserver',
+"     'biome',
+"     'vtsls',
+"     'jqls',
+"     'marksman',
+"     'prosemd_lsp',
+"     'remark_ls',
+"     'jedi_language_server',
+"     'pyright',
+"     'pylyzer',
+"     'pylsp',
+"     'ruby_ls',
+"     'solargraph',
+"     'rubocop',
+"     'stylelint_lsp',
+"     'lua_ls',
+"     'rust_analyzer',
+"     'tailwindcss',
+"     'terraformls',
+"     'tflint',
+"     'vimls',
+"     'lemminx',
+"     'hydra_lsp'
+"   }
+" })
+"
+" require('mason-lspconfig').setup_handlers(handlers)
+"
+" EOF
 
 " }}}
 " {{{ ultisnips
@@ -2098,42 +2152,41 @@ EOF
 " }}}
 " {{{ focus.nvim
 
-" lua << EOF
-"
-" require("focus").setup()
-"
-" local ignore_filetypes = { 'NvimTree' }
-" local ignore_buftypes = { 'nofile', 'prompt', 'popup' }
-"
-" local augroup =
-"     vim.api.nvim_create_augroup('FocusDisable', { clear = true })
-"
-" vim.api.nvim_create_autocmd('WinEnter', {
-"     group = augroup,
-"     callback = function(_)
-"         if vim.tbl_contains(ignore_buftypes, vim.bo.buftype)
-"         then
-"             vim.w.focus_disable = true
-"         else
-"             vim.w.focus_disable = false
-"         end
-"     end,
-"     desc = 'Disable focus autoresize for BufType',
-" })
-"
-" vim.api.nvim_create_autocmd('FileType', {
-"     group = augroup,
-"     callback = function(_)
-"         if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
-"             vim.b.focus_disable = true
-"         else
-"             vim.b.focus_disable = false
-"         end
-"     end,
-"     desc = 'Disable focus autoresize for FileType',
-" })
-"
-" EOF
+lua << EOF
+
+require('focus').setup()
+
+local ignore_filetypes = { 'NvimTree' }
+local ignore_buftypes = { 'nofile', 'prompt', 'popup' }
+local augroup = vim.api.nvim_create_augroup('FocusDisable', { clear = true })
+
+vim.api.nvim_create_autocmd('WinEnter', {
+   group = augroup,
+   callback = function()
+       if vim.tbl_contains(ignore_buftypes, vim.bo.buftype)
+       then
+           vim.w.focus_disable = true
+       else
+           vim.w.focus_disable = false
+       end
+   end,
+   desc = 'Disable focus autoresize for BufType',
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+   group = augroup,
+   desc = 'Disable focus autoresize for FileType',
+   callback = function()
+       if vim.tbl_contains(ignore_filetypes, vim.bo.filetype)
+       then
+           vim.b.focus_disable = true
+       else
+           vim.b.focus_disable = false
+       end
+   end
+})
+
+EOF
 
 " }}}
 " {{{ dressing
@@ -2674,10 +2727,10 @@ require('true-zen').setup({
 			},
 		},
 		narrow = {
-			--- change the style of the fold lines. Set it to:
-			--- `informative`: to get nice pre-baked folds
-			--- `invisible`: hide them
-			--- function() end: pass a custom func with your fold lines. See :h foldtext
+			-- change the style of the fold lines. Set it to:
+			-- `informative`: to get nice pre-baked folds
+			-- `invisible`: hide them
+			-- function() end: pass a custom func with your fold lines. See :h foldtext
 			folds_style = "informative",
 			run_ataraxis = true, -- display narrowed text in a Ataraxis session
 			callbacks = { -- run functions when opening/closing Narrow mode
@@ -2968,114 +3021,102 @@ callback = highlight_symbol,
 EOF
 
 " }}}
-" {{{ gen
+" {{{ gen (https://github.com/David-Kunz/gen.nvim)
+
+" {{{ all models
+
+" 'llava' 'mistra' 'mixtra' 'starling-l' 'neural-cha' 'codellam'
+" 'mistral-openorc' 'orca-min' 'deepseek-code' 'vicun''phind-codellam'
+" 'dolphin-mixtra' 'wizard-vicuna-uncensore' 'ph' 'dolphin-mistra' 'zephy'
+" 'wizardcode' 'openherme'   'opencha' 'wizard-mat' 'nous-herme' 'falco'
+" 'tinyllam' 'codeu' 'dolphin-ph' 'starcode' 'everythingl' 'stable-belug'
+" 'wizardlm-uncensore' 'y' 'bakllav' 'sola' 'yarn-mistra' 'sqlcode'
+" 'wizard-vicun' 'samantha-mistra' 'stable-cod' 'stablelm-zephy' 'qwe'
+" 'meditro' 'magicode' 'deepseek-ll' 'codeboog' 'mistrallit' 'llama-pr'
+" 'goliat' 'nexusrave' 'notu' 'tinydolphi' 'wizardl' 'alfre' 'xwinl'
+" 'megadolphi' 'notu'
+
+" }}}
+" {{{ installed models
+
+" 'wizardcoder'
+" 'codebooga'
+" 'starcoder'
+
+" }}}
 
 lua << EOF
 
--- https://github.com/David-Kunz/gen.nvim
---- {{{ all models
-
---  mode = "llava",
---  mode = "mistral",
---  mode = "mixtral",
---  mode = "starling-lm",
---  mode = "neural-chat",
---  mode = "codellama",
---  mode = "dolphin-mixtral",
---  mode = "mistral-openorca",
---  mode = "orca-mini",
---  mode = "deepseek-coder",
---  mode = "vicuna",
---  mode = "wizard-vicuna-uncensored",
---  mode = "phi",
---  mode = "dolphin-mistral",
---  mode = "zephyr",
---  mode = "wizardcoder",
---  mode = "openhermes",
---  mode = "phind-codellama",
---  mode = "openchat",
---  mode = "wizard-math",
---  mode = "nous-hermes",
---  mode = "falcon",
---  mode = "tinyllama",
---  mode = "codeup",
---  mode = "dolphin-phi",
---  mode = "starcoder",
---  mode = "everythinglm",
---  mode = "stable-beluga",
---  mode = "wizardlm-uncensored",
---  mode = "yi",
---  mode = "bakllava",
---  mode = "solar",
---  mode = "yarn-mistral",
---  mode = "sqlcoder",
---  mode = "wizard-vicuna",
---  mode = "samantha-mistral",
---  mode = "stable-code",
---  mode = "stablelm-zephyr",
---  mode = "qwen",
---  mode = "meditron",
---  mode = "magicoder",
---  mode = "deepseek-llm",
---  mode = "codebooga",
---  mode = "mistrallite",
---  mode = "llama-pro",
---  mode = "goliath",
---  mode = "nexusraven",
---  mode = "notux",
---  mode = "tinydolphin",
---  mode = "wizardlm",
---  mode = "alfred",
---  mode = "xwinlm",
---  mode = "megadolphin",
---  mode = "notus",
-
--- }}}
+-- {{{ setup
 
 local gen = require('gen')
 local prompts = gen.prompts
 
 gen.setup({
-debug = false,
-show_prompt = true,
-show_model = false,
-model = "wizardcoder",
-no_auto_close = false,
-display_mode = "float",
-list_models = '<omitted lua function>',
-init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
-command = "curl --silent --no-buffer -X POST http://localhost:11434/api/generate -d $body"
+  debug = false,
+  show_prompt = true,
+  show_model = true,
+  model = "codebooga",
+  no_auto_close = false,
+  display_mode = "split",
+  list_models = '<omitted lua function>',
+  init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
+  command = "curl --silent --no-buffer -X POST http://localhost:11434/api/generate -d $body"
 })
 
-prompts['Generate'] = {
-replace = true,
-prompt = "$input"
+-- }}}
+-- {{{ prompts
+
+-- {{{ Generate
+
+gen.prompts['Generate'] = {
+  replace = true,
+  prompt = "$input"
 }
 
-prompts['Ask'] = {
-prompt = "Regarding the following text, $input:\n$text"
+-- }}}
+-- {{{ Ask
+
+gen.prompts['Ask'] = {
+  prompt = "Regarding the following text, $input:\n$text"
 }
 
-prompts['Review Code'] = {
-prompt = "Review the following code and make concise suggestions:\n```$filetype\n$text\n```"
+-- }}}
+-- {{{ Review Code
+
+gen.prompts['Review Code'] = {
+  prompt = "Review the following code and make concise suggestions:\n```$filetype\n$text\n```"
 }
 
-prompts['Elaborate_Text'] = {
-replace = true,
-prompt = "Elaborate the following text:\n$text"
+-- }}}
+-- {{{ Elaborate Text
+
+gen.prompts['Elaborate_Text'] = {
+  replace = true,
+  prompt = "Elaborate the following text:\n$text"
 }
 
-prompts['Enhance_Code'] = {
-replace = true,
-extract = "```$filetype\n(.-)```",
-prompt = "Enhance the following code, only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
+-- }}}
+-- {{{ Enhance Code
+
+gen.prompts['Enhance_Code'] = {
+  replace = true,
+  extract = "```$filetype\n(.-)```",
+  prompt = "Enhance the following code, only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
 }
 
-prompts['Fix_Code'] = {
-replace = true,
-extract = "```$filetype\n(.-)```",
-prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
+-- }}}
+-- {{{ Fix Code
+
+gen.prompts['Fix_Code'] = {
+  replace = true,
+  extract = "```$filetype\n(.-)```",
+  prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
 }
+
+-- }}}
+
+-- }}}
 
 EOF
 
@@ -3480,6 +3521,19 @@ imap cc <cmd>call codeium#Clear()<cr>
 " {{{ exec current line
 
 nnoremap <silent> <leader>ex :exec '!'.getline('.')<cr>
+
+" }}}
+" {{{ nvim-tree
+
+nnoremap <silent> <leader>e :NvimTreeFocus<cr>
+nnoremap <silent> <leader>eo :NvimTreeOpen<cr>
+nnoremap <silent> <leader>ec :NvimTreeClose<cr>
+nnoremap <silent> <leader>et :NvimTreeToggle<cr>
+nnoremap <silent> <leader>eff :NvimTreeFindFile<cr>
+nnoremap <silent> <leader>es :NvimTreeResize 30<cr>
+nnoremap <silent> <leader>el :NvimTreeResize 55<cr>
+nnoremap <silent> <leader>ecl :NvimTreeCollapse<cr>
+lua vim.keymap.set('n', '<leader>ep', OpenPathInputAndNavigate)
 
 " }}}
 
