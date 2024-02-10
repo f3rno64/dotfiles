@@ -103,6 +103,7 @@ Plug 'JMarkin/cmp-diag-codes'
 Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'jcha0713/cmp-tw2css'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-cmdline'
 
 " }}}
 " {{{ snipppets
@@ -160,6 +161,7 @@ Plug 'f3rno/vimwiki-footnotes'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'danilamihailov/vim-tips-wiki'
 Plug 'liangxianzhe/floating-input.nvim'
 Plug 'danilamihailov/vim-tips-wiki'
 Plug 'james1236/backseat.nvim'
@@ -1711,11 +1713,24 @@ cmp.setup({
   })
 })
 
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
 
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' }
+  }, {
+    {
+      name = 'cmdline',
+      option = {
+        ignore_cmds = { 'Man', '!' }
+      }
+    }
   })
 })
 
