@@ -92,7 +92,6 @@ Plug 'petertriho/cmp-git'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
 Plug 'f3fora/cmp-spell'
 Plug 'hrsh7th/cmp-emoji'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
@@ -1712,19 +1711,11 @@ cmp.setup({
   })
 })
 
-cmp.setup.cmdline({ '/', '?' }, {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'buffer' }
-  }
-})
 
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' }
-  }, {
-    { name = 'cmdline' }
   })
 })
 
@@ -3314,6 +3305,12 @@ let g:gutentags_file_list_command = 'fd -e c -e h'
 
 " {{{ custom keybindings
 
+" {{{ quote word
+
+nnoremap <silent> <leader>sr" ciw""<Esc>P
+nnoremap <silent> <leader>sr' ciw''<Esc>P`
+
+" }}}
 " {{{ plugin management
 
 nnoremap <silent> PI :PlugInstall<cr>
