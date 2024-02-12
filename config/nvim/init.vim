@@ -161,6 +161,7 @@ Plug 'f3rno/vimwiki-footnotes'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'junegunn/goyo.vim'
 Plug 'danilamihailov/vim-tips-wiki'
 Plug 'liangxianzhe/floating-input.nvim'
 Plug 'danilamihailov/vim-tips-wiki'
@@ -858,7 +859,7 @@ EOF
 " }}}
 " {{{ colorscheme
 
-set background=dark
+set background=light
 
 " {{{ light colorschemes
 
@@ -869,7 +870,7 @@ set background=dark
 " colorscheme tempus_day
 " colorscheme tempus_totus
 " colorscheme base16-one-light
-" colorscheme base16-github
+colorscheme base16-github
 " colorscheme base16-mexico-light
 " colorscheme base16-still-alive
 " colorscheme base16-unikitty-light
@@ -889,7 +890,7 @@ set background=dark
 " }}}
 " {{{ dark colorschemes
 
-colorscheme base16-colors
+" colorscheme base16-colors
 " colorscheme tundra
 " colorscheme base16-railscasts
 " colorscheme tequila-sunrise

@@ -224,10 +224,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || xf_safe_add_dir_to_path "$PYENV_ROOT/bin"
 eval "$(pyenv init -)"
 
-if [[ -f "$HOME/.cargo/env" ]]; then
-  source "$HOME/.cargo/env"
-fi
-
 if command -v lsd >/dev/null 2>&1; then
   alias ls='lsd'
 fi
@@ -285,4 +281,8 @@ LUA_LANGUAGE_SERVER_BIN_DIR_PATH="$XF_SRC_DIR/github/LuaLS/lua-language-server/b
 
 if [[ -d "$LUA_LANGUAGE_SERVER_BIN_DIR_PATH" ]]; then
   xf_safe_add_dir_to_path "$LUA_LANGUAGE_SERVER_BIN_DIR_PATH"
+fi
+
+if xf_has_cmd 'trash-put'; then
+  alias rm='echo "Use trash-put instead"; false'
 fi
