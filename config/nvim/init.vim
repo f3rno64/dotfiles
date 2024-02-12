@@ -83,7 +83,7 @@ Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'RubixDev/mason-update-all'
 Plug 'dnlhc/glance.nvim'
 Plug 'pwntester/nvim-lsp'
-Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'nvimtools/none-ls.nvim'
 
 " }}}
 " {{{ cmp
@@ -858,7 +858,7 @@ EOF
 " }}}
 " {{{ colorscheme
 
-set background=light
+set background=dark
 
 " {{{ light colorschemes
 
@@ -880,7 +880,7 @@ set background=light
 " colorscheme toast
 " colorscheme leaf
 " colorscheme PaperColor
-colorscheme catppuccin-latte
+" colorscheme catppuccin-latte
 " colorscheme newpaper
 " colorscheme flatwhite
 " colorscheme base16-github
@@ -889,6 +889,7 @@ colorscheme catppuccin-latte
 " }}}
 " {{{ dark colorschemes
 
+colorscheme base16-colors
 " colorscheme tundra
 " colorscheme base16-railscasts
 " colorscheme tequila-sunrise
@@ -1058,7 +1059,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.pydocstyle,
     null_ls.builtins.diagnostics.rubocop,
     null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.stylelint,
+    -- null_ls.builtins.diagnostics.stylelint,
     null_ls.builtins.diagnostics.stylint,
     null_ls.builtins.diagnostics.tidy,
     null_ls.builtins.diagnostics.todo_comments,
@@ -1088,7 +1089,7 @@ null_ls.setup({
     null_ls.builtins.formatting.rubocop,
     null_ls.builtins.formatting.shellharden,
     null_ls.builtins.formatting.shfmt,
-    null_ls.builtins.formatting.stylelint,
+    -- null_ls.builtins.formatting.stylelint,
     null_ls.builtins.formatting.yamlfix,
 
     -- null_ls.builtins.hover.dictionary,
@@ -1763,7 +1764,6 @@ require('mason-lspconfig').setup({
     'unocss',
     'dockerls',
     'eslint',
-    'grammarly',
     'graphql',
     'html',
     'jsonls',
@@ -1782,7 +1782,7 @@ require('mason-lspconfig').setup({
     'ruby_ls',
     'solargraph',
     'rubocop',
-    'stylelint_lsp',
+    -- 'stylelint_lsp',
     'lua_ls',
     'rust_analyzer',
     'tailwindcss',
