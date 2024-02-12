@@ -157,6 +157,9 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'f3rno/vimwiki-footnotes'
 
 " }}}
+" {{{ ai
+
+" }}}
 " {{{ other
 
 " let g:polyglot_disabled = ['markdown']
@@ -283,6 +286,8 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 " }}}
 " {{{ colorschemes
 
+Plug 'jaredgorski/SpaceCamp'
+Plug 'cryptomilk/nightcity.nvim'
 Plug 'sam4llis/nvim-tundra'
 Plug 'yasukotelin/shirotelin'
 Plug 'cpea2506/one_monokai.nvim'
@@ -859,7 +864,7 @@ EOF
 " }}}
 " {{{ colorscheme
 
-set background=light
+set background=dark
 
 " {{{ light colorschemes
 
@@ -870,7 +875,7 @@ set background=light
 " colorscheme tempus_day
 " colorscheme tempus_totus
 " colorscheme base16-one-light
-colorscheme base16-github
+" colorscheme base16-github
 " colorscheme base16-mexico-light
 " colorscheme base16-still-alive
 " colorscheme base16-unikitty-light
@@ -890,6 +895,7 @@ colorscheme base16-github
 " }}}
 " {{{ dark colorschemes
 
+colorscheme spacecamp
 " colorscheme base16-colors
 " colorscheme tundra
 " colorscheme base16-railscasts
@@ -1046,7 +1052,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.markdownlint,
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.diagnostics.mypy,
     -- null_ls.builtins.diagnostics.alex,
     -- null_ls.builtins.diagnostics.codespell,
@@ -3402,16 +3408,6 @@ nnoremap <silent> <leader>cn :call MakeClassNameAttributeDynamic()<cr>
 nnoremap <silent> <leader>RR :source $MYVIMRC<cr>
 
 " }}}
-" {{{ append comma
-
-nnoremap <silent> <leader>, A,<esc>
-
-" }}}
-" {{{ lsp format
-
-nnoremap <leader>FF :lua vim.lsp.buf.format()<cr>
-
-" }}}
 " {{{ insert snippet folds
 
 function! s:GetFoldShortcutExecString(fold_str)
@@ -3451,22 +3447,17 @@ nnoremap <silent> ]d :lua vim.diagnostic.goto_next({ border = "single" })<cr>
 " }}}
 " {{{ lsp
 
-nnoremap <silent> CA :lua vim.lsp.buf.code_action()<cr>
-vnoremap <silent> CA :lua vim.lsp.buf.code_action()<cr>
-
-nnoremap <silent> CAP :lua require('actions-preview').code_actions<cr>
-vnoremap <silent> CAP :lua require('actions-preview').code_actions<cr>
-
-nnoremap <silent> GD :lua vim.lsp.buf.declaration()<cr>
-nnoremap <silent> Gd :lua vim.lsp.buf.definition()<cr>
-nnoremap <silent> Gt :lua vim.lsp.buf.type_definition()<cr>
-nnoremap <silent> Gr :lua vim.lsp.buf.references()<cr>
-nnoremap <silent> Gi :lua vim.lsp.buf.implementation()<cr>
-nnoremap <silent> GH :lua vim.lsp.buf.hover()<cr>
-nnoremap <silent> GS :lua vim.lsp.buf.signature_help()<cr>
-nnoremap <silent> GT :lua vim.lsp.buf.type_definition()<cr>
-nnoremap <silent> rn :lua vim.lsp.buf.rename()<cr>
-nnoremap <silent> <leader>ff :lua vim.lsp.buf.format()<cr>
+nnoremap <silent> lD :lua vim.lsp.buf.declaration()<cr>
+nnoremap <silent> ld :lua vim.lsp.buf.definition()<cr>
+nnoremap <silent> lt :lua vim.lsp.buf.type_definition()<cr>
+nnoremap <silent> lr :lua vim.lsp.buf.references()<cr>
+nnoremap <silent> li :lua vim.lsp.buf.implementation()<cr>
+nnoremap <silent> lh :lua vim.lsp.buf.hover()<cr>
+nnoremap <silent> ls :lua vim.lsp.buf.signature_help()<cr>
+nnoremap <silent> lf :lua vim.lsp.buf.format()<cr>
+nnoremap <silent> lrn :lua vim.lsp.buf.rename()<cr>
+nnoremap <silent> lca :lua vim.lsp.buf.code_action()<cr>
+nnoremap <silent> lcap :lua require('actions-preview').code_actions<cr>
 
 " }}}
 " {{{ refactor insert _isUndefined

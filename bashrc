@@ -263,7 +263,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
 
 xf_safe_source "$HOME/.github_api_token"
-xf_safe_source "$HOME/.openai_api_token_vim_wtf"
+xf_safe_source "$HOME/.openai_api_token"
 
 # tabtab source for packages
 # uninstall by removing these lines
