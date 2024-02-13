@@ -263,17 +263,11 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
 
 xf_safe_source "$HOME/.github_api_token"
-xf_safe_source "$HOME/.openai_api_token"
+xf_safe_source "$HOME/.openai_api_key"
 
 # tabtab source for packages
 # uninstall by removing these lines
 [ -f ~/.config/tabtab/bash/__tabtab.bash ] && . ~/.config/tabtab/bash/__tabtab.bash || true
-
-# Added by Codeium. These lines cannot be automatically removed if modified
-if command -v termium > /dev/null 2>&1; then
-  eval "$(termium shell-hook show post)"
-fi
-# End of Codeium integration
 
 eval "$(gh completion -s bash)"
 

@@ -5,26 +5,19 @@ scriptencoding utf-8
 "
 " https://github.com/f3rno64/dotfiles
 
-" {{{ leader key
+" {{{ plugin loading
 
-let mapleader=','
-
-" }}}
-" {{{ disable netrw, as we use nvim-tree instead
-
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-
-" }}}
-
-" {{{ plugins
-
-" {{{ plugin directory resolution
+" {{{ ensure plugin directory resolution
 
 if has('nvim')
   let s:plugin_dir_path = $HOME . '/.nvim-plugins'
 else
   let s:plugin_dir_path = $HOME . '/.vim-plugins'
+endif
+
+if !isdirectory(s:plugin_dir_path)
+  call mkdir(s:plugin_dir_path, 'p')
+  echo 'Created plugin directory: ' . s:plugin_dir_path
 endif
 
 " }}}
@@ -61,11 +54,10 @@ endfunction
 " {{{ treesitter
 
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-" Plug 'yioneko/nvim-yati', { 'tag': '*' }
 Plug 'm-demare/hlargs.nvim'
-" Plug 'p00f/nvim-ts-rainbow'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'RRethy/nvim-treesitter-textsubjects'
+Plug 'https://gitlab.com/HiPhish/rainbow-delimiters.nvim.git'
 
 " }}}
 " {{{ nvim-tree
@@ -157,7 +149,14 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'f3rno/vimwiki-footnotes'
 
 " }}}
-" {{{ ai
+" {{{ ui
+
+Plug 'elpiloto/significant.nvim'
+
+" }}}
+" {{{  ai
+
+Plug 'madox2/vim-ai'
 
 " }}}
 " {{{ other
@@ -165,7 +164,6 @@ Plug 'f3rno/vimwiki-footnotes'
 " let g:polyglot_disabled = ['markdown']
 
 Plug 'junegunn/goyo.vim'
-Plug 'danilamihailov/vim-tips-wiki'
 Plug 'liangxianzhe/floating-input.nvim'
 Plug 'danilamihailov/vim-tips-wiki'
 Plug 'james1236/backseat.nvim'
@@ -179,7 +177,6 @@ Plug 'junegunn/vim-emoji'
 " Plug 'sheerun/vim-polyglot'
 Plug 'sindrets/diffview.nvim'
 Plug 'jghauser/follow-md-links.nvim'
-Plug 'David-Kunz/gen.nvim', {'branch': 'main'}
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'tom-anders/telescope-vim-bookmarks.nvim'
 Plug 'rhysd/accelerated-jk'
@@ -200,8 +197,6 @@ Plug 'vim-test/vim-test'
 Plug 'David-Kunz/jester'
 Plug 'AndrewRadev/switch.vim'
 Plug 'joaohkfaria/vim-jest-snippets'
-" Plug 'MysticalDevil/inlay-hints.nvim'
-" Plug 'boltlessengineer/smart-tab.nvim'
 Plug 'lcheylus/overlength.nvim'
 Plug 'smoka7/hop.nvim', { 'branch': 'master' }
 Plug 'anuvyklack/keymap-amend.nvim'
@@ -215,7 +210,6 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'axelvc/template-string.nvim'
 Plug 'sontungexpt/buffer-closer'
 Plug 'jamestthompson3/sort-import.nvim'
-Plug 'sbdchd/neoformat'
 Plug 'github/copilot.vim'
 Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
@@ -262,18 +256,13 @@ Plug 'windwp/nvim-autopairs'
 Plug 'nvim-zh/colorful-winsep.nvim'
 Plug 'kwkarlwang/bufresize.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
-" Plug 'folke/twilight.nvim'
 Plug 'folke/zen-mode.nvim'
-" Plug 'glepnir/dashboard-nvim'
 Plug 'ojroques/nvim-bufdel'
 Plug 'smjonas/inc-rename.nvim'
-Plug 'numToStr/FTerm.nvim'
 Plug 'winston0410/cmd-parser.nvim'
 Plug 'winston0410/range-highlight.nvim'
-" Plug 'mawkler/modicator.nvim'
 Plug 'RRethy/vim-illuminate'
 Plug 'm4xshen/smartcolumn.nvim'
-Plug 'mhinz/vim-signify'
 
 function! UpdateRemotePlugins(...)
   " Needed to refresh runtime files
@@ -290,9 +279,7 @@ Plug 'jaredgorski/SpaceCamp'
 Plug 'cryptomilk/nightcity.nvim'
 Plug 'sam4llis/nvim-tundra'
 Plug 'yasukotelin/shirotelin'
-Plug 'cpea2506/one_monokai.nvim'
 Plug 'kamwitsta/flatwhite-vim'
-Plug 'Yagua/nebulous.nvim'
 Plug 'rafamadriz/neon'
 Plug 'yashguptaz/calvera-dark.nvim'
 Plug 'cseelus/vim-colors-lucid'
@@ -373,9 +360,10 @@ function s:GetUserSnippetFilePath(filetype)
 endfunction
 
 " }}}
-" {{{ GetCommentString
+" {{{ s:GetCommentString
 
-function GetCommentString()
+
+function s:GetCommentString()
   let l:comment_string_parts = split(&commentstring, '%s')
 
   if len(l:comment_string_parts) == 0
@@ -388,9 +376,9 @@ endfunction
 " }}}
 
 " }}}
-" {{{ general settings
+" {{{ settings
 
-" {{{ config
+let mapleader=','
 
 syntax enable
 
@@ -406,7 +394,7 @@ set softtabstop=2
 set shiftwidth=2
 
 set timeout           " for mappings
-set timeoutlen=300    " default value
+set timeoutlen=500    " default value
 set ttimeout          " for key codes
 set ttimeoutlen=10    " unnoticeable small value
 
@@ -431,6 +419,8 @@ set showcmd
 set smartcase
 set hidden
 set textwidth=79 " word wrap
+set wrap linebreak
+set linebreak
 set equalalways
 set wildignore+=*node_modules/**
 set noswapfile
@@ -441,6 +431,277 @@ set conceallevel=0
 set termguicolors
 set mouse+=a
 set splitkeep=screen
+
+set foldmethod=marker
+set foldcolumn=1
+set foldlevel=0
+
+augroup editing
+  autocmd!
+  autocmd InsertLeave * set nopaste
+  autocmd BufEnter * set number
+  autocmd BufLeave * set nonumber
+augroup END
+
+augroup SnippetFoldMethod
+  autocmd!
+  autocmd FileType snippets setlocal foldmethod=marker
+augroup END
+
+" hacky fix for syntax highlighting in large files
+augroup syntax_fix
+  autocmd!
+  autocmd WinEnter,Filetype * syntax sync fromstart
+augroup END
+
+augroup SetVimSyntax
+  autocmd!
+  autocmd BufNewFile,BufRead *.vim setf vim
+  autocmd BufNewFile,BufRead *.nvim setf vim
+augroup END
+
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
+" }}}
+" {{{ gui config
+
+if has('gui_running') || exists('g:GtkGuiLoaded')
+
+" {{{ font
+
+" {{{ list of fonts for reference
+
+" Iosevka
+" FuraCode Nerd Font | cali
+" Hasklug Nerd Font
+" Input Mono (Normal|Narrow|Condensed|Compressed)
+" Rec Mono (Linear|Duotone|SemiCasual|Casual)
+" Victor Mono
+" Operator Mono
+" Hermit
+" Source Code Pro
+" JetBrainsMono Nerd Font
+" BlexMono Nerd Font | liga, zero, frac
+
+" }}}
+
+let s:font_name = 'JetBrainsMono Nerd Font'
+let s:font_features = ''
+let s:font_size = 10
+
+" {{{ functions
+
+" {{{ s:SetFont()
+
+function! s:SetFont()
+  let &guifont = s:font_name . ' ' . s:font_size
+endfunction
+
+" }}}
+" {{{ s:AdjustFontSize(delta)
+
+function! s:AdjustFontSize(delta)
+  let s:font_size += a:delta
+  call SetFont()
+endfunction
+
+" }}}
+
+" }}}
+" {{{ keybindings
+
+nnoremap <C-=> :call <SID>AdjustFontSize(1)<cr>
+nnoremap <C-+> :call <SID>AdjustFontSize(1)<cr>
+nnoremap <C--> :call <SID>AdjustFontSize(-1)<cr>
+
+" }}}
+
+call SetFont()
+
+" }}}
+" {{{ terminal
+
+tnoremap <Esc> <C-\><C-n>
+
+" }}}
+" {{{ Neovim-GTK
+
+if has('nvim') && ! has('gui_vimr')
+  map <S-Insert> <MiddleMouse>
+  map! <S-Insert> <MiddleMouse>
+
+  call rpcnotify(1, 'Gui', 'Option', 'Popupmenu', 0)
+  call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
+  call rpcnotify(1, 'Gui', 'Option', 'Cmdline', 0)
+
+  let g:GuiInternalClipboard = 1
+endif
+
+" }}}
+" {{{ cursor init
+
+if has('nvim') && has('gui_running')
+  set guicursor+=n-v-c-sm:block
+  set guicursor+=i-ci-ve:ver25
+  set guicursor+=r-cr-o:hor20
+  set guicursor+=a:blinkon0
+endif
+
+" }}}
+
+endif
+
+" }}}
+" {{{ colorschemes
+
+set background=dark
+
+" {{{ colorscheme configs
+
+let g:falcon_background = 0
+let g:falcon_inactive = 1
+
+let g:calvera_italic_comments = 1
+let g:calvera_italic_keywords = 1
+let g:calvera_italic_functions = 1
+let g:calvera_contrast = 1
+
+let g:material_style = 'deep ocean'
+
+" }}}
+" {{{ light colorschemes
+
+" colorscheme fruchtig
+" colorscheme shirotelin
+" colorscheme onehalflight
+" colorscheme paper
+" colorscheme tempus_day
+" colorscheme tempus_totus
+" colorscheme base16-one-light
+" colorscheme base16-github
+" colorscheme base16-mexico-light
+" colorscheme base16-still-alive
+" colorscheme base16-unikitty-light
+
+" }}}
+" {{{ light and dark colorschemes
+
+" colorscheme toast
+" colorscheme leaf
+" colorscheme PaperColor
+" colorscheme catppuccin-latte
+" colorscheme newpaper
+" colorscheme flatwhite
+" colorscheme base16-github
+" colorscheme tempus_day
+
+" }}}
+" {{{ dark colorschemes
+
+" colorscheme base16-summercamp
+" colorscheme spacecamp
+" colorscheme base16-colors
+" colorscheme tundra
+" colorscheme base16-railscasts
+" colorscheme tequila-sunrise
+" colorscheme melange
+" colorscheme base16-blueish
+" colorscheme lucid
+" colorscheme base16-ayu-mirage
+" colorscheme vn-night
+" colorscheme base16-summercamp
+" colorscheme base16-tokyodark-terminal
+" colorscheme base16-onedark
+" colorscheme sherbet
+" colorscheme slate
+" colorscheme murphy
+" colorscheme gruvbox-baby
+colorscheme base16-tokyo-city-dark
+" colorscheme nightly
+" colorscheme tender
+" colorscheme dogrun
+" colorscheme tempus_future
+" colorscheme tempus_night
+" colorscheme tempus_warp
+" colorscheme desertink
+" colorscheme base16-material-palenight
+" colorscheme base16-horizon-terminal-dark
+" colorscheme base16-irblack
+" colorscheme tequila-sunrise
+" colorscheme kanagawa
+" colorscheme material
+" colorscheme nightfox
+" colorscheme oxocarbon
+" colorscheme base16-gruvbox-dark-medium
+" colorscheme abscs
+" colorscheme tokyonight-night
+" colorscheme zephyr
+" colorscheme melange
+" colorscheme aurora
+" colorscheme one-nvim
+" colorscheme falcon
+" colorscheme calvera
+" colorscheme vn-night
+" colorscheme everblush
+
+" }}}
+
+" }}}
+" {{{ plugin configs
+
+" {{{ vim-ai
+
+let g:vim_ai_chat = {
+\  "options": {
+\    "model": "gpt-4",
+\    "temperature": 0.2,
+\  },
+\}
+
+" }}}
+" {{{ nightly
+
+lua << EOF
+
+require("nightly").setup({
+  transparent = false,
+  styles = {
+    comments = { italic = true },
+    functions = { italic = false },
+    variables = { italic = false },
+    keywords = { italic = false },
+  },
+  highlights = {},
+})
+
+EOF
+
+" }}}
+" {{{ material setup
+
+lua << EOF
+
+require('material').setup({
+  contrast = {
+    terminal = true,
+    sidebars = true,
+    floating_windows = true,
+    cursor_line = true,
+    non_current_windows = true
+  },
+
+  plugins = {
+    'gitsigns',
+    'lspsaga',
+    'nvim-cmp',
+    'nvim-web-devicons',
+    'telescope',
+    'trouble'
+  }
+})
+
+EOF
 
 " }}}
 " {{{ vim-thematic
@@ -524,11 +785,6 @@ let g:thematic#themes = {
 \
 \   'desertink': {
 \     'colorscheme': 'desertink',
-\     'background': 'dark'
-\   },
-\
-\   'nebulous': {
-\     'colorscheme': 'nebulous',
 \     'background': 'dark'
 \   },
 \
@@ -687,345 +943,6 @@ let g:thematic#themes = {
 \   },
 \ }
 
-nnoremap tn :ThematicNext<cr>
-nnoremap tp :ThematicPrevious<cr>
-nnoremap tr :ThematicRandom<cr>
-nnoremap tnp :Thematic newpaper<cr>
-nnoremap tir :Thematic base16-irblack<cr>
-nnoremap tam :Thematic material<cr>
-nnoremap tka :Thematic kanagawa<cr>
-
-" <c-l> to clear the highlight, as well as redraw the screen
-noremap <silent> <C-l> :<C-u>nohlsearch<cr><C-l>
-inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
-
-" }}}
-" {{{ folding
-
-set foldmethod=marker
-set foldcolumn=1
-set foldlevel=0
-
-" }}}
-" {{{ autocommands
-
-augroup TerraformVarFiles
-  autocmd!
-  autocmd BufNewFile,BufRead *.tfvars.dev setf terraform
-  autocmd BufNewFile,BufRead *.tfvars.prod setf terraform
-augroup END
-
-augroup editing
-  autocmd!
-  autocmd InsertLeave * set nopaste
-  autocmd BufEnter * set number
-  autocmd BufLeave * set nonumber
-augroup END
-
-augroup SnippetFoldMethod
-  autocmd!
-  autocmd FileType snippets setlocal foldmethod=marker
-augroup END
-
-" hacky fix for syntax highlighting in large files
-augroup syntax_fix
-  autocmd!
-  autocmd WinEnter,Filetype * syntax sync fromstart
-augroup END
-
-augroup SetVimSyntax
-  autocmd!
-  autocmd BufNewFile,BufRead *.vim setf vim
-  autocmd BufNewFile,BufRead *.nvim setf vim
-augroup END
-
-augroup SetI3ConfigSyntax
-  autocmd BufNewFile,BufRead */i3/config setf i3config
-  autocmd BufNewFile,BufRead */sway/config setf i3config
-augroup END
-
-function! s:WriteIfBufferHasName()
-  if empty(@%) == 0; then
-    write
-  fi
-endfunction
-
-" augroup WriteOnInsertLeave
-"   autocmd!
-"   autocmd InsertLeave * <SID>WriteIfBufferHasName()
-" augroup END
-
-" }}}
-" {{{ colorscheme configs
-
-let g:falcon_background = 0
-let g:falcon_inactive = 1
-
-let g:calvera_italic_comments = 1
-let g:calvera_italic_keywords = 1
-let g:calvera_italic_functions = 1
-let g:calvera_contrast = 1
-
-let g:material_style = 'deep ocean'
-" let g:material_style = 'lighter'
-
-" }}}
-" {{{ material setup
-
-lua << EOF
-
-require('material').setup({
-  contrast = {
-    terminal = true,
-    sidebars = true,
-    floating_windows = true,
-    cursor_line = true,
-    non_current_windows = true
-  },
-
-  plugins = {
-    'gitsigns',
-    'lspsaga',
-    'nvim-cmp',
-    'nvim-web-devicons',
-    'telescope',
-    'trouble'
-  }
-})
-
-EOF
-
-" }}}
-" {{{ nightly setup
-
-lua << EOF
-
-require("nightly").setup({
-  transparent = false,
-  styles = {
-    comments = { italic = true },
-    functions = { italic = false },
-    variables = { italic = false },
-    keywords = { italic = false },
-  },
-  highlights = {},
-})
-
-EOF
-
-" }}}
-" {{{ calvera
-
-let g:calvera_italic_comments = 1
-let g:calvera_italic_keywords = 1
-let g:calvera_italic_functions = 1
-let g:calvera_contrast = 1
-
-" }}}
-" {{{ nebulous
-
-lua << EOF
-
-require("nebulous").setup({
-  variant = "midnight",
-  disable = {
-    background = true,
-    endOfBuffer = false,
-    terminal_colors = false,
-  },
-  italic = {
-    comments   = false,
-    keywords   = true,
-    functions  = false,
-    variables  = true,
-  },
-  custom_colors = { -- this table can hold any group of colors with their respective values
-    LineNr = { fg = "#5BBBDA", bg = "NONE", style = "NONE" },
-    CursorLineNr = { fg = "#E1CD6C", bg = "NONE", style = "NONE" },
-
-    -- it is possible to specify only the element to be changed
-    TelescopePreviewBorder = { fg = "#A13413" },
-    LspDiagnosticsDefaultError = { bg = "#E11313" },
-    TSTagDelimiter = { style = "bold,italic" },
-  }
-})
-
-local setmap = vim.api.nvim_set_keymap
-local options = { silent = true, noremap = true }
-
-setmap("n", "ntc", ":lua require('nebulous.functions').toggle_variant()<CR>", options)
-setmap("n", "nrc", ":lua require('nebulous.functions').random_variant()<CR>", options)
--- setmap("n", "<leader>tw", ":lua require('nebulous.functions').set_variant('variant_name')<CR>", options)
-
-EOF
-
-" }}}
-
-" }}}
-" {{{ colorscheme
-
-set background=dark
-
-" {{{ light colorschemes
-
-" colorscheme fruchtig
-" colorscheme shirotelin
-" colorscheme onehalflight
-" colorscheme paper
-" colorscheme tempus_day
-" colorscheme tempus_totus
-" colorscheme base16-one-light
-" colorscheme base16-github
-" colorscheme base16-mexico-light
-" colorscheme base16-still-alive
-" colorscheme base16-unikitty-light
-
-" }}}
-" {{{ light and dark colorschemes
-
-" colorscheme toast
-" colorscheme leaf
-" colorscheme PaperColor
-" colorscheme catppuccin-latte
-" colorscheme newpaper
-" colorscheme flatwhite
-" colorscheme base16-github
-" colorscheme tempus_day
-
-" }}}
-" {{{ dark colorschemes
-
-colorscheme spacecamp
-" colorscheme base16-colors
-" colorscheme tundra
-" colorscheme base16-railscasts
-" colorscheme tequila-sunrise
-" colorscheme melange
-" colorscheme base16-blueish
-" colorscheme lucid
-" colorscheme base16-ayu-mirage
-" colorscheme vn-night
-" colorscheme base16-summercamp
-" colorscheme base16-tokyodark-terminal
-" colorscheme base16-onedark
-" colorscheme sherbet
-" colorscheme slate
-" colorscheme murphy
-" colorscheme gruvbox-baby
-" colorscheme base16-tokyo-city-dark
-" colorscheme nightly
-" colorscheme tender
-" colorscheme dogrun
-" colorscheme tempus_future
-" colorscheme tempus_night
-" colorscheme tempus_warp
-" colorscheme desertink
-" colorscheme nebulous
-" colorscheme base16-material-palenight
-" colorscheme base16-horizon-terminal-dark
-" colorscheme base16-irblack
-" colorscheme tequila-sunrise
-" colorscheme kanagawa
-" colorscheme material
-" colorscheme nightfox
-" colorscheme oxocarbon
-" colorscheme base16-gruvbox-dark-medium
-" colorscheme abscs
-" colorscheme tokyonight-night
-" colorscheme zephyr
-" colorscheme melange
-" colorscheme aurora
-" colorscheme one-nvim
-" colorscheme falcon
-" colorscheme calvera
-" colorscheme vn-night
-" colorscheme everblush
-
-" }}}
-
-" }}}
-
-" {{{ gui configuration
-
-if has('gui_running') || exists('g:GtkGuiLoaded')
-
-" {{{ font & dynamic size
-
-" {{{ reference
-
-" Iosevka
-" FuraCode Nerd Font | cali
-" Hasklug Nerd Font
-" Input Mono (Normal|Narrow|Condensed|Compressed)
-" Rec Mono (Linear|Duotone|SemiCasual|Casual)
-" Victor Mono
-" Operator Mono
-" Hermit
-" Source Code Pro
-" JetBrainsMono Nerd Font
-" BlexMono Nerd Font | liga, zero, frac
-
-" }}}
-" {{{ functions
-
-func! SetFont()
-  let &guifont = g:font_name . ' ' . g:font_size
-endfunc
-
-func! AdjustFontSize(delta)
-  let g:font_size += a:delta
-  call SetFont()
-endfunc
-
-" }}}
-" {{{ keybindings
-
-nnoremap <C-=> :call AdjustFontSize(1)<cr>
-nnoremap <C-+> :call AdjustFontSize(1)<cr>
-nnoremap <C--> :call AdjustFontSize(-1)<cr>
-
-" }}}
-
-let g:font_name = 'JetBrainsMono Nerd Font'
-let g:font_features = ''
-let g:font_size = 10
-
-call SetFont()
-
-" }}}
-" {{{ terminal
-
-tnoremap <Esc> <C-\><C-n>
-
-" }}}
-" {{{ Neovim-GTK
-
-if has('nvim') && ! has('gui_vimr')
-  " Paste via shift + insert
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
-
-  call rpcnotify(1, 'Gui', 'Option', 'Popupmenu', 0)
-  call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
-  call rpcnotify(1, 'Gui', 'Option', 'Cmdline', 0)
-
-  let g:GuiInternalClipboard = 1
-endif
-
-" }}}
-" {{{ cursor init
-
-if has('nvim') && has('gui_running')
-  set guicursor+=n-v-c-sm:block
-  set guicursor+=i-ci-ve:ver25
-  set guicursor+=r-cr-o:hor20
-  set guicursor+=a:blinkon0
-endif
-
-" }}}
-
-endif
-
 " }}}
 " {{{ mason
 
@@ -1070,7 +987,6 @@ null_ls.setup({
     null_ls.builtins.diagnostics.stylint,
     null_ls.builtins.diagnostics.tidy,
     null_ls.builtins.diagnostics.todo_comments,
-    null_ls.builtins.diagnostics.typos,
     -- null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.yamllint,
 
@@ -1107,95 +1023,6 @@ null_ls.setup({
 EOF
 
 " }}}
-" {{{ ctrl+backspace delete word
-
-imap <C-BS> <C-W>
-noremap! <C-BS> <C-w>
-noremap! <C-h> <C-w>
-
-" }}}
-" {{{ help
-
-nnoremap <leader><S-h> :execute 'vert help ' . expand('<cword>')<cr>
-
-" }}}
-" {{{ fast quit
-
-nnoremap <silent> <leader>q :qa<cr>
-nnoremap <silent> <leader>Q :q!<cr>
-
-" }}}
-" {{{ fast save
-
-nnoremap <silent><leader>SS<CR>
-
-" }}}
-" {{{ folds
-
-func! s:xf_folds_toggle() abort
-  if &foldlevel > 0
-    call <SID>xf_folds_collapse()
-  else
-    call <SID>xf_folds_expand()
-  endif
-endfunc
-
-func! s:xf_folds_collapse() abort
-  let &foldlevel = 0
-endfunc
-
-func! s:xf_folds_expand() abort
-  let &foldlevel = 99
-endfunc
-
-" Toggle fold
-nnoremap <silent> <leader><space> @=(foldlevel('.')?'za':"\<space>")<CR>
-
-" Toggle all folds
-nnoremap <silent> fff :call <SID>xf_folds_toggle()<CR>
-
-" }}}
-" {{{ search highlights
-
-nnoremap <leader>hl :nohl<CR>
-
-" }}}
-" {{{ splits
-
-nnoremap <up> :resize -1<CR>
-nnoremap <down> :resize +1<CR>
-nnoremap <left> :vert resize +1<CR>
-nnoremap <right> :vert resize -1<CR>
-
-nnoremap <leader>cs :CleverSplit<CR>
-nnoremap <leader>ch :CleverHSplit<CR>
-nnoremap <leader>cv :CleverVSplit<CR>
-
-" }}}
-" {{{ buffers
-
-nnoremap <leader>bo :BufOnly<CR>
-nnoremap <leader>bn :BufferNext<CR>
-nnoremap <leader>bN :BufferPrevious<CR>
-
-" }}}
-" {{{ terminal splits
-
-command! -nargs=* T split | terminal <args>
-command! -nargs=* VT vsplit | terminal <args>
-
-" }}}
-" {{{ terminal exit shortcut
-
-tnoremap <Esc> <C-\><C-n>
-
-" }}}
-" {{{ trim trailing spaces
-
-nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
-
-" }}}
-
 " {{{ tabnine-nvim
 
 lua << EOF
@@ -1213,7 +1040,6 @@ require('tabnine').setup({
 EOF
 
 " }}}
-
 " {{{ lualine
 
 lua << EOF
@@ -1270,12 +1096,6 @@ require("lualine").setup {
 EOF
 
 " }}}
-" {{{ bufutils
-
-nnoremap <leader>zi :BResizeZoom<cr>
-nnoremap <leader>zo :BResizeZoom<cr>
-
-" }}}
 " {{{ devicons
 
 lua << EOF
@@ -1301,9 +1121,6 @@ require("sessions").setup({
 
 EOF
 
-nnoremap <leader>ss <cmd>SessionsSave<cr>
-nnoremap <leader>sl <cmd>SessionsLoad<cr>
-
 " }}}
 " {{{ workspaces
 
@@ -1327,9 +1144,6 @@ require("workspaces").setup({
 })
 
 EOF
-
-nnoremap <leader>wo <cmd>WorkspacesOpen<cr>
-nnoremap <leader>wl <cmd>WorkspacesList<cr>
 
 " }}}
 " {{{ telescope
@@ -1359,14 +1173,6 @@ require("telescope").load_extension("workspaces")
 require("telescope").load_extension("ui-select")
 
 EOF
-
-nnoremap <c-p> <cmd>Telescope find_files<cr>
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <leader>fw <cmd>Telescope workspaces<cr>
-nnoremap <leader>fd <cmd>Telescope diagnostics<cr>
 
 " }}}
 " {{{ nvim-tree
@@ -1455,7 +1261,6 @@ function on_attach(bufnr)
   vim.keymap.set('n', 'g?',    ntree_api.tree.toggle_help,                  opts('Help'))
   vim.keymap.set('n', 'gy',    ntree_api.fs.copy.absolute_path,             opts('Copy Absolute Path'))
   vim.keymap.set('n', 'H',     ntree_api.tree.toggle_hidden_filter,         opts('Toggle Dotfiles'))
-  vim.keymap.set('n', 'I',     ntree_api.tree.toggle_gitignore_filter,      opts('Toggle Git Ignore'))
   vim.keymap.set('n', 'J',     ntree_api.node.navigate.sibling.last,        opts('Last Sibling'))
   vim.keymap.set('n', 'K',     ntree_api.node.navigate.sibling.first,       opts('First Sibling'))
   vim.keymap.set('n', 'm',     ntree_api.marks.toggle,                      opts('Toggle Bookmark'))
@@ -1503,7 +1308,6 @@ require("nvim-tree").setup({
 EOF
 
 " }}}
-
 " {{{ vim-grepper
 
 let g:grepper = {}
@@ -1513,38 +1317,6 @@ let g:grepper.quickfix = 1
 let g:grepper.open = 1
 let g:grepper.switch = 1
 let g:grepper.dir = 'repo,file'
-
-nnoremap <silent> GG :Grepper<cr>
-nnoremap <silent> GC :Grepper-cword -noprompt<cr>
-
-" }}}
-" {{{ barbar
-
-nnoremap <silent>    <A-,> <Cmd>BufferPrevious<CR>
-nnoremap <silent>    <A-.> <Cmd>BufferNext<CR>
-
-nnoremap <silent>    <A-<> <Cmd>BufferMovePrevious<CR>
-nnoremap <silent>    <A->> <Cmd>BufferMoveNext<CR>
-
-nnoremap <silent>    <A-1> <Cmd>BufferGoto 1<CR>
-nnoremap <silent>    <A-2> <Cmd>BufferGoto 2<CR>
-nnoremap <silent>    <A-3> <Cmd>BufferGoto 3<CR>
-nnoremap <silent>    <A-4> <Cmd>BufferGoto 4<CR>
-nnoremap <silent>    <A-5> <Cmd>BufferGoto 5<CR>
-nnoremap <silent>    <A-6> <Cmd>BufferGoto 6<CR>
-nnoremap <silent>    <A-7> <Cmd>BufferGoto 7<CR>
-nnoremap <silent>    <A-8> <Cmd>BufferGoto 8<CR>
-nnoremap <silent>    <A-9> <Cmd>BufferGoto 9<CR>
-nnoremap <silent>    <A-0> <Cmd>BufferLast<CR>
-
-nnoremap <silent>    <A-p> <Cmd>BufferPin<CR>
-
-nnoremap <silent>    <A-c> <Cmd>BufferClose<CR>
-
-nnoremap <silent> <Space>bb <Cmd>BufferOrderByBufferNumber<CR>
-nnoremap <silent> <Space>bd <Cmd>BufferOrderByDirectory<CR>
-nnoremap <silent> <Space>bl <Cmd>BufferOrderByLanguage<CR>
-nnoremap <silent> <Space>bw <Cmd>BufferOrderByWindowNumber<CR>
 
 " }}}
 " {{{ trouble
@@ -1765,7 +1537,6 @@ require('mason-lspconfig').setup({
   handlers = handlers,
   automatic_installation = true,
   ensure_installed = {
-    'typos_lsp',
     'bashls',
     'cssls',
     'unocss',
@@ -1813,14 +1584,17 @@ augroup UltiSnipsAddFiletypes
   autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
 augroup END
 
+augroup ultisnips_no_auto_expansion
+    au!
+    au VimEnter * au! UltiSnips_AutoTrigger
+augroup END
+
 let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsExpandTrigger = '<cr>'
+let g:UltiSnipsExpandTrigger = '<c-x>'
 let g:UltiSnipsListSnippets = '<c-s><c-l>'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 let g:UltiSnipsSnippetDirectories = [s:GetUserSnippetsDirPath() . '/ultisnips']
-
-nnoremap <c-r><c-s> :call UltiSnips#RefreshSnippets()<cr>
 
 " }}}
 " {{{ nvim-lightbulb
@@ -1855,14 +1629,6 @@ require('tabby.tabline').use_preset('active_wins_at_tail', {
 })
 
 EOF
-
-nnoremap <silent> <leader>ta :$tabnew<cr>
-nnoremap <silent> <leader>tc :tabclose<cr>
-nnoremap <silent> <leader>to :tabonly<cr>
-nnoremap <silent> <leader>tn :tabn<cr>
-nnoremap <silent> <leader>tp :tabp<cr>
-nnoremap <silent> <leader>tmp :-tabmove<cr>
-nnoremap <silent> <leader>tmn :+tabmove<cr>
 
 " }}}
 " {{{ neoscroll
@@ -1934,27 +1700,7 @@ require('smart-splits').setup({
   },
 })
 
-vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
-vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
-vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
-vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
-
-vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
-vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
-vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
-vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
-
-vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
-vim.keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
-vim.keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
-vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
-
 EOF
-
-" }}}
-" {{{ twilight
-
-" lua require("twilight").setup()
 
 " }}}
 " {{{ zen-mode
@@ -1962,51 +1708,9 @@ EOF
 lua require("zen-mode").setup()
 
 " }}}
-" {{{ dashboard-nvim
-
-" lua require("dashboard").setup()
-
-" }}}
-" {{{ vim-jsx-pretty-template
-
-" augroup JsPreTemplate
-"   autocmd!
-"   autocmd FileType javascript JsPreTmpl
-"   autocmd FileType javascript.jsx JsPreTmpl
-"   autocmd FileType typescript JsPreTmpl
-"   autocmd FileType typescript syn clear foldBraces
-" augroup END
-
-" }}}
 " {{{ inc-rename
 
-lua << EOF
-
-require("inc_rename").setup()
-
-vim.keymap.set("n", "<leader>rn", function()
-  return ":IncRename " .. vim.fn.expand("<cword>")
-end, { expr = true })
-
-EOF
-
-" }}}
-" {{{ toggleterm
-
-lua << EOF
-
-require'FTerm'.setup({
-    border = 'double',
-    dimensions  = {
-        height = 0.9,
-        width = 0.9,
-    },
-})
-
-vim.keymap.set('n', '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>')
-vim.keymap.set('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
-
-EOF
+lua require("inc_rename").setup()
 
 " }}}
 " {{{ range-highlight
@@ -2131,11 +1835,6 @@ require('illuminate').configure({
 EOF
 
 " }}}
-" {{{ modicator
-
-" lua require("modicator").setup()
-
-" }}}
 " {{{ smartcolumn
 
 lua require("smartcolumn").setup()
@@ -2206,11 +1905,6 @@ require('glance').setup({
 
 EOF
 
-nnoremap <silent> <leader>Gr :Glance references<cr>
-nnoremap <silent> <leader>Gd :Glance definitions<cr>
-nnoremap <silent> <leader>Gt :Glance type_definitions<cr>
-nnoremap <silent> <leader>Gi :Glance implementations<cr>
-
 " }}}
 " {{{ vim-lexical
 
@@ -2223,12 +1917,6 @@ augroup lexical
   autocmd FileType textile call lexical#init()
   autocmd FileType text call lexical#init({ 'spell': 0 })
 augroup END
-
-" }}}
-" {{{ ScrollColors
-
-map <silent><F3> :NEXTCOLOR<cr>
-map <silent><F2> :PREVCOLOR<cr>
 
 " }}}
 " {{{ vim-wheel
@@ -2252,16 +1940,6 @@ lua require('hypersonic').setup({})
 " {{{ sort-import
 
 lua require('sort-import').setup()
-
-" }}}
-" {{{ neoformat
-
-let g:neoformat_try_node_exe = 1
-
-augroup autoformat
-  autocmd!
-  autocmd BufWritePre *.js,*.ts,*.tsx Neoformat
-augroup END
 
 " }}}
 " {{{ buffer-closer
@@ -2324,7 +2002,6 @@ lua require('lsp-progress').setup()
 " {{{ nvim-toggler.nvim
 
 lua require('nvim-toggler').setup()
-lua vim.keymap.set({ 'n', 'v' }, '<leader>cl', require('nvim-toggler').toggle)
 
 " }}}
 " {{{ tabout.nvim
@@ -2369,14 +2046,6 @@ lua require("auto-save").setup()
 
 lua require'hop'.setup {}
 
-nnoremap <silent>Hw :HopWord<CR>
-nnoremap <silent>Hl :HopLine<CR>
-nnoremap <silent>Hls :HopLineStart<CR>
-nnoremap <silent>Ha :HopAnywhere<CR>
-nnoremap <silent>Hc1 :HopChar1<CR>
-nnoremap <silent>Hc2 :HopChar2<CR>
-nnoremap <silent>Hp :HopPattern<CR>
-
 " }}}
 " {{{ overlength
 
@@ -2412,41 +2081,6 @@ require('overlength').setup({
 })
 
 EOF
-
-" }}}
-" {{{ smart-tab
-
-" lua << EOF
-"
-" require('smart-tab').setup({
-"     -- default options:
-"     -- list of tree-sitter node types to filter
-"     skips = { "string_content" },
-"     -- default mapping, set `false` if you don't want automatic mapping
-"     mapping = "<tab>",
-"     -- filetypes to exclude
-"     exclude_filetypes = {}
-" })
-"
-" vim.keymap.set("n", "<tab>", require('smart-tab').smart_tab)
-"
-" EOF
-
-" }}}
-" {{{ inlay-hints
-
-" lua << EOF
-"
-" require("inlay-hints").setup({
-"   -- Enable InlayHints commands, include `InlayHintsToggle`,
-"   -- `InlayHintsEnable` and `InlayHintsDisable`
-"   commands = { enable = true },
-"
-"   -- Enable the inlay hints on `LspAttach` event
-"   autocmd = { enable = true }
-" })
-"
-" EOF
 
 " }}}
 " {{{ vim-wiki
@@ -2537,11 +2171,6 @@ let g:vimwiki_valid_html_tags = 'b,i,s,u,sub,sup,kbd,br,hr,pre,script'
 " let g:vimwiki_filetypes = ['vimwiki']
 
 " }}}
-" {{{ - autocmd init
-
-" autocmd FileType vimwiki UltiSnipsAddFiletypes <SID>xf_init()
-
-" }}}
 
 " }}}
 " {{{ switch
@@ -2579,36 +2208,16 @@ require("jester").setup({
 EOF
 
 " }}}
-" {{{ one_monokai
-
-" lua << EOF
-"
-" require("one_monokai").setup({
-"     transparent = false,
-"     colors = {},
-"     themes = function(colors)
-"         return {}
-"     end,
-"     italics = true,
-" })
-"
-" EOF
-
-" }}}
 " {{{ custom quickfix
 
 lua << EOF
 
-local opts = { noremap=true, silent=true }
-
-local function quickfix()
+function quickfix()
     vim.lsp.buf.code_action({
         filter = function(a) return a.isPreferred end,
         apply = true
     })
 end
-
-vim.keymap.set('n', 'qqf', quickfix, opts)
 
 EOF
 
@@ -2617,21 +2226,11 @@ EOF
 
 let test#strategy = 'floaterm'
 
-nmap <silent> <leader>tt :TestNearest<CR>
-nmap <silent> <leader>tf :TestFile<CR>
-nmap <silent> <leader>ts :TestSuite<CR>
-nmap <silent> <leader>tl :TestLast<CR>
-
 " }}}
 " {{{ vim-isort
 
 let g:vim_isort_map = '<C-i>'
 let g:vim_isort_python_version = 'python3'
-
-" }}}
-" {{{ trouble
-
-nnoremap <silent><leader>T :TroubleToggle<cr>
 
 " }}}
 " {{{ better-whitespace
@@ -2757,46 +2356,11 @@ require('true-zen').setup({
 			enabled = false,
 			font = "+3"
 		},
-		-- twilight = true,
 		lualine = true
 	},
 })
 
-vim.api.nvim_set_keymap("n", "<leader>zn", ":TZNarrow<CR>", {})
-vim.api.nvim_set_keymap("v", "<leader>zn", ":'<,'>TZNarrow<CR>", {})
-vim.api.nvim_set_keymap("n", "<leader>zf", ":TZFocus<CR>", {})
-vim.api.nvim_set_keymap("n", "<leader>zm", ":TZMinimalist<CR>", {})
-vim.api.nvim_set_keymap("n", "<leader>za", ":TZAtaraxis<CR>", {})
-
 EOF
-
-" }}}
-" {{{ twilight.nvim
-
-" lua << EOF
-"
-" require('twilight').setup({
-"   dimming = {
-"     alpha = 0.25, -- amount of dimming
-"     -- we try to get the foreground from the highlight groups or fallback color
-"     color = { "Normal", "#ffffff" },
-"     term_bg = "#000000", -- if guibg=NONE, this will be used to calculate text color
-"     inactive = false, -- when true, other windows will be fully dimmed (unless they contain the same buffer)
-"   },
-"   context = 10, -- amount of lines we will try to show around the current line
-"   treesitter = true, -- use treesitter when available for the filetype
-"   -- treesitter is used to automatically expand the visible text,
-"   -- but you can further control the types of nodes that should always be fully expanded
-"   expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
-"     "function",
-"     "method",
-"     "table",
-"     "if_statement",
-"   },
-"   exclude = {}, -- exclude these filetypes
-" })
-"
-" EOF
 
 " }}}
 " {{{ vim-clap
@@ -2805,26 +2369,6 @@ let g:clap_theme = 'shirotelin'
 
 " }}}
 " {{{ vim-vsnip
-
-imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-
-" Expand or jump
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-
-" Jump forward or backward
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-
-" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
-" See https://github.com/hrsh7th/vim-vsnip/pull/50
-nmap        s   <Plug>(vsnip-select-text)
-xmap        s   <Plug>(vsnip-select-text)
-nmap        S   <Plug>(vsnip-cut-text)
-xmap        S   <Plug>(vsnip-cut-text)
 
 " If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
 let g:vsnip_filetypes = {}
@@ -2865,12 +2409,6 @@ require('tsc').setup({
 })
 
 EOF
-
-" }}}
-" {{{ accelerated-jk
-
-nmap j <Plug>(accelerated_jk_gj)
-nmap k <Plug>(accelerated_jk_gk)
 
 " }}}
 " {{{ bookmarks.nvim
@@ -3023,106 +2561,6 @@ callback = highlight_symbol,
 EOF
 
 " }}}
-" {{{ gen (https://github.com/David-Kunz/gen.nvim)
-
-" {{{ all models
-
-" 'llava' 'mistra' 'mixtra' 'starling-l' 'neural-cha' 'codellam'
-" 'mistral-openorc' 'orca-min' 'deepseek-code' 'vicun''phind-codellam'
-" 'dolphin-mixtra' 'wizard-vicuna-uncensore' 'ph' 'dolphin-mistra' 'zephy'
-" 'wizardcode' 'openherme'   'opencha' 'wizard-mat' 'nous-herme' 'falco'
-" 'tinyllam' 'codeu' 'dolphin-ph' 'starcode' 'everythingl' 'stable-belug'
-" 'wizardlm-uncensore' 'y' 'bakllav' 'sola' 'yarn-mistra' 'sqlcode'
-" 'wizard-vicun' 'samantha-mistra' 'stable-cod' 'stablelm-zephy' 'qwe'
-" 'meditro' 'magicode' 'deepseek-ll' 'codeboog' 'mistrallit' 'llama-pr'
-" 'goliat' 'nexusrave' 'notu' 'tinydolphi' 'wizardl' 'alfre' 'xwinl'
-" 'megadolphi' 'notu'
-
-" }}}
-" {{{ installed models
-
-" 'wizardcoder'
-" 'codebooga'
-" 'starcoder'
-
-" }}}
-
-lua << EOF
-
--- {{{ setup
-
-local gen = require('gen')
-local prompts = gen.prompts
-
-gen.setup({
-  debug = false,
-  show_prompt = true,
-  show_model = true,
-  model = "codebooga",
-  no_auto_close = false,
-  display_mode = "split",
-  list_models = '<omitted lua function>',
-  init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
-  command = "curl --silent --no-buffer -X POST http://localhost:11434/api/generate -d $body"
-})
-
--- }}}
--- {{{ prompts
-
--- {{{ Generate
-
-gen.prompts['Generate'] = {
-  replace = true,
-  prompt = "$input"
-}
-
--- }}}
--- {{{ Ask
-
-gen.prompts['Ask'] = {
-  prompt = "Regarding the following text, $input:\n$text"
-}
-
--- }}}
--- {{{ Review Code
-
-gen.prompts['Review Code'] = {
-  prompt = "Review the following code and make concise suggestions:\n```$filetype\n$text\n```"
-}
-
--- }}}
--- {{{ Elaborate Text
-
-gen.prompts['Elaborate_Text'] = {
-  replace = true,
-  prompt = "Elaborate the following text:\n$text"
-}
-
--- }}}
--- {{{ Enhance Code
-
-gen.prompts['Enhance_Code'] = {
-  replace = true,
-  extract = "```$filetype\n(.-)```",
-  prompt = "Enhance the following code, only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
-}
-
--- }}}
--- {{{ Fix Code
-
-gen.prompts['Fix_Code'] = {
-  replace = true,
-  extract = "```$filetype\n(.-)```",
-  prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```"
-}
-
--- }}}
-
--- }}}
-
-EOF
-
-" }}}
 " {{{ markdown.nvim
 
 lua require('markdown').setup()
@@ -3265,7 +2703,7 @@ lua << EOF
 
 require("wtf").setup({
     popup_type = "popup",
-    openai_api_key = vim.env.VIM_WTF_OPENAI_API_KEY,
+    openai_api_key = vim.env.OPENAI_API_KEY,
     openai_model_id = "gpt-3.5-turbo",
     context = true,
     language = "english",
@@ -3314,8 +2752,59 @@ let g:gutentags_file_list_command = 'fd -e c -e h'
 
 " }}}
 
-" {{{ custom keybindings
+" }}}
+" {{{ keybindings
 
+" {{{ profiling
+
+function! s:StartProfiling()
+    execute 'profile start profile.log'
+    execute 'profile func *'
+    execute 'profile file *'
+endfunction
+
+function! s:StopProfiling()
+    execute 'profile pause'
+    noautocmd qall!
+endfunction
+
+nnoremap PR :call <SID>StartProfiling()<cr>
+nnoremap PS :call <SID>StopProfiling()<cr>
+
+" }}}
+" {{{ sessions
+
+nnoremap <leader>ss <cmd>SessionsSave<cr>
+nnoremap <leader>sl <cmd>SessionsLoad<cr>
+
+" }}}
+" {{{ workspaces
+
+nnoremap <leader>wo <cmd>WorkspacesOpen<cr>
+nnoremap <leader>wl <cmd>WorkspacesList<cr>
+
+" }}}
+" {{{ vim-thematic
+
+nnoremap tn :ThematicNext<cr>
+nnoremap tp :ThematicPrevious<cr>
+nnoremap tr :ThematicRandom<cr>
+nnoremap tnp :Thematic newpaper<cr>
+nnoremap tir :Thematic base16-irblack<cr>
+nnoremap tam :Thematic material<cr>
+nnoremap tka :Thematic kanagawa<cr>
+
+" <c-l> to clear the highlight, as well as redraw the screen
+noremap <silent> <C-l> :<C-u>nohlsearch<cr><C-l>
+inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
+
+" }}}
+" {{{ bufutils
+
+nnoremap <leader>zi :BResizeZoom<cr>
+nnoremap <leader>zo :BResizeZoom<cr>
+
+" }}}
 " {{{ quote word
 
 nnoremap <silent> <leader>sr" ciw""<Esc>P
@@ -3375,7 +2864,7 @@ function! ToggleQuickFix()
     endif
 endfunction
 
-nnoremap <silent> <leader>cc :call ToggleQuickFix()<cr>
+nnoremap <silent> QF :call ToggleQuickFix()<cr>
 
 " }}}
 " {{{ sort lines
@@ -3411,7 +2900,7 @@ nnoremap <silent> <leader>RR :source $MYVIMRC<cr>
 " {{{ insert snippet folds
 
 function! s:GetFoldShortcutExecString(fold_str)
-  return GetCommentString() . ' ' . a:fold_str
+  return <SID>GetCommentString() . ' ' . a:fold_str
 endfunction
 
 function! s:InsertFoldEndAndStart()
@@ -3447,28 +2936,23 @@ nnoremap <silent> ]d :lua vim.diagnostic.goto_next({ border = "single" })<cr>
 " }}}
 " {{{ lsp
 
-nnoremap <silent> lD :lua vim.lsp.buf.declaration()<cr>
-nnoremap <silent> ld :lua vim.lsp.buf.definition()<cr>
-nnoremap <silent> lt :lua vim.lsp.buf.type_definition()<cr>
-nnoremap <silent> lr :lua vim.lsp.buf.references()<cr>
-nnoremap <silent> li :lua vim.lsp.buf.implementation()<cr>
-nnoremap <silent> lh :lua vim.lsp.buf.hover()<cr>
-nnoremap <silent> ls :lua vim.lsp.buf.signature_help()<cr>
-nnoremap <silent> lf :lua vim.lsp.buf.format()<cr>
-nnoremap <silent> lrn :lua vim.lsp.buf.rename()<cr>
-nnoremap <silent> lca :lua vim.lsp.buf.code_action()<cr>
-nnoremap <silent> lcap :lua require('actions-preview').code_actions<cr>
+nnoremap <silent> LD :lua vim.lsp.buf.declaration()<cr>
+nnoremap <silent> Ld :lua vim.lsp.buf.definition()<cr>
+nnoremap <silent> Lt :lua vim.lsp.buf.type_definition()<cr>
+nnoremap <silent> Lr :lua vim.lsp.buf.references()<cr>
+nnoremap <silent> Li :lua vim.lsp.buf.implementation()<cr>
+nnoremap <silent> Lh :lua vim.lsp.buf.hover()<cr>
+nnoremap <silent> Ls :lua vim.lsp.buf.signature_help()<cr>
+nnoremap <silent> Lf :lua vim.lsp.buf.format()<cr>
+nnoremap <silent> Lrn :lua vim.lsp.buf.rename()<cr>
+nnoremap <silent> Lca :lua vim.lsp.buf.code_action()<cr>
+nnoremap <silent> Lcap :lua require('actions-preview').code_actions<cr>
 
 " }}}
 " {{{ refactor insert _isUndefined
 
 nnoremap <silent> <leader>rd :s/typeof \(\w*\) === 'undefined'/_isUndefined(\1)/g<cr>
 nnoremap <silent> <leader>rud :s/typeof \(\w*\) !== 'undefined'/!_isUndefined(\1)/g<cr>
-
-" }}}
-" {{{ gen.nvim
-
-lua vim.keymap.set({ 'n', 'v' }, 'GAI', ':Gen<CR>')
 
 " }}}
 " {{{ insert emoji list
@@ -3527,6 +3011,250 @@ nnoremap <silent> <leader>es :NvimTreeResize 30<cr>
 nnoremap <silent> <leader>el :NvimTreeResize 55<cr>
 nnoremap <silent> <leader>ecl :NvimTreeCollapse<cr>
 lua vim.keymap.set('n', '<leader>ep', OpenPathInputAndNavigate)
+
+" }}}
+" {{{ ctrl+backspace delete word
+
+imap <C-BS> <C-W>
+noremap! <C-BS> <C-w>
+noremap! <C-h> <C-w>
+
+" }}}
+" {{{ help
+
+nnoremap HH :execute 'vert help ' . expand('<cword>')<cr>
+
+" }}}
+" {{{ fast quit
+
+nnoremap <silent> <leader>q :qa<cr>
+nnoremap <silent> <leader>Q :q!<cr>
+
+" }}}
+" {{{ fast save
+
+nnoremap <silent><leader>SS<CR>
+
+" }}}
+" {{{ folds
+
+" {{{ s:CloseAllFolds
+
+function! s:CloseAllFolds() abort
+  let &foldlevel = 0
+endfunction
+
+" }}}
+" {{{ s:OpenAllFolds
+
+function! s:OpenAllFolds() abort
+  let &foldlevel = 99
+endfunction
+
+" }}}
+" {{{ s:ToggleFolds
+
+function! s:ToggleFolds() abort
+  if &foldlevel > 0
+    call <SID>CloseAllFolds()
+  else
+    call <SID>OpenAllFolds()
+  endif
+endfunction
+
+" }}}
+
+nnoremap <silent> <leader><space> @=(foldlevel('.')?'za':"\<space>")<CR>
+nnoremap <silent> fff :call <SID>ToggleFolds()<CR>
+
+" }}}
+" {{{ search highlights
+
+nnoremap <leader>hl :nohl<CR>
+
+" }}}
+" {{{ splits
+
+nnoremap <up> :resize -1<CR>
+nnoremap <down> :resize +1<CR>
+nnoremap <left> :vert resize +1<CR>
+nnoremap <right> :vert resize -1<CR>
+
+nnoremap <leader>cs :CleverSplit<CR>
+nnoremap <leader>ch :CleverHSplit<CR>
+nnoremap <leader>cv :CleverVSplit<CR>
+
+" }}}
+" {{{ buffers
+
+nnoremap <leader>bo :BufOnly<CR>
+nnoremap <leader>bn :BufferNext<CR>
+nnoremap <leader>bN :BufferPrevious<CR>
+
+" }}}
+" {{{ terminal splits
+
+command! -nargs=* T split | terminal <args>
+command! -nargs=* VT vsplit | terminal <args>
+
+" }}}
+" {{{ terminal exit shortcut
+
+tnoremap <Esc> <C-\><C-n>
+
+" }}}
+" {{{ trim trailing spaces
+
+nnoremap <leader><leader><leader> :%s/\s\+$//e<cr>
+
+" }}}
+" {{{ telescope
+
+nnoremap <c-p> <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fw <cmd>Telescope workspaces<cr>
+nnoremap <leader>fd <cmd>Telescope diagnostics<cr>
+
+" }}}
+" {{{ vim-grepper
+
+nnoremap <silent> GG :Grepper<cr>
+nnoremap <silent> GC :Grepper-cword -noprompt<cr>
+
+" }}}
+" {{{ ultisnips
+
+nnoremap <c-r><c-s> :call UltiSnips#RefreshSnippets()<cr>
+
+" }}}
+" {{{ tabline
+
+nnoremap <silent> <leader>ta :$tabnew<cr>
+nnoremap <silent> <leader>tc :tabclose<cr>
+nnoremap <silent> <leader>to :tabonly<cr>
+nnoremap <silent> <leader>tn :tabn<cr>
+nnoremap <silent> <leader>tp :tabp<cr>
+nnoremap <silent> <leader>tmp :-tabmove<cr>
+nnoremap <silent> <leader>tmn :+tabmove<cr>
+
+" }}}
+" {{{ smart-splits
+
+nnoremap <silent> <A-h> :lua require('smart-splits').resize_left()<cr>
+nnoremap <silent> <A-j> :lua require('smart-splits').resize_down()<cr>
+nnoremap <silent> <A-k> :lua require('smart-splits').resize_up()<cr>
+nnoremap <silent> <A-l> :lua require('smart-splits').resize_right()<cr>
+
+nnoremap <silent> <C-h> :lua require('smart-splits').move_cursor_left()<cr>
+nnoremap <silent> <C-j> :lua require('smart-splits').move_cursor_down()<cr>
+nnoremap <silent> <C-k> :lua require('smart-splits').move_cursor_up()<cr>
+nnoremap <silent> <C-l> :lua require('smart-splits').move_cursor_right()<cr>
+
+nnoremap <silent> <leader><leader>h :lua require('smart-splits').swap_buf_left()<cr>
+nnoremap <silent> <leader><leader>j :lua require('smart-splits').swap_buf_down()<cr>
+nnoremap <silent> <leader><leader>k :lua require('smart-splits').swap_buf_up()<cr>
+nnoremap <silent> <leader><leader>l :lua require('smart-splits').swap_buf_right()<cr>
+
+" }}}
+" {{{ inc-rename
+
+lua << EOF
+
+vim.keymap.set("n", "<leader>rn", function()
+  return ":IncRename " .. vim.fn.expand("<cword>")
+end, { expr = true })
+
+EOF
+
+" }}}
+" {{{ glance
+
+nnoremap <silent> <leader>Gr :Glance references<cr>
+nnoremap <silent> <leader>Gd :Glance definitions<cr>
+nnoremap <silent> <leader>Gt :Glance type_definitions<cr>
+nnoremap <silent> <leader>Gi :Glance implementations<cr>
+
+" }}}
+" {{{ ScrollColors
+
+map <silent><F3> :NEXTCOLOR<cr>
+map <silent><F2> :PREVCOLOR<cr>
+
+" }}}
+" {{{ nvim-toggler.nvim
+
+nnoremap <silent> <leader>cl :lua require('nvim-toggler').toggle()<cr>
+vnoremap <silent> <leader>cl :lua require('nvim-toggler').toggle()<cr>
+
+" }}}
+" {{{ hop
+
+nnoremap <silent>Hw :HopWord<CR>
+nnoremap <silent>Hl :HopLine<CR>
+nnoremap <silent>Hls :HopLineStart<CR>
+nnoremap <silent>Ha :HopAnywhere<CR>
+nnoremap <silent>Hc1 :HopChar1<CR>
+nnoremap <silent>Hc2 :HopChar2<CR>
+nnoremap <silent>Hp :HopPattern<CR>
+
+" }}}
+" {{{ custom quickfix
+
+lua vim.keymap.set('n', 'qqf', quickfix, { noremap=true, silent=true })
+
+" }}}
+" {{{ vim-test
+
+nmap <silent> <leader>tt :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ts :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+
+" }}}
+" {{{ trouble
+
+nnoremap <silent><leader>T :TroubleToggle<cr>
+
+" }}}
+" {{{ true-zen.nvim
+
+nnoremap <silent> <leader>zn :TZNarrow<cr>
+vnoremap <silent> <leader>zn :'<,'>TZNarrow<cr>
+nnoremap <silent> <leader>zf :TZFocus<cr>
+nnoremap <silent> <leader>zm :TZMinimalist<cr>
+nnoremap <silent> <leader>za :TZAtaraxis<cr>
+
+" }}}
+" {{{ vim-vnsip
+
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+
+" Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+nmap        s   <Plug>(vsnip-select-text)
+xmap        s   <Plug>(vsnip-select-text)
+nmap        S   <Plug>(vsnip-cut-text)
+xmap        S   <Plug>(vsnip-cut-text)
+
+" }}}
+" {{{ accelerated-jk
+
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
 
 " }}}
 
