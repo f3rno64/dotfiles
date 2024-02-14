@@ -100,7 +100,6 @@ Plug 'JMarkin/cmp-diag-codes'
 Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'jcha0713/cmp-tw2css'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-cmdline'
 
 " }}}
 " {{{ snipppets
@@ -1493,27 +1492,6 @@ cmp.setup({
     }
   }, {
     { name = 'buffer' },
-  })
-})
-
-cmp.setup.cmdline('/', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'buffer' }
-  }
-})
-
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    {
-      name = 'cmdline',
-      option = {
-        ignore_cmds = { 'Man', '!' }
-      }
-    }
   })
 })
 
