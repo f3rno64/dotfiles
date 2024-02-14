@@ -66,44 +66,6 @@ Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-tree/nvim-tree.lua'
 
 " }}}
-" {{{ lsp
-
-Plug 'neovim/nvim-lspconfig'
-Plug 'reksar/nvim-lsp-python'
-Plug 'williamboman/mason.nvim'
-Plug 'williamboman/mason-lspconfig.nvim'
-Plug 'RubixDev/mason-update-all'
-Plug 'dnlhc/glance.nvim'
-Plug 'pwntester/nvim-lsp'
-Plug 'nvimtools/none-ls.nvim'
-
-" }}}
-" {{{ cmp
-
-Plug 'petertriho/cmp-git'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'f3fora/cmp-spell'
-Plug 'hrsh7th/cmp-emoji'
-Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-Plug 'rasulomaroff/cmp-bufname'
-Plug 'amarakon/nvim-cmp-buffer-lines'
-Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
-Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
-Plug 'JMarkin/cmp-diag-codes'
-Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
-Plug 'jcha0713/cmp-tw2css'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-cmdline'
-
-" }}}
-" {{{ snipppets
-
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
-" }}}
 " {{{ tabline
 
 " Plug 'romgrk/barbar.nvim'
@@ -127,10 +89,9 @@ Plug 'Quramy/vim-js-pretty-template'
 
 Plug 'SidOfc/mkdx'
 Plug 'tadmccorkle/markdown.nvim'
-Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 Plug 'tpope/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install',  }
 Plug 'wallpants/github-preview.nvim'
 
 " }}}
@@ -159,44 +120,41 @@ Plug 'elpiloto/significant.nvim'
 Plug 'madox2/vim-ai'
 
 " }}}
+" {{{ mason
+
+Plug 'williamboman/mason.nvim'
+
+" }}}
+" {{{ linting
+
+Plug 'mfussenegger/nvim-lint'
+
+" }}}
 " {{{ other
 
-" let g:polyglot_disabled = ['markdown']
-
-Plug 'junegunn/goyo.vim'
+Plug 'godlygeek/tabular'
 Plug 'liangxianzhe/floating-input.nvim'
 Plug 'danilamihailov/vim-tips-wiki'
 Plug 'james1236/backseat.nvim'
-Plug 'nvim-lua/lsp-status.nvim'
 Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 Plug 'piersolenski/wtf.nvim'
-Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/vim-emoji'
-" Plug 'sheerun/vim-polyglot'
 Plug 'sindrets/diffview.nvim'
 Plug 'jghauser/follow-md-links.nvim'
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'tom-anders/telescope-vim-bookmarks.nvim'
 Plug 'rhysd/accelerated-jk'
-Plug 'dmmulroy/tsc.nvim'
-" Plug 'rcarriga/nvim-notify'
-Plug 'rafamadriz/friendly-snippets'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 Plug 'Pocco81/true-zen.nvim'
 Plug 'nvim-focus/focus.nvim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'christoomey/vim-sort-motion'
 Plug 'jbgutierrez/vim-better-comments'
-Plug 'fisadev/vim-isort'
-Plug 'voldikss/vim-floaterm'
 Plug 'vim-test/vim-test'
 Plug 'David-Kunz/jester'
 Plug 'AndrewRadev/switch.vim'
-Plug 'joaohkfaria/vim-jest-snippets'
 Plug 'lcheylus/overlength.nvim'
 Plug 'smoka7/hop.nvim', { 'branch': 'master' }
 Plug 'anuvyklack/keymap-amend.nvim'
@@ -204,13 +162,10 @@ Plug 'okuuva/auto-save.nvim'
 Plug 'declancm/cinnamon.nvim'
 Plug 'abecodes/tabout.nvim'
 Plug 'nguyenvukhang/nvim-toggler'
-Plug 'linrongbin16/lsp-progress.nvim'
 Plug 'roobert/search-replace.nvim'
-Plug 'ray-x/lsp_signature.nvim'
 Plug 'axelvc/template-string.nvim'
 Plug 'sontungexpt/buffer-closer'
 Plug 'jamestthompson3/sort-import.nvim'
-Plug 'github/copilot.vim'
 Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
 Plug 'preservim/vim-wheel'
@@ -223,7 +178,6 @@ Plug 'wincent/terminus'
 Plug 'stevearc/dressing.nvim'
 Plug 'jghauser/mkdir.nvim'
 Plug 'tpope/vim-eunuch'
-" Plug 'beauwilliams/focus.nvim'
 Plug 'jinh0/eyeliner.nvim'
 Plug 'smitajit/bufutils.vim'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
@@ -237,7 +191,6 @@ Plug 'hashivim/vim-terraform'
 Plug 'f3rno64/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 Plug 'folke/trouble.nvim'
 Plug 'weilbith/nvim-code-action-menu', { 'on': 'CodeActionMenu' }
-Plug 'kosayoda/nvim-lightbulb'
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'ggandor/leap.nvim'
 Plug 'tpope/vim-speeddating'
@@ -247,7 +200,6 @@ Plug 'RRethy/vim-illuminate'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'kevinhwang91/nvim-bqf'
 Plug 'karb94/neoscroll.nvim'
-Plug 'onsails/lspkind.nvim'
 Plug 'kylechui/nvim-surround'
 Plug 'folke/todo-comments.nvim'
 Plug 'lewis6991/foldsigns.nvim'
@@ -324,42 +276,6 @@ call plug#end()
 " }}}
 " {{{ functions
 
-" {{{ s:GetUserSnippetsDirPath
-
-function s:GetUserSnippetsDirPath()
-  if empty($XF_SRC_DIR)
-    return ''
-  endif
-
-  let l:path = $XF_SRC_DIR . '/github/' . $USER . '/vim-snippets'
-
-  if !maktaba#path#Exists(l:path)
-    return ''
-  else
-    return l:path
-  endif
-endfunction
-
-" }}}
-" {{{ s:GetUserSnippetFilePath
-
-function s:GetUserSnippetFilePath(filetype)
-  let l:snippets_path = s:GetUserSnippetsDirPath()
-
-  if empty(l:snippets_path)
-    return ''
-  else
-    let l:ft_snippets_path = l:snippets_path . '/ultisnips/' . a:filetype . '.snippets'
-
-    if maktaba#path#Exists(l:ft_snippets_path)
-      return l:ft_snippets_path
-    else
-      return ''
-    endif
-  endif
-endfunction
-
-" }}}
 " {{{ s:GetCommentString
 
 
@@ -441,11 +357,6 @@ augroup editing
   autocmd InsertLeave * set nopaste
   autocmd BufEnter * set number
   autocmd BufLeave * set nonumber
-augroup END
-
-augroup SnippetFoldMethod
-  autocmd!
-  autocmd FileType snippets setlocal foldmethod=marker
 augroup END
 
 " hacky fix for syntax highlighting in large files
@@ -553,6 +464,25 @@ endif
 endif
 
 " }}}
+" {{{ diagnostics
+
+lua << EOF
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = true,
+  float = {
+    border = "rounded",
+    source = true,
+  },
+  severity_sort = true,
+})
+
+EOF
+
+" }}}
 " {{{ colorschemes
 
 set background=dark
@@ -650,6 +580,265 @@ colorscheme base16-tokyo-city-dark
 " }}}
 " {{{ plugin configs
 
+" {{{ mason
+
+lua require('mason').setup({})
+
+" }}}
+" {{{ mason-lspconfig
+
+lua << EOF
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local handlers = {
+  function (server_name)
+    require("lspconfig")[server_name].setup({
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        require("lsp-status").on_attach(client, bufnr)
+      end
+    })
+  end
+}
+
+require('mason-lspconfig').setup({
+  handlers = handlers,
+  automatic_installation = true,
+  ensure_installed = {
+    'bashls',
+    'cssls',
+    'unocss',
+    'dockerls',
+    'eslint',
+    'graphql',
+    'html',
+    'jsonls',
+    'quick_lint_js',
+    'tsserver',
+    'biome',
+    'vtsls',
+    'jqls',
+    'marksman',
+    'prosemd_lsp',
+    'remark_ls',
+    'jedi_language_server',
+    'pyright',
+    'pylyzer',
+    'pylsp',
+    'ruby_ls',
+    'solargraph',
+    'rubocop',
+    -- 'stylelint_lsp',
+    'lua_ls',
+    'rust_analyzer',
+    'tailwindcss',
+    'terraformls',
+    'tflint',
+    'vimls',
+    'lemminx',
+    'hydra_lsp'
+  }
+})
+
+require('mason-lspconfig').setup_handlers(handlers)
+
+EOF
+
+" }}}
+" {{{ nvim-lint
+
+lua << EOF
+
+local lint = require('lint')
+
+vim.api.nvim_create_autocmd(
+    { 'BufEnter', 'BufWritePost', 'TextChanged', 'InsertLeave' },
+    {
+        group = vim.api.nvim_create_augroup('nvim_lint', { clear = true }),
+        callback = function(opts)
+            vim.defer_fn(function()
+                lint.try_lint(nil, { ignore_errors = true })
+            end, 1)
+
+            if opts.event == 'BufWritePost' then
+                local diagnostics = vim.diagnostic.get(0)
+                if #diagnostics > 0 then
+                    -- Modify message to add source and error code
+                    local new_msg = {}
+                    for _, v in pairs(diagnostics) do
+                        if not string.match(v.message, v.source) then
+                            v.message = string.format('%s: %s', v.source, v.message)
+                            if v.code and v.code ~= '' then
+                                v.message = string.format('%s [%s]', v.message, v.code)
+                            end
+                        end
+                        table.insert(new_msg, v.message)
+                    end
+
+                    -- Using set.diagnostics is weird so we first set the location list
+                    -- with the original diagnostics and then modify it with the new
+                    -- diagnostic msg
+                    vim.diagnostic.setloclist({ open = false })
+                    local current_ll = vim.fn.getloclist(0)
+                    local new_ll = {}
+                    for i, v in pairs(current_ll) do
+                        v.text = new_msg[i]
+                        table.insert(new_ll, v)
+                    end
+                    vim.fn.setloclist(0, {}, ' ', {
+                        title = string.format(
+                            'Diagnostics: %s',
+                            vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':p:.')
+                        ),
+                        items = new_ll,
+                    })
+                    vim.cmd('lopen')
+                else
+                    vim.cmd('lclose')
+                end
+            end
+        end,
+    }
+)
+
+lint.linters_by_ft = {
+  text = { 'codespell', 'typos' },
+  css = { 'stylelint', 'typos' },
+  scss = { 'stylelint', 'typos' },
+  ruby = { 'rubocop' },
+  markdown = { 'markdownlint', 'proselint', 'write-good', 'typos' },
+	lua = { 'codespell', 'selene', 'luacheck', 'typos' },
+	sh = { 'codespell', 'shellcheck', 'typos' },
+	bash = { 'codespell', 'shellcheck', 'typos' },
+  yaml = { 'codespell', 'yamllint', 'eslint_d', 'typos' },
+  json = { 'codespell', 'jsonlint', 'eslint_d', 'typos' },
+	javascript = { 'eslint_d', 'codespell', 'typos' },
+	typescript = { 'eslint_d', 'codespell', 'typos' },
+	javascriptreact = { 'eslint_d', 'codespell', 'typos' },
+	typescriptreact = { 'eslint_d', 'codespell', 'typos' },
+  python = { 'ruff', 'mypy', 'pylint', 'typos' },
+  gitcommit = { 'gitlint', 'codespell', 'write-good', 'typos' }
+}
+
+local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+  callback = function()
+    local lint_status, lint = pcall(require, "lint")
+    if lint_status then
+      lint.try_lint()
+    end
+  end,
+})
+
+vim.keymap.set("n", "LL", function()
+  lint.try_lint()
+end, { desc = "Trigger linting for current file" })
+
+lint.linters.gitlint = {
+  cmd = 'gitlint',
+  stdin = false,
+  append_fname = true,
+  args = { '--ignore-stdin', '--msg-filename' },
+  stream = 'stderr',
+  ignore_exitcode = true,
+  parser = function(output, bufnr)
+    local bufname = api.nvim_buf_get_name(bufnr)
+    local root = fs.dirname(fs.dirname(bufname))
+
+    if not util.file_exists(root .. '/' .. '.gitlint') then
+      return {}
+    end
+
+    local parse = parser.from_pattern(
+      '(%d+): %w+ ([^:]+)',
+      { 'lnum', 'message' },
+      {},
+      {},
+      {}
+    )
+
+    return parse(output, bufnr)
+  end,
+}
+
+-- Vale errors when a config file is missing, which is annoying for projects
+-- that don't use Vale, so we just ignore the exit code.
+lint.linters.vale.ignore_exitcode = true
+
+local codespell_args = { '--builtin', 'clear,rare,informal,usage,names' }
+local found = vim.fs.find('.codespell', { upward = true, path = vim.fn.getcwd() })[1]
+
+if found then
+  vim.list_extend(codespell_args, { '-I', found })
+end
+
+lint.linters.codespell.args = codespell_args
+
+local luacheck = lint.linters.luacheck
+
+luacheck.args = {
+  '--formatter',
+  'plain',
+  '--codes',
+  '--ranges',
+  '--filename',
+  '$FILENAME'          ,
+  '-',
+  '--globals',
+  'vim'
+}
+
+lint.linters.markdownlint.args = { '--config=' .. vim.env.HOME .. '/.markdownlint.json' }
+
+local ruff_severities = {
+    ['E'] = vim.diagnostic.severity.ERROR,
+    ['F8'] = vim.diagnostic.severity.ERROR,
+    ['F'] = vim.diagnostic.severity.WARN,
+    ['W'] = vim.diagnostic.severity.WARN,
+    ['D'] = vim.diagnostic.severity.INFO,
+    ['B'] = vim.diagnostic.severity.INFO,
+}
+
+local ruff_parser = lint.linters.ruff.parser
+
+lint.linters.ruff.parser = function(output, bufnr)
+    local diagnostics = ruff_parser(output, bufnr)
+    for _, v in pairs(diagnostics) do
+        local code = string.sub(v.code, 1, 2)
+        if code ~= 'F8' then
+            code = string.sub(code, 1, 1)
+        end
+        local new_severity = ruff_severities[code]
+        if new_severity then
+            v.severity = new_severity
+        end
+    end
+    return diagnostics
+end
+
+vim.api.nvim_create_user_command('LinterInfo', function()
+    local runningLinters = table.concat(lint.get_running(), '\n')
+    vim.notify(runningLinters, vim.log.levels.INFO, { title = 'nvim-lint' })
+end, {})
+
+local lint_progress = function()
+  local linters = require("lint").get_running()
+  if #linters == 0 then
+      return ""
+  end
+  return " " .. table.concat(linters, ", ")
+end
+
+-- diagnostics
+
+vim.diagnostic.config({ virtual_text = true })
+
+EOF
+
+au BufWritePost * lua require('lint').try_lint()
+
+" }}}
 " {{{ vim-ai
 
 let g:vim_ai_chat = {
@@ -693,8 +882,6 @@ require('material').setup({
 
   plugins = {
     'gitsigns',
-    'lspsaga',
-    'nvim-cmp',
     'nvim-web-devicons',
     'telescope',
     'trouble'
@@ -944,102 +1131,6 @@ let g:thematic#themes = {
 \ }
 
 " }}}
-" {{{ mason
-
-lua require("mason").setup()
-
-" }}}
-" {{{ mason-update-all
-
-lua require("mason-update-all").setup()
-
-" }}}
-" {{{ null-ls
-
-lua << EOF
-
-local null_ls = require("null-ls")
-
-null_ls.setup({
-  debounce = 200,
-  sources = {
-    null_ls.builtins.diagnostics.actionlint,
-    null_ls.builtins.diagnostics.tsc,
-    null_ls.builtins.diagnostics.jsonlint,
-    null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.diagnostics.mypy,
-    -- null_ls.builtins.diagnostics.alex,
-    -- null_ls.builtins.diagnostics.codespell,
-    null_ls.builtins.diagnostics.commitlint,
-    null_ls.builtins.diagnostics.dotenv_linter,
-    null_ls.builtins.diagnostics.erb_lint,
-    null_ls.builtins.diagnostics.gitlint,
-    -- null_ls.builtins.diagnostics.jshint,
-    null_ls.builtins.diagnostics.misspell,
-    null_ls.builtins.diagnostics.pycodestyle,
-    null_ls.builtins.diagnostics.pydocstyle,
-    null_ls.builtins.diagnostics.rubocop,
-    null_ls.builtins.diagnostics.shellcheck,
-    -- null_ls.builtins.diagnostics.stylelint,
-    null_ls.builtins.diagnostics.stylint,
-    null_ls.builtins.diagnostics.tidy,
-    null_ls.builtins.diagnostics.todo_comments,
-    -- null_ls.builtins.diagnostics.vint,
-    null_ls.builtins.diagnostics.yamllint,
-
-    -- null_ls.builtins.completion.spell,
-    null_ls.builtins.completion.tags,
-    null_ls.builtins.completion.vsnip,
-
-    null_ls.builtins.code_actions.eslint_d,
-    null_ls.builtins.code_actions.cspell,
-    null_ls.builtins.code_actions.refactoring,
-    null_ls.builtins.code_actions.shellcheck,
-
-    null_ls.builtins.formatting.blackd,
-    -- null_ls.builtins.formatting.codespell,
-    null_ls.builtins.formatting.eslint_d,
-    null_ls.builtins.formatting.fixjson,
-    null_ls.builtins.formatting.htmlbeautifier,
-    null_ls.builtins.formatting.isort,
-    null_ls.builtins.formatting.jq,
-    null_ls.builtins.formatting.markdownlint,
-    null_ls.builtins.formatting.ocdc,
-    null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.formatting.rubocop,
-    null_ls.builtins.formatting.shellharden,
-    null_ls.builtins.formatting.shfmt,
-    -- null_ls.builtins.formatting.stylelint,
-    null_ls.builtins.formatting.yamlfix,
-
-    -- null_ls.builtins.hover.dictionary,
-    null_ls.builtins.hover.printenv
-  },
-})
-
-EOF
-
-" }}}
-" {{{ tabnine-nvim
-
-lua << EOF
-
-require('tabnine').setup({
-  disable_auto_comment=true,
-  accept_keymap="<C-t>",
-  dismiss_keymap = "<C-]>",
-  debounce_ms = 800,
-  suggestion_color = {gui = "#808080", cterm = 244},
-  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-  log_file_path = nil, -- absolute path to Tabnine log file
-})
-
-EOF
-
-" }}}
 " {{{ lualine
 
 lua << EOF
@@ -1072,10 +1163,8 @@ require("lualine").setup {
       {
         "filename",
         path = 2
-      },
-      "require('lsp-progress').progress()"
+      }
     },
-    lualine_x = {"tabnine", wtf.get_status, "fileformat", "filetype"},
     lualine_y = {"progress"},
     lualine_z = {"location"}
   },
@@ -1391,220 +1480,6 @@ EOF
 lua require("hlargs").setup()
 
 " }}}
-" {{{ cmp-tabnine
-
-lua << EOF
-
-local tabnine = require('cmp_tabnine.config')
-
-tabnine:setup({
-	max_lines = 1000,
-	max_num_results = 20,
-	sort = true,
-	run_on_every_keystroke = true,
-	snippet_placeholder = '..',
-	ignored_file_types = {
-		-- default is not to ignore
-		-- uncomment to ignore in lua:
-		-- lua = true
-	},
-	show_prediction_strength = false,
-	min_percent = 0
-})
-
-EOF
-
-" }}}
-" {{{ cmp
-
-set completeopt=menu,menuone,noselect
-
-lua << EOF
-
-local cmp = require('cmp')
-local lspkind = require('lspkind')
-
-cmp.setup({
-  formatting = {
-    format = lspkind.cmp_format({
-      mode = "symbol_text",
-      menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
-        nvim_lua = "[Lua]"
-      }),
-
-      maxwidth = 50,
-      ellipsis_char = '...',
-
-      before = function (entry, vim_item)
-        return vim_item
-      end
-    })
-  },
-
-  snippet = {
-    expand = function(args)
-      vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-    end,
-  },
-
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
-
-  mapping = cmp.mapping.preset.insert({
-    ['<C-J>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-K>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-k>'] = cmp.mapping.select_next_item(),
-    ['<C-j>'] = cmp.mapping.select_prev_item()
-  }),
-
-  sources = cmp.config.sources({
-    { name = 'ultisnips' },
-    { name = 'nvim_lsp' },
-    { name = 'bufname' },
-    { name = 'buffer-lines' },
-    { name = 'cmp_tabnine' },
-    { name = 'cmp-tw2css' },
-    { name = 'nvim_lsp_document_symbol' },
-    { name = 'nvim_lsp_signature_help' },
-    { name = 'tabnine', ignore_pattern = "[(|,]" },
-    {
-      name = "diag-codes",
-      option = { in_comment = true }
-    },
-    { name = 'emoji' },
-    {
-      name = 'spell',
-      option = {
-          keep_all_entries = false,
-          enable_in_context = function()
-              return true
-          end,
-      }
-    }
-  }, {
-    { name = 'buffer' },
-  })
-})
-
-cmp.setup.cmdline('/', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'buffer' }
-  }
-})
-
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    {
-      name = 'cmdline',
-      option = {
-        ignore_cmds = { 'Man', '!' }
-      }
-    }
-  })
-})
-
-EOF
-
-" }}}
-" {{{ mason-lspconfig,
-
-lua << EOF
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local handlers = {
-  function (server_name)
-    require("lspconfig")[server_name].setup({
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        require("lsp-status").on_attach(client, bufnr)
-      end
-    })
-  end
-}
-
-require('mason-lspconfig').setup({
-  handlers = handlers,
-  automatic_installation = true,
-  ensure_installed = {
-    'bashls',
-    'cssls',
-    'unocss',
-    'dockerls',
-    'eslint',
-    'graphql',
-    'html',
-    'jsonls',
-    'quick_lint_js',
-    'tsserver',
-    'biome',
-    'vtsls',
-    'jqls',
-    'marksman',
-    'prosemd_lsp',
-    'remark_ls',
-    'jedi_language_server',
-    'pyright',
-    'pylyzer',
-    'pylsp',
-    'ruby_ls',
-    'solargraph',
-    'rubocop',
-    -- 'stylelint_lsp',
-    'lua_ls',
-    'rust_analyzer',
-    'tailwindcss',
-    'terraformls',
-    'tflint',
-    'vimls',
-    'lemminx',
-    'hydra_lsp'
-  }
-})
-
-require('mason-lspconfig').setup_handlers(handlers)
-
-EOF
-
-" }}}
-" {{{ ultisnips
-
-augroup UltiSnipsAddFiletypes
-  autocmd!
-  autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
-augroup END
-
-augroup ultisnips_no_auto_expansion
-    au!
-    au VimEnter * au! UltiSnips_AutoTrigger
-augroup END
-
-let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsExpandTrigger = '<c-x>'
-let g:UltiSnipsListSnippets = '<c-s><c-l>'
-let g:UltiSnipsJumpForwardTrigger = '<c-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-let g:UltiSnipsSnippetDirectories = [s:GetUserSnippetsDirPath() . '/ultisnips']
-
-" }}}
-" {{{ nvim-lightbulb
-
-augroup lightbulb
-  autocmd!
-  autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
-augroup END
-
-" }}}
 " {{{ leap
 
 lua require("leap").add_default_mappings()
@@ -1811,7 +1686,6 @@ lua << EOF
 
 require('illuminate').configure({
     providers = {
-        'lsp',
         'treesitter',
         'regex',
     },
@@ -1984,19 +1858,9 @@ require('template-string').setup({
 EOF
 
 " }}}
-" {{{ lsp_signature.nvim
-
-lua require'lsp_signature'.setup(opts)
-
-" }}}
 " {{{ search-replace.nvim
 
 lua require("search-replace").setup({})
-
-" }}}
-" {{{ lsp-progress.nvim
-
-lua require('lsp-progress').setup()
 
 " }}}
 " {{{ nvim-toggler.nvim
@@ -2208,29 +2072,9 @@ require("jester").setup({
 EOF
 
 " }}}
-" {{{ custom quickfix
-
-lua << EOF
-
-function quickfix()
-    vim.lsp.buf.code_action({
-        filter = function(a) return a.isPreferred end,
-        apply = true
-    })
-end
-
-EOF
-
-" }}}
 " {{{ vim-test
 
 let test#strategy = 'floaterm'
-
-" }}}
-" {{{ vim-isort
-
-let g:vim_isort_map = '<C-i>'
-let g:vim_isort_python_version = 'python3'
 
 " }}}
 " {{{ better-whitespace
@@ -2368,14 +2212,6 @@ EOF
 let g:clap_theme = 'shirotelin'
 
 " }}}
-" {{{ vim-vsnip
-
-" If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
-let g:vsnip_filetypes = {}
-let g:vsnip_filetypes.javascriptreact = ['javascript']
-let g:vsnip_filetypes.typescriptreact = ['typescript']
-
-" }}}
 " {{{ vim-notify
 
 " lua << EOF
@@ -2383,32 +2219,6 @@ let g:vsnip_filetypes.typescriptreact = ['typescript']
 " vim.notify = require("notify")
 
 " EOF
-
-" }}}
-" {{{ tsc
-
-lua << EOF
-
-require('tsc').setup({
-  auto_open_qflist = false,
-  auto_close_qflist = false,
-  auto_focus_qflist = false,
-  auto_start_watch_mode = true,
-  bin_path = require('tsc/utils').find_tsc_bin(),
-  enable_progress_notifications = false,
-  flags = {
-    noEmit = true,
-    project = function()
-      return require('tsc/utils').find_nearest_tsconfig()
-    end,
-    watch = true,
-  },
-  hide_progress_notifications_from_history = true,
-  spinner = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
-  pretty_errors = true,
-})
-
-EOF
 
 " }}}
 " {{{ bookmarks.nvim
@@ -2498,72 +2308,10 @@ vim.api.nvim_create_autocmd('ModeChanged', {
 EOF
 
 " }}}
-" {{{ vim lsp config
-
-lua << EOF
-
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-vim.lsp.handlers.hover,
-{border = 'rounded'}
-)
-
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-vim.lsp.handlers.signature_help,
-{border = 'rounded'}
-)
-
-local function hide_semantic_highlights()
-for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-  vim.api.nvim_set_hl(0, group, {})
-end
-end
-
-vim.api.nvim_create_autocmd('ColorScheme', {
-desc = 'Clear LSP highlight groups',
-callback = hide_semantic_highlights,
-})
-
-vim.api.nvim_set_hl(0, 'LspReferenceRead', {link = 'Search'})
-vim.api.nvim_set_hl(0, 'LspReferenceText', {link = 'Search'})
-vim.api.nvim_set_hl(0, 'LspReferenceWrite', {link = 'Search'})
-
-vim.opt.updatetime = 400
-
-local function highlight_symbol(event)
-local id = vim.tbl_get(event, 'data', 'client_id')
-local client = id and vim.lsp.get_client_by_id(id)
-if client == nil or not client.supports_method('textDocument/documentHighlight') then
-  return
-end
-
-local group = vim.api.nvim_create_augroup('highlight_symbol', {clear = false})
-
-vim.api.nvim_clear_autocmds({buffer = event.buf, group = group})
-
-vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-  group = group,
-  buffer = event.buf,
-  callback = vim.lsp.buf.document_highlight,
-})
-
-vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
-  group = group,
-  buffer = event.buf,
-  callback = vim.lsp.buf.clear_references,
-})
-end
-
-vim.api.nvim_create_autocmd('LspAttach', {
-desc = 'Setup highlight symbol',
-callback = highlight_symbol,
-})
-
-EOF
-
-" }}}
 " {{{ markdown.nvim
 
-lua require('markdown').setup()
+autocmd! User markdown.nvim lua require('markdown').setup()
+
 
 " }}}
 " {{{ mkdx
@@ -2678,23 +2426,6 @@ let g:gitgutter_sign_added = emoji#for('white_check_mark')
 let g:gitgutter_sign_modified = emoji#for('pencil2')
 let g:gitgutter_sign_removed = emoji#for('x')
 let g:gitgutter_sign_modified_removed = emoji#for('red_circle')
-
-" }}}
-" {{{ tabnine-nvim
-
-lua << EOF
-
-require('tabnine').setup({
-  disable_auto_comment=true,
-  accept_keymap="<Tab>",
-  dismiss_keymap = "<C-]>",
-  debounce_ms = 300,
-  suggestion_color = {gui = "#808080", cterm = 244},
-  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-  log_file_path = nil
-})
-
-EOF
 
 " }}}
 " {{{ vim-wtf
@@ -2897,7 +2628,7 @@ nnoremap <silent> <leader>cn :call MakeClassNameAttributeDynamic()<cr>
 nnoremap <silent> <leader>RR :source $MYVIMRC<cr>
 
 " }}}
-" {{{ insert snippet folds
+" {{{ insert folds
 
 function! s:GetFoldShortcutExecString(fold_str)
   return <SID>GetCommentString() . ' ' . a:fold_str
@@ -2934,21 +2665,6 @@ nnoremap <silent> [d :lua vim.diagnostic.goto_prev({ border = "single" })<cr>
 nnoremap <silent> ]d :lua vim.diagnostic.goto_next({ border = "single" })<cr>
 
 " }}}
-" {{{ lsp
-
-nnoremap <silent> LD :lua vim.lsp.buf.declaration()<cr>
-nnoremap <silent> Ld :lua vim.lsp.buf.definition()<cr>
-nnoremap <silent> Lt :lua vim.lsp.buf.type_definition()<cr>
-nnoremap <silent> Lr :lua vim.lsp.buf.references()<cr>
-nnoremap <silent> Li :lua vim.lsp.buf.implementation()<cr>
-nnoremap <silent> Lh :lua vim.lsp.buf.hover()<cr>
-nnoremap <silent> Ls :lua vim.lsp.buf.signature_help()<cr>
-nnoremap <silent> Lf :lua vim.lsp.buf.format()<cr>
-nnoremap <silent> Lrn :lua vim.lsp.buf.rename()<cr>
-nnoremap <silent> Lca :lua vim.lsp.buf.code_action()<cr>
-nnoremap <silent> Lcap :lua require('actions-preview').code_actions<cr>
-
-" }}}
 " {{{ refactor insert _isUndefined
 
 nnoremap <silent> <leader>rd :s/typeof \(\w*\) === 'undefined'/_isUndefined(\1)/g<cr>
@@ -2964,20 +2680,6 @@ function s:InsertEmojiList()
 endfunction
 
 nnoremap <silent> IEL :call s:InsertEmojiList()<cr>
-
-" }}}
-" {{{ edit snippets
-
-let s:ts_snippets_path = s:GetUserSnippetFilePath('typescript')
-let s:tsreact_snippets_path = s:GetUserSnippetFilePath('typescriptreact')
-
-if !empty(s:ts_snippets_path)
-  execute 'nnoremap <silent> est :e ' . s:ts_snippets_path . '<cr>'
-endif
-
-if !empty(s:tsreact_snippets_path)
-  execute 'nnoremap <silent> estr :e ' . s:tsreact_snippets_path . '<cr>'
-endif
 
 " }}}
 " {{{ vim-wtf
@@ -3125,11 +2827,6 @@ nnoremap <silent> GG :Grepper<cr>
 nnoremap <silent> GC :Grepper-cword -noprompt<cr>
 
 " }}}
-" {{{ ultisnips
-
-nnoremap <c-r><c-s> :call UltiSnips#RefreshSnippets()<cr>
-
-" }}}
 " {{{ tabline
 
 nnoremap <silent> <leader>ta :$tabnew<cr>
@@ -3201,11 +2898,6 @@ nnoremap <silent>Hc2 :HopChar2<CR>
 nnoremap <silent>Hp :HopPattern<CR>
 
 " }}}
-" {{{ custom quickfix
-
-lua vim.keymap.set('n', 'qqf', quickfix, { noremap=true, silent=true })
-
-" }}}
 " {{{ vim-test
 
 nmap <silent> <leader>tt :TestNearest<CR>
@@ -3226,29 +2918,6 @@ vnoremap <silent> <leader>zn :'<,'>TZNarrow<cr>
 nnoremap <silent> <leader>zf :TZFocus<cr>
 nnoremap <silent> <leader>zm :TZMinimalist<cr>
 nnoremap <silent> <leader>za :TZAtaraxis<cr>
-
-" }}}
-" {{{ vim-vnsip
-
-imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-
-" Expand or jump
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-
-" Jump forward or backward
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-
-" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
-" See https://github.com/hrsh7th/vim-vsnip/pull/50
-nmap        s   <Plug>(vsnip-select-text)
-xmap        s   <Plug>(vsnip-select-text)
-nmap        S   <Plug>(vsnip-cut-text)
-xmap        S   <Plug>(vsnip-cut-text)
 
 " }}}
 " {{{ accelerated-jk
