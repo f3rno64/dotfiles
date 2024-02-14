@@ -5,6 +5,11 @@ scriptencoding utf-8
 "
 " https://github.com/f3rno64/dotfiles
 
+" {{{ set python3_host_prog to speed up load time
+
+let g:python3_host_prog = '/usr/bin/python3'
+
+" }}}
 " {{{ plugin loading
 
 " {{{ ensure plugin directory resolution
@@ -163,6 +168,7 @@ Plug 'madox2/vim-ai'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'dstein64/vim-startuptime'
 Plug 'junegunn/goyo.vim'
 Plug 'liangxianzhe/floating-input.nvim'
 Plug 'danilamihailov/vim-tips-wiki'
@@ -191,7 +197,7 @@ Plug 'nvim-focus/focus.nvim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'christoomey/vim-sort-motion'
 Plug 'jbgutierrez/vim-better-comments'
-Plug 'fisadev/vim-isort'
+" Plug 'fisadev/vim-isort'
 Plug 'voldikss/vim-floaterm'
 Plug 'vim-test/vim-test'
 Plug 'David-Kunz/jester'
@@ -1004,7 +1010,7 @@ null_ls.setup({
     null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.fixjson,
     null_ls.builtins.formatting.htmlbeautifier,
-    null_ls.builtins.formatting.isort,
+    -- null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.markdownlint,
     null_ls.builtins.formatting.ocdc,
@@ -1339,7 +1345,6 @@ nnoremap <silent> <leader>D :TroubleToggle<cr>
 lua << EOF
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { 'python', 'javascript', 'typescript', 'json' },
   sync_install = false,
   auto_install = true,
   highlight = {
@@ -1767,8 +1772,8 @@ glance.setup({
       ['<Up>'] = actions.previous,
       ['<Tab>'] = actions.next_location, -- Bring the cursor to the next location skipping groups in the list
       ['<S-Tab>'] = actions.previous_location, -- Bring the cursor to the previous location skipping groups in the list
-      ['<C-u>'] = actions.preview_scroll_win(5),
-      ['<C-d>'] = actions.preview_scroll_win(-5),
+      ['<C-u>'] = actions.preview_scroll_win(2),
+      ['<C-d>'] = actions.preview_scroll_win(-2),
       ['v'] = actions.jump_vsplit,
       ['s'] = actions.jump_split,
       ['t'] = actions.jump_tab,
@@ -2229,8 +2234,8 @@ let test#strategy = 'floaterm'
 " }}}
 " {{{ vim-isort
 
-let g:vim_isort_map = '<C-i>'
-let g:vim_isort_python_version = 'python3'
+" let g:vim_isort_map = '<C-i>'
+" let g:vim_isort_python_version = 'python3'
 
 " }}}
 " {{{ better-whitespace
@@ -2546,11 +2551,11 @@ vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
   callback = vim.lsp.buf.document_highlight,
 })
 
-vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
-  group = group,
-  buffer = event.buf,
-  callback = vim.lsp.buf.clear_references,
-})
+-- vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
+--   group = group,
+--   buffer = event.buf,
+--   callback = vim.lsp.buf.clear_references,
+-- })
 end
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -2793,10 +2798,6 @@ nnoremap tnp :Thematic newpaper<cr>
 nnoremap tir :Thematic base16-irblack<cr>
 nnoremap tam :Thematic material<cr>
 nnoremap tka :Thematic kanagawa<cr>
-
-" <c-l> to clear the highlight, as well as redraw the screen
-noremap <silent> <C-l> :<C-u>nohlsearch<cr><C-l>
-inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
 
 " }}}
 " {{{ bufutils
