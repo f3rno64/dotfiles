@@ -975,7 +975,6 @@ null_ls.setup({
     null_ls.builtins.diagnostics.markdownlint,
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.diagnostics.mypy,
     -- null_ls.builtins.diagnostics.alex,
     -- null_ls.builtins.diagnostics.codespell,
@@ -994,27 +993,26 @@ null_ls.setup({
     null_ls.builtins.diagnostics.tidy,
     null_ls.builtins.diagnostics.todo_comments,
     -- null_ls.builtins.diagnostics.vint,
+    -- null_ls.builtins.diagnostics.deno_lint,
     null_ls.builtins.diagnostics.yamllint,
 
     -- null_ls.builtins.completion.spell,
     null_ls.builtins.completion.tags,
     null_ls.builtins.completion.vsnip,
 
-    null_ls.builtins.code_actions.eslint_d,
     null_ls.builtins.code_actions.cspell,
     null_ls.builtins.code_actions.refactoring,
     null_ls.builtins.code_actions.shellcheck,
 
     null_ls.builtins.formatting.blackd,
     -- null_ls.builtins.formatting.codespell,
-    null_ls.builtins.formatting.eslint_d,
+    null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.fixjson,
     null_ls.builtins.formatting.htmlbeautifier,
     -- null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.markdownlint,
     null_ls.builtins.formatting.ocdc,
-    null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.rubocop,
     null_ls.builtins.formatting.shellharden,
     null_ls.builtins.formatting.shfmt,
@@ -1546,13 +1544,11 @@ require('mason-lspconfig').setup({
     'cssls',
     'unocss',
     'dockerls',
-    'eslint',
     'graphql',
     'html',
     'jsonls',
     'quick_lint_js',
     'tsserver',
-    'biome',
     'vtsls',
     'jqls',
     'marksman',
@@ -2545,11 +2541,11 @@ local group = vim.api.nvim_create_augroup('highlight_symbol', {clear = false})
 
 vim.api.nvim_clear_autocmds({buffer = event.buf, group = group})
 
-vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-  group = group,
-  buffer = event.buf,
-  callback = vim.lsp.buf.document_highlight,
-})
+-- vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+--   group = group,
+--   buffer = event.buf,
+--   callback = vim.lsp.buf.document_highlight,
+-- })
 
 -- vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
 --   group = group,
@@ -2760,6 +2756,12 @@ let g:gutentags_file_list_command = 'fd -e c -e h'
 " }}}
 " {{{ keybindings
 
+" {{{ nohl
+
+noremap <silent> <C-l> :<C-u>nohlsearch<cr><C-l>
+inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
+
+" }}}
 " {{{ profiling
 
 function! s:StartProfiling()
