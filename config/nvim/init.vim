@@ -202,7 +202,7 @@ Plug 'vim-test/vim-test'
 Plug 'David-Kunz/jester'
 Plug 'AndrewRadev/switch.vim'
 Plug 'joaohkfaria/vim-jest-snippets'
-Plug 'lcheylus/overlength.nvim'
+" Plug 'lcheylus/overlength.nvim'
 Plug 'smoka7/hop.nvim', { 'branch': 'master' }
 Plug 'anuvyklack/keymap-amend.nvim'
 Plug 'okuuva/auto-save.nvim'
@@ -987,7 +987,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.pydocstyle,
     null_ls.builtins.diagnostics.rubocop,
     null_ls.builtins.diagnostics.shellcheck,
-    -- null_ls.builtins.diagnostics.stylelint,
+    null_ls.builtins.diagnostics.stylelint,
     null_ls.builtins.diagnostics.stylint,
     null_ls.builtins.diagnostics.tidy,
     null_ls.builtins.diagnostics.todo_comments,
@@ -1015,7 +1015,7 @@ null_ls.setup({
     null_ls.builtins.formatting.rubocop,
     null_ls.builtins.formatting.shellharden,
     null_ls.builtins.formatting.shfmt,
-    -- null_ls.builtins.formatting.stylelint,
+    null_ls.builtins.formatting.stylelint,
     null_ls.builtins.formatting.yamlfix,
 
     -- null_ls.builtins.hover.dictionary,
@@ -1327,9 +1327,34 @@ let g:grepper.dir = 'repo,file'
 lua << EOF
 
 require("trouble").setup({
+  position = 'bottom',
   height = 15,
+  width = 50,
+  icons = true,
+  mode = 'workspace_diagnostics',
+  severity = nil,
+  fold_open = '',
+  fold_closed = '',
+  group = true,
+  padding = true,
+  cycle_results = true,
+  multiline = true,
+  indent_lines = true,
+  win_config = { border = 'single' },
   auto_open = false,
-  auto_close = false
+  auto_close = true,
+  auto_preview = true,
+  auto_fold = false,
+  auto_jump = { 'lsp_definitions' },
+  include_declaration = { 'lsp_references', 'lsp_implementations', 'lsp_definitions' },
+  signs = {
+    error = '',
+    warning = '',
+    hint = '',
+    information = '',
+    other = '',
+  },
+  use_diagnostic_signs = true
 })
 
 EOF
@@ -1539,7 +1564,7 @@ require('mason-lspconfig').setup({
     'ruby_ls',
     'solargraph',
     'rubocop',
-    -- 'stylelint_lsp',
+    'stylelint_lsp',
     'lua_ls',
     'rust_analyzer',
     'tailwindcss',
@@ -2028,38 +2053,38 @@ lua require'hop'.setup {}
 " }}}
 " {{{ overlength
 
-lua << EOF
-
-require('overlength').setup({
-   -- Overlength highlighting enabled by default
-  enabled = true,
-
-  -- Colors for OverLength highlight group
-  colors = {
-    ctermfg = nil,
-    ctermbg = 'darkgrey',
-    fg = nil,
-    bg = '#8B0000',
-  },
-
-  -- Mode to use textwidth local options
-  -- 0: Don't use textwidth at all, always use config.default_overlength.
-  -- 1: Use `textwidth, unless it's 0, then use config.default_overlength.
-  -- 2: Always use textwidth. There will be no highlighting where
-  --    textwidth == 0, unless added explicitly
-  textwidth_mode = 2,
-  -- Default overlength with no filetype
-  default_overlength = 80,
-  -- How many spaces past your overlength to start highlighting
-  grace_length = 1,
-  -- Highlight only the column or until the end of the line
-  highlight_to_eol = true,
-
-  -- List of filetypes to disable overlength highlighting
-  disable_ft = { 'qf', 'help', 'man', 'checkhealth', 'lazy', 'packer', 'NvimTree', 'Telescope', 'WhichKey' },
-})
-
-EOF
+" lua << EOF
+"
+" require('overlength').setup({
+"    -- Overlength highlighting enabled by default
+"   enabled = true,
+"
+"   -- Colors for OverLength highlight group
+"   colors = {
+"     ctermfg = nil,
+"     ctermbg = 'darkgrey',
+"     fg = nil,
+"     bg = '#8B0000',
+"   },
+"
+"   -- Mode to use textwidth local options
+"   -- 0: Don't use textwidth at all, always use config.default_overlength.
+"   -- 1: Use `textwidth, unless it's 0, then use config.default_overlength.
+"   -- 2: Always use textwidth. There will be no highlighting where
+"   --    textwidth == 0, unless added explicitly
+"   textwidth_mode = 2,
+"   -- Default overlength with no filetype
+"   default_overlength = 80,
+"   -- How many spaces past your overlength to start highlighting
+"   grace_length = 1,
+"   -- Highlight only the column or until the end of the line
+"   highlight_to_eol = true,
+"
+"   -- List of filetypes to disable overlength highlighting
+"   disable_ft = { 'qf', 'help', 'man', 'checkhealth', 'lazy', 'packer', 'NvimTree', 'Telescope', 'WhichKey' },
+" })
+"
+" EOF
 
 " }}}
 " {{{ vim-wiki
@@ -2924,7 +2949,7 @@ nnoremap <silent> Lr :lua vim.lsp.buf.references()<cr>
 nnoremap <silent> Li :lua vim.lsp.buf.implementation()<cr>
 nnoremap <silent> Lh :lua vim.lsp.buf.hover()<cr>
 nnoremap <silent> Ls :lua vim.lsp.buf.signature_help()<cr>
-nnoremap <silent> Lf :lua vim.lsp.buf.format()<cr>
+nnoremap <silent> ff :lua vim.lsp.buf.format()<cr>
 nnoremap <silent> Lrn :lua vim.lsp.buf.rename()<cr>
 nnoremap <silent> Lca :lua vim.lsp.buf.code_action()<cr>
 nnoremap <silent> Lcap :lua require('actions-preview').code_actions<cr>
