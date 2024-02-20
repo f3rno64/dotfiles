@@ -59,3 +59,4 @@ npmrc
 !.yarn/sdks
 !.yarn/versions
 wakatime.cfg
+/local/pipx

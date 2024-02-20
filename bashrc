@@ -1,7 +1,10 @@
 #! /usr/bin/env bash
 #
 # shellcheck disable=1090,1091
-# Allow dynamic source
+
+if command -v termium > /dev/null 2>&1; then
+  eval "$(termium shell-hook show pre)"
+fi
 
 # {{{ interactive check
 
@@ -279,4 +282,10 @@ fi
 
 if xf_has_cmd 'trash-put'; then
   alias rm='echo "Use trash-put instead"; false'
+fi
+
+PATH=~/.console-ninja/.bin:$PATH
+
+if command -v termium > /dev/null 2>&1; then
+  eval "$(termium shell-hook show post)"
 fi

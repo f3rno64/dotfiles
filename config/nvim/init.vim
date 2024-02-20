@@ -173,7 +173,7 @@ Plug 'liangxianzhe/floating-input.nvim'
 Plug 'danilamihailov/vim-tips-wiki'
 Plug 'james1236/backseat.nvim'
 Plug 'nvim-lua/lsp-status.nvim'
-Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
+" Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 Plug 'piersolenski/wtf.nvim'
 Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 Plug 'tpope/vim-fugitive'
@@ -588,6 +588,7 @@ let g:material_style = 'deep ocean'
 " colorscheme base16-mexico-light
 " colorscheme base16-still-alive
 " colorscheme base16-unikitty-light
+" colorscheme newpaper
 
 " }}}
 " {{{ light and dark colorschemes
@@ -596,7 +597,6 @@ let g:material_style = 'deep ocean'
 " colorscheme leaf
 " colorscheme PaperColor
 " colorscheme catppuccin-latte
-" colorscheme newpaper
 " colorscheme flatwhite
 " colorscheme base16-github
 " colorscheme tempus_day
@@ -610,7 +610,7 @@ let g:material_style = 'deep ocean'
 " colorscheme tundra
 " colorscheme base16-railscasts
 " colorscheme tequila-sunrise
-" colorscheme melange
+colorscheme melange
 " colorscheme base16-blueish
 " colorscheme lucid
 " colorscheme base16-ayu-mirage
@@ -622,7 +622,7 @@ let g:material_style = 'deep ocean'
 " colorscheme slate
 " colorscheme murphy
 " colorscheme gruvbox-baby
-colorscheme base16-tokyo-city-dark
+" colorscheme base16-tokyo-city-dark
 " colorscheme nightly
 " colorscheme tender
 " colorscheme dogrun
@@ -987,7 +987,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.pydocstyle,
     null_ls.builtins.diagnostics.rubocop,
     null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.stylelint,
+    -- null_ls.builtins.diagnostics.stylelint,
     null_ls.builtins.diagnostics.stylint,
     null_ls.builtins.diagnostics.tidy,
     null_ls.builtins.diagnostics.todo_comments,
@@ -999,9 +999,9 @@ null_ls.setup({
     null_ls.builtins.completion.tags,
     null_ls.builtins.completion.vsnip,
 
-    null_ls.builtins.code_actions.cspell,
-    null_ls.builtins.code_actions.refactoring,
-    null_ls.builtins.code_actions.shellcheck,
+    -- null_ls.builtins.code_actions.cspell,
+    -- null_ls.builtins.code_actions.refactoring,
+    -- null_ls.builtins.code_actions.shellcheck,
 
     null_ls.builtins.formatting.blackd,
     -- null_ls.builtins.formatting.codespell,
@@ -1015,7 +1015,7 @@ null_ls.setup({
     null_ls.builtins.formatting.rubocop,
     null_ls.builtins.formatting.shellharden,
     null_ls.builtins.formatting.shfmt,
-    null_ls.builtins.formatting.stylelint,
+    -- null_ls.builtins.formatting.stylelint,
     null_ls.builtins.formatting.yamlfix,
 
     -- null_ls.builtins.hover.dictionary,
@@ -1540,40 +1540,7 @@ local handlers = {
 }
 
 require('mason-lspconfig').setup({
-  handlers = handlers,
-  automatic_installation = true,
-  ensure_installed = {
-    'bashls',
-    'cssls',
-    'unocss',
-    'dockerls',
-    'graphql',
-    'html',
-    'jsonls',
-    'quick_lint_js',
-    'tsserver',
-    'vtsls',
-    'jqls',
-    'marksman',
-    'prosemd_lsp',
-    'remark_ls',
-    'jedi_language_server',
-    'pyright',
-    'pylyzer',
-    'pylsp',
-    'ruby_ls',
-    'solargraph',
-    'rubocop',
-    'stylelint_lsp',
-    'lua_ls',
-    'rust_analyzer',
-    'tailwindcss',
-    'terraformls',
-    'tflint',
-    'vimls',
-    'lemminx',
-    'hydra_lsp'
-  }
+  handlers = handlers
 })
 
 require('mason-lspconfig').setup_handlers(handlers)
@@ -2724,7 +2691,7 @@ EOF
 " }}}
 " {{{ codeium
 
-let g:codeium_disable_bindings = 1
+" let g:codeium_disable_bindings = 1
 
 " }}}
 " {{{ backseat.nvim
@@ -2995,10 +2962,10 @@ nnoremap <silent> <leader>gW :lua require('wtf').search()<cr>
 " }}}
 " {{{ codeium
 
-imap <script><silent><nowait><expr> <S-tab> codeium#Accept()
-imap jj <cmd>call codeium#CycleCompletions(-1)<cr>
-imap kk <cmd>call codeium#CycleCompletions(-1)<cr>
-imap cc <cmd>call codeium#Clear()<cr>
+" imap <script><silent><nowait><expr> <S-tab> codeium#Accept()
+" imap jj <cmd>call codeium#CycleCompletions(-1)<cr>
+" imap kk <cmd>call codeium#CycleCompletions(-1)<cr>
+" imap cc <cmd>call codeium#Clear()<cr>
 
 " }}}
 " {{{ exec current line
