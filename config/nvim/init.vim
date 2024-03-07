@@ -15,14 +15,14 @@ let g:python3_host_prog = '/usr/bin/python3'
 " {{{ ensure plugin directory resolution
 
 if has('nvim')
-  let s:plugin_dir_path = $HOME . '/.nvim-plugins'
+let s:plugin_dir_path = $HOME . '/.nvim-plugins'
 else
-  let s:plugin_dir_path = $HOME . '/.vim-plugins'
+let s:plugin_dir_path = $HOME . '/.vim-plugins'
 endif
 
 if !isdirectory(s:plugin_dir_path)
-  call mkdir(s:plugin_dir_path, 'p')
-  echo 'Created plugin directory: ' . s:plugin_dir_path
+call mkdir(s:plugin_dir_path, 'p')
+echo 'Created plugin directory: ' . s:plugin_dir_path
 endif
 
 " }}}
@@ -44,12 +44,12 @@ Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
 Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'aznhe21/actions-preview.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', {
-  \   'do': join([
-  \     'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release',
-  \     'cmake --build build --config Release',
-  \     'cmake --install build --prefix build'
-  \   ], ' && ')
-  \ }
+\   'do': join([
+\     'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release',
+\     'cmake --build build --config Release',
+\     'cmake --install build --prefix build'
+\   ], ' && ')
+\ }
 
 function! OpenPluginDirectory()
 
@@ -270,9 +270,9 @@ Plug 'RRethy/vim-illuminate'
 Plug 'm4xshen/smartcolumn.nvim'
 
 function! UpdateRemotePlugins(...)
-  " Needed to refresh runtime files
-  let &runtimepath=&runtimepath
-  UpdateRemotePlugins
+" Needed to refresh runtime files
+let &runtimepath=&runtimepath
+UpdateRemotePlugins
 endfunction
 
 Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
@@ -332,36 +332,36 @@ call plug#end()
 " {{{ s:GetUserSnippetsDirPath
 
 function s:GetUserSnippetsDirPath()
-  if empty($XF_SRC_DIR)
-    return ''
-  endif
+if empty($XF_SRC_DIR)
+  return ''
+endif
 
-  let l:path = $XF_SRC_DIR . '/github/' . $USER . '/vim-snippets'
+let l:path = $XF_SRC_DIR . '/github/' . $USER . '/vim-snippets'
 
-  if !maktaba#path#Exists(l:path)
-    return ''
-  else
-    return l:path
-  endif
+if !maktaba#path#Exists(l:path)
+  return ''
+else
+  return l:path
+endif
 endfunction
 
 " }}}
 " {{{ s:GetUserSnippetFilePath
 
 function s:GetUserSnippetFilePath(filetype)
-  let l:snippets_path = s:GetUserSnippetsDirPath()
+let l:snippets_path = s:GetUserSnippetsDirPath()
 
-  if empty(l:snippets_path)
-    return ''
+if empty(l:snippets_path)
+  return ''
+else
+  let l:ft_snippets_path = l:snippets_path . '/ultisnips/' . a:filetype . '.snippets'
+
+  if maktaba#path#Exists(l:ft_snippets_path)
+    return l:ft_snippets_path
   else
-    let l:ft_snippets_path = l:snippets_path . '/ultisnips/' . a:filetype . '.snippets'
-
-    if maktaba#path#Exists(l:ft_snippets_path)
-      return l:ft_snippets_path
-    else
-      return ''
-    endif
+    return ''
   endif
+endif
 endfunction
 
 " }}}
@@ -369,13 +369,13 @@ endfunction
 
 
 function s:GetCommentString()
-  let l:comment_string_parts = split(&commentstring, '%s')
+let l:comment_string_parts = split(&commentstring, '%s')
 
-  if len(l:comment_string_parts) == 0
-    return ''
-  else
-    return l:comment_string_parts[0]
-  endif
+if len(l:comment_string_parts) == 0
+  return ''
+else
+  return l:comment_string_parts[0]
+endif
 endfunction
 
 " }}}
@@ -442,27 +442,27 @@ set foldcolumn=1
 set foldlevel=0
 
 augroup editing
-  autocmd!
-  autocmd InsertLeave * set nopaste
-  autocmd BufEnter * set number
-  autocmd BufLeave * set nonumber
+autocmd!
+autocmd InsertLeave * set nopaste
+autocmd BufEnter * set number
+autocmd BufLeave * set nonumber
 augroup END
 
 augroup SnippetFoldMethod
-  autocmd!
-  autocmd FileType snippets setlocal foldmethod=marker
+autocmd!
+autocmd FileType snippets setlocal foldmethod=marker
 augroup END
 
 " hacky fix for syntax highlighting in large files
 augroup syntax_fix
-  autocmd!
-  autocmd WinEnter,Filetype * syntax sync fromstart
+autocmd!
+autocmd WinEnter,Filetype * syntax sync fromstart
 augroup END
 
 augroup SetVimSyntax
-  autocmd!
-  autocmd BufNewFile,BufRead *.vim setf vim
-  autocmd BufNewFile,BufRead *.nvim setf vim
+autocmd!
+autocmd BufNewFile,BufRead *.vim setf vim
+autocmd BufNewFile,BufRead *.nvim setf vim
 augroup END
 
 let g:loaded_netrw = 1
@@ -500,15 +500,15 @@ let s:font_size = 10
 " {{{ s:SetFont()
 
 function! s:SetFont()
-  let &guifont = s:font_name . ' ' . s:font_size
+let &guifont = s:font_name . ' ' . s:font_size
 endfunction
 
 " }}}
 " {{{ s:AdjustFontSize(delta)
 
 function! s:AdjustFontSize(delta)
-  let s:font_size += a:delta
-  call SetFont()
+let s:font_size += a:delta
+call SetFont()
 endfunction
 
 " }}}
@@ -533,24 +533,24 @@ tnoremap <Esc> <C-\><C-n>
 " {{{ Neovim-GTK
 
 if has('nvim') && ! has('gui_vimr')
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
 
-  call rpcnotify(1, 'Gui', 'Option', 'Popupmenu', 0)
-  call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
-  call rpcnotify(1, 'Gui', 'Option', 'Cmdline', 0)
+call rpcnotify(1, 'Gui', 'Option', 'Popupmenu', 0)
+call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
+call rpcnotify(1, 'Gui', 'Option', 'Cmdline', 0)
 
-  let g:GuiInternalClipboard = 1
+let g:GuiInternalClipboard = 1
 endif
 
 " }}}
 " {{{ cursor init
 
 if has('nvim') && has('gui_running')
-  set guicursor+=n-v-c-sm:block
-  set guicursor+=i-ci-ve:ver25
-  set guicursor+=r-cr-o:hor20
-  set guicursor+=a:blinkon0
+set guicursor+=n-v-c-sm:block
+set guicursor+=i-ci-ve:ver25
+set guicursor+=r-cr-o:hor20
+set guicursor+=a:blinkon0
 endif
 
 " }}}
@@ -609,8 +609,8 @@ let g:material_style = 'deep ocean'
 " colorscheme base16-colors
 " colorscheme tundra
 " colorscheme base16-railscasts
-" colorscheme tequila-sunrise
-colorscheme melange
+colorscheme tequila-sunrise
+" colorscheme melange
 " colorscheme base16-blueish
 " colorscheme lucid
 " colorscheme base16-ayu-mirage
@@ -670,14 +670,14 @@ let g:vim_ai_chat = {
 lua << EOF
 
 require("nightly").setup({
-  transparent = false,
-  styles = {
-    comments = { italic = true },
-    functions = { italic = false },
-    variables = { italic = false },
-    keywords = { italic = false },
-  },
-  highlights = {},
+transparent = false,
+styles = {
+  comments = { italic = true },
+  functions = { italic = false },
+  variables = { italic = false },
+  keywords = { italic = false },
+},
+highlights = {},
 })
 
 EOF
@@ -688,22 +688,22 @@ EOF
 lua << EOF
 
 require('material').setup({
-  contrast = {
-    terminal = true,
-    sidebars = true,
-    floating_windows = true,
-    cursor_line = true,
-    non_current_windows = true
-  },
+contrast = {
+  terminal = true,
+  sidebars = true,
+  floating_windows = true,
+  cursor_line = true,
+  non_current_windows = true
+},
 
-  plugins = {
-    'gitsigns',
-    'lspsaga',
-    'nvim-cmp',
-    'nvim-web-devicons',
-    'telescope',
-    'trouble'
-  }
+plugins = {
+  'gitsigns',
+  'lspsaga',
+  'nvim-cmp',
+  'nvim-web-devicons',
+  'telescope',
+  'trouble'
+}
 })
 
 EOF
@@ -966,61 +966,61 @@ lua << EOF
 local null_ls = require("null-ls")
 
 null_ls.setup({
-  debounce = 200,
-  sources = {
-    null_ls.builtins.diagnostics.actionlint,
-    null_ls.builtins.diagnostics.tsc,
-    null_ls.builtins.diagnostics.jsonlint,
-    null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.mypy,
-    -- null_ls.builtins.diagnostics.alex,
-    -- null_ls.builtins.diagnostics.codespell,
-    null_ls.builtins.diagnostics.commitlint,
-    null_ls.builtins.diagnostics.dotenv_linter,
-    null_ls.builtins.diagnostics.erb_lint,
-    null_ls.builtins.diagnostics.gitlint,
-    -- null_ls.builtins.diagnostics.jshint,
-    null_ls.builtins.diagnostics.misspell,
-    null_ls.builtins.diagnostics.pycodestyle,
-    null_ls.builtins.diagnostics.pydocstyle,
-    null_ls.builtins.diagnostics.rubocop,
-    null_ls.builtins.diagnostics.shellcheck,
-    -- null_ls.builtins.diagnostics.stylelint,
-    null_ls.builtins.diagnostics.stylint,
-    null_ls.builtins.diagnostics.tidy,
-    null_ls.builtins.diagnostics.todo_comments,
-    -- null_ls.builtins.diagnostics.vint,
-    -- null_ls.builtins.diagnostics.deno_lint,
-    null_ls.builtins.diagnostics.yamllint,
+debounce = 200,
+sources = {
+  null_ls.builtins.diagnostics.actionlint,
+  null_ls.builtins.diagnostics.tsc,
+  null_ls.builtins.diagnostics.jsonlint,
+  null_ls.builtins.diagnostics.markdownlint,
+  null_ls.builtins.diagnostics.shellcheck,
+  null_ls.builtins.diagnostics.pylint,
+  null_ls.builtins.diagnostics.mypy,
+  -- null_ls.builtins.diagnostics.alex,
+  -- null_ls.builtins.diagnostics.codespell,
+  null_ls.builtins.diagnostics.commitlint,
+  null_ls.builtins.diagnostics.dotenv_linter,
+  null_ls.builtins.diagnostics.erb_lint,
+  null_ls.builtins.diagnostics.gitlint,
+  -- null_ls.builtins.diagnostics.jshint,
+  null_ls.builtins.diagnostics.misspell,
+  null_ls.builtins.diagnostics.pycodestyle,
+  null_ls.builtins.diagnostics.pydocstyle,
+  null_ls.builtins.diagnostics.rubocop,
+  null_ls.builtins.diagnostics.shellcheck,
+  -- null_ls.builtins.diagnostics.stylelint,
+  null_ls.builtins.diagnostics.stylint,
+  null_ls.builtins.diagnostics.tidy,
+  null_ls.builtins.diagnostics.todo_comments,
+  -- null_ls.builtins.diagnostics.vint,
+  -- null_ls.builtins.diagnostics.deno_lint,
+  null_ls.builtins.diagnostics.yamllint,
 
-    -- null_ls.builtins.completion.spell,
-    null_ls.builtins.completion.tags,
-    null_ls.builtins.completion.vsnip,
+  -- null_ls.builtins.completion.spell,
+  null_ls.builtins.completion.tags,
+  null_ls.builtins.completion.vsnip,
 
-    -- null_ls.builtins.code_actions.cspell,
-    -- null_ls.builtins.code_actions.refactoring,
-    -- null_ls.builtins.code_actions.shellcheck,
+  -- null_ls.builtins.code_actions.cspell,
+  -- null_ls.builtins.code_actions.refactoring,
+  -- null_ls.builtins.code_actions.shellcheck,
 
-    null_ls.builtins.formatting.blackd,
-    -- null_ls.builtins.formatting.codespell,
-    null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.formatting.fixjson,
-    null_ls.builtins.formatting.htmlbeautifier,
-    -- null_ls.builtins.formatting.isort,
-    null_ls.builtins.formatting.jq,
-    null_ls.builtins.formatting.markdownlint,
-    null_ls.builtins.formatting.ocdc,
-    null_ls.builtins.formatting.rubocop,
-    null_ls.builtins.formatting.shellharden,
-    null_ls.builtins.formatting.shfmt,
-    -- null_ls.builtins.formatting.stylelint,
-    null_ls.builtins.formatting.yamlfix,
+  null_ls.builtins.formatting.blackd,
+  -- null_ls.builtins.formatting.codespell,
+  null_ls.builtins.formatting.prettierd,
+  null_ls.builtins.formatting.fixjson,
+  null_ls.builtins.formatting.htmlbeautifier,
+  -- null_ls.builtins.formatting.isort,
+  null_ls.builtins.formatting.jq,
+  null_ls.builtins.formatting.markdownlint,
+  null_ls.builtins.formatting.ocdc,
+  null_ls.builtins.formatting.rubocop,
+  null_ls.builtins.formatting.shellharden,
+  null_ls.builtins.formatting.shfmt,
+  -- null_ls.builtins.formatting.stylelint,
+  null_ls.builtins.formatting.yamlfix,
 
-    -- null_ls.builtins.hover.dictionary,
-    null_ls.builtins.hover.printenv
-  },
+  -- null_ls.builtins.hover.dictionary,
+  null_ls.builtins.hover.printenv
+},
 })
 
 EOF
@@ -1031,13 +1031,13 @@ EOF
 lua << EOF
 
 require('tabnine').setup({
-  disable_auto_comment=true,
-  accept_keymap="<C-t>",
-  dismiss_keymap = "<C-]>",
-  debounce_ms = 800,
-  suggestion_color = {gui = "#808080", cterm = 244},
-  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-  log_file_path = nil, -- absolute path to Tabnine log file
+disable_auto_comment=true,
+accept_keymap="<C-t>",
+dismiss_keymap = "<C-]>",
+debounce_ms = 800,
+suggestion_color = {gui = "#808080", cterm = 244},
+exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+log_file_path = nil, -- absolute path to Tabnine log file
 })
 
 EOF
@@ -1050,50 +1050,50 @@ lua << EOF
 local wtf = require("wtf")
 
 require("lualine").setup {
-  options = {
-    icons_enabled = true,
-    theme = "auto",
-    component_separators = { left = "", right = ""},
-    section_separators = { left = "", right = ""},
-    disabled_filetypes = {
-      statusline = {},
-      winbar = {},
+options = {
+  icons_enabled = true,
+  theme = "auto",
+  component_separators = { left = "", right = ""},
+  section_separators = { left = "", right = ""},
+  disabled_filetypes = {
+    statusline = {},
+    winbar = {},
+  },
+  ignore_focus = {},
+  always_divide_middle = true,
+  globalstatus = false,
+  refresh = {
+    statusline = 1000,
+    tabline = 1000,
+    winbar = 1000,
+  }
+},
+sections = {
+  lualine_a = {"mode"},
+  lualine_b = {"branch", "diff", "diagnostics"},
+  lualine_c = {
+    {
+      "filename",
+      path = 2
     },
-    ignore_focus = {},
-    always_divide_middle = true,
-    globalstatus = false,
-    refresh = {
-      statusline = 1000,
-      tabline = 1000,
-      winbar = 1000,
-    }
+    "require('lsp-progress').progress()"
   },
-  sections = {
-    lualine_a = {"mode"},
-    lualine_b = {"branch", "diff", "diagnostics"},
-    lualine_c = {
-      {
-        "filename",
-        path = 2
-      },
-      "require('lsp-progress').progress()"
-    },
-    lualine_x = {"tabnine", wtf.get_status, "fileformat", "filetype"},
-    lualine_y = {"progress"},
-    lualine_z = {"location"}
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {"filename"},
-    lualine_x = {"location"},
-    lualine_y = {},
-    lualine_z = {}
-  },
-  tabline = {},
-  winbar = {},
-  inactive_winbar = {},
-  extensions = {}
+  lualine_x = {"tabnine", wtf.get_status, "fileformat", "filetype"},
+  lualine_y = {"progress"},
+  lualine_z = {"location"}
+},
+inactive_sections = {
+  lualine_a = {},
+  lualine_b = {},
+  lualine_c = {"filename"},
+  lualine_x = {"location"},
+  lualine_y = {},
+  lualine_z = {}
+},
+tabline = {},
+winbar = {},
+inactive_winbar = {},
+extensions = {}
 }
 
 EOF
@@ -1104,9 +1104,9 @@ EOF
 lua << EOF
 
 require("nvim-web-devicons").setup({
-  color_icons = true,
-  default = true,
-  strict = true
+color_icons = true,
+default = true,
+strict = true
 })
 
 EOF
@@ -1117,9 +1117,9 @@ EOF
 lua << EOF
 
 require("sessions").setup({
-  events = { "BufEnter" },
-  session_filepath = vim.fn.stdpath("data") .. "/sessions",
-  absolute = true,
+events = { "BufEnter" },
+session_filepath = vim.fn.stdpath("data") .. "/sessions",
+absolute = true,
 })
 
 EOF
@@ -1130,20 +1130,20 @@ EOF
 lua << EOF
 
 require("workspaces").setup({
-  path = vim.fn.stdpath("data") .. "/workspaces",
-  cd_type = "global",
-  sort = true,
-  mru_sort = true,
-  notify_info = true,
-  hooks = {
-    add = {},
-    remove = {},
-    rename = {},
-    open_pre = {},
-    open = function()
-      require("sessions").load(nil, { silent = true })
-    end,
-  },
+path = vim.fn.stdpath("data") .. "/workspaces",
+cd_type = "global",
+sort = true,
+mru_sort = true,
+notify_info = true,
+hooks = {
+  add = {},
+  remove = {},
+  rename = {},
+  open_pre = {},
+  open = function()
+    require("sessions").load(nil, { silent = true })
+  end,
+},
 })
 
 EOF
@@ -1154,22 +1154,22 @@ EOF
 lua << EOF
 
 require("telescope").setup({
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = "close"
-      }
-    }
-  },
-
-  extensions = {
-    fzf = {
-      fuzzy = true,
-      override_generic_sorter = true,
-      override_file_sorter = true,
-      case_mode = "smart_case",
+defaults = {
+  mappings = {
+    i = {
+      ["<esc>"] = "close"
     }
   }
+},
+
+extensions = {
+  fzf = {
+    fuzzy = true,
+    override_generic_sorter = true,
+    override_file_sorter = true,
+    case_mode = "smart_case",
+  }
+}
 })
 
 require("telescope").load_extension("workspaces")
@@ -1190,100 +1190,100 @@ floating_input = require('floating-input')
 -- {{{ OpenNvimTreeAtPath()
 
 function OpenNvimTreePathInput(on_confirm)
-  local opts = { prompt = 'Path: ' }
-	local win_opts = {
-    height = 2,
-    style = 'minimal',
-    border = 'rounded',
-    title_pos = 'center',
-    footer = 'Specify path...',
-    title = 'Open Path In Tree'
-  }
+local opts = { prompt = 'Path: ' }
+local win_opts = {
+  height = 2,
+  style = 'minimal',
+  border = 'rounded',
+  title_pos = 'center',
+  footer = 'Specify path...',
+  title = 'Open Path In Tree'
+}
 
-	floating_input.input(opts, on_confirm, win_opts)
+floating_input.input(opts, on_confirm, win_opts)
 end
 
 -- }}}
 -- {{{ OnGetNvinTreeOpenPath
 
 function OnGetNvimTreeOpenPath(path)
-  ntree_api.tree.open()
-  ntree_api.tree.change_root(path)
+ntree_api.tree.open()
+ntree_api.tree.change_root(path)
 end
 
 -- }}}
 -- {{{ OpenPathInputAndNavigate
 
 function OpenPathInputAndNavigate()
-  OpenNvimTreePathInput(OnGetNvimTreeOpenPath)
+OpenNvimTreePathInput(OnGetNvimTreeOpenPath)
 end
 
 -- }}}
 -- {{{ on_attach
 
 function on_attach(bufnr)
-  function opts(desc)
-    return {
-      desc = 'nvim-tree: ' .. desc,
-      buffer = bufnr,
-      noremap = true,
-      silent = true,
-      nowait = true
-    }
-  end
+function opts(desc)
+  return {
+    desc = 'nvim-tree: ' .. desc,
+    buffer = bufnr,
+    noremap = true,
+    silent = true,
+    nowait = true
+  }
+end
 
-  vim.keymap.set('n', '<C-]>', ntree_api.tree.change_root_to_node,          opts('CD'))
-  vim.keymap.set('n', '<C-e>', ntree_api.node.open.replace_tree_buffer,     opts('Open: In Place'))
-  vim.keymap.set('n', '<C-k>', ntree_api.node.show_info_popup,              opts('Info'))
-  vim.keymap.set('n', '<C-r>', ntree_api.fs.rename_sub,                     opts('Rename: Omit Filename'))
-  vim.keymap.set('n', '<C-t>', ntree_api.node.open.tab,                     opts('Open: New Tab'))
-  vim.keymap.set('n', '<C-v>', ntree_api.node.open.vertical,                opts('Open: Vertical Split'))
-  vim.keymap.set('n', '<C-x>', ntree_api.node.open.horizontal,              opts('Open: Horizontal Split'))
-  vim.keymap.set('n', '<BS>',  ntree_api.node.navigate.parent_close,        opts('Close Directory'))
-  vim.keymap.set('n', '<CR>',  ntree_api.node.open.edit,                    opts('Open'))
-  vim.keymap.set('n', '<Tab>', ntree_api.node.open.preview,                 opts('Open Preview'))
-  vim.keymap.set('n', '>',     ntree_api.node.navigate.sibling.next,        opts('Next Sibling'))
-  vim.keymap.set('n', '<',     ntree_api.node.navigate.sibling.prev,        opts('Previous Sibling'))
-  vim.keymap.set('n', '.',     ntree_api.node.run.cmd,                      opts('Run Command'))
-  vim.keymap.set('n', '-',     ntree_api.tree.change_root_to_parent,        opts('Up'))
-  vim.keymap.set('n', 'a',     ntree_api.fs.create,                         opts('Create'))
-  vim.keymap.set('n', 'bmv',   ntree_api.marks.bulk.move,                   opts('Move Bookmarked'))
-  vim.keymap.set('n', 'B',     ntree_api.tree.toggle_no_buffer_filter,      opts('Toggle No Buffer'))
-  vim.keymap.set('n', 'c',     ntree_api.fs.copy.node,                      opts('Copy'))
-  vim.keymap.set('n', 'C',     ntree_api.tree.toggle_git_clean_filter,      opts('Toggle Git Clean'))
-  vim.keymap.set('n', '[c',    ntree_api.node.navigate.git.prev,            opts('Prev Git'))
-  vim.keymap.set('n', ']c',    ntree_api.node.navigate.git.next,            opts('Next Git'))
-  vim.keymap.set('n', 'd',     ntree_api.fs.remove,                         opts('Delete'))
-  vim.keymap.set('n', 'D',     ntree_api.fs.trash,                          opts('Trash'))
-  vim.keymap.set('n', 'E',     ntree_api.tree.expand_all,                   opts('Expand All'))
-  vim.keymap.set('n', 'e',     ntree_api.fs.rename_basename,                opts('Rename: Basename'))
-  vim.keymap.set('n', ']e',    ntree_api.node.navigate.diagnostics.next,    opts('Next Diagnostic'))
-  vim.keymap.set('n', '[e',    ntree_api.node.navigate.diagnostics.prev,    opts('Prev Diagnostic'))
-  vim.keymap.set('n', 'F',     ntree_api.live_filter.clear,                 opts('Clean Filter'))
-  vim.keymap.set('n', 'f',     ntree_api.live_filter.start,                 opts('Filter'))
-  vim.keymap.set('n', 'g?',    ntree_api.tree.toggle_help,                  opts('Help'))
-  vim.keymap.set('n', 'gy',    ntree_api.fs.copy.absolute_path,             opts('Copy Absolute Path'))
-  vim.keymap.set('n', 'H',     ntree_api.tree.toggle_hidden_filter,         opts('Toggle Dotfiles'))
-  vim.keymap.set('n', 'J',     ntree_api.node.navigate.sibling.last,        opts('Last Sibling'))
-  vim.keymap.set('n', 'K',     ntree_api.node.navigate.sibling.first,       opts('First Sibling'))
-  vim.keymap.set('n', 'm',     ntree_api.marks.toggle,                      opts('Toggle Bookmark'))
-  vim.keymap.set('n', 'o',     ntree_api.node.open.edit,                    opts('Open'))
-  vim.keymap.set('n', 'O',     ntree_api.node.open.no_window_picker,        opts('Open: No Window Picker'))
-  vim.keymap.set('n', 'p',     ntree_api.fs.paste,                          opts('Paste'))
-  vim.keymap.set('n', 'P',     ntree_api.node.navigate.parent,              opts('Parent Directory'))
-  vim.keymap.set('n', 'q',     ntree_api.tree.close,                        opts('Close'))
-  vim.keymap.set('n', 'r',     ntree_api.fs.rename,                         opts('Rename'))
-  vim.keymap.set('n', 'R',     ntree_api.tree.reload,                       opts('Refresh'))
-  vim.keymap.set('n', 's',     ntree_api.node.run.system,                   opts('Run System'))
-  vim.keymap.set('n', 'S',     ntree_api.tree.search_node,                  opts('Search'))
-  vim.keymap.set('n', 'U',     ntree_api.tree.toggle_custom_filter,         opts('Toggle Hidden'))
-  vim.keymap.set('n', 'W',     ntree_api.tree.collapse_all,                 opts('Collapse'))
-  vim.keymap.set('n', 'x',     ntree_api.fs.cut,                            opts('Cut'))
-  vim.keymap.set('n', 'y',     ntree_api.fs.copy.filename,                  opts('Copy Name'))
-  vim.keymap.set('n', 'Y',     ntree_api.fs.copy.relative_path,             opts('Copy Relative Path'))
-  vim.keymap.set('n', '<2-LeftMouse>',  ntree_api.node.open.edit,           opts('Open'))
-  vim.keymap.set('n', '<2-RightMouse>', ntree_api.tree.change_root_to_node, opts('CD'))
-  vim.keymap.set('n', 'u', ntree_api.tree.change_root_to_parent, opts('Up'))
+vim.keymap.set('n', '<C-]>', ntree_api.tree.change_root_to_node,          opts('CD'))
+vim.keymap.set('n', '<C-e>', ntree_api.node.open.replace_tree_buffer,     opts('Open: In Place'))
+vim.keymap.set('n', '<C-k>', ntree_api.node.show_info_popup,              opts('Info'))
+vim.keymap.set('n', '<C-r>', ntree_api.fs.rename_sub,                     opts('Rename: Omit Filename'))
+vim.keymap.set('n', '<C-t>', ntree_api.node.open.tab,                     opts('Open: New Tab'))
+vim.keymap.set('n', '<C-v>', ntree_api.node.open.vertical,                opts('Open: Vertical Split'))
+vim.keymap.set('n', '<C-x>', ntree_api.node.open.horizontal,              opts('Open: Horizontal Split'))
+vim.keymap.set('n', '<BS>',  ntree_api.node.navigate.parent_close,        opts('Close Directory'))
+vim.keymap.set('n', '<CR>',  ntree_api.node.open.edit,                    opts('Open'))
+vim.keymap.set('n', '<Tab>', ntree_api.node.open.preview,                 opts('Open Preview'))
+vim.keymap.set('n', '>',     ntree_api.node.navigate.sibling.next,        opts('Next Sibling'))
+vim.keymap.set('n', '<',     ntree_api.node.navigate.sibling.prev,        opts('Previous Sibling'))
+vim.keymap.set('n', '.',     ntree_api.node.run.cmd,                      opts('Run Command'))
+vim.keymap.set('n', '-',     ntree_api.tree.change_root_to_parent,        opts('Up'))
+vim.keymap.set('n', 'a',     ntree_api.fs.create,                         opts('Create'))
+vim.keymap.set('n', 'bmv',   ntree_api.marks.bulk.move,                   opts('Move Bookmarked'))
+vim.keymap.set('n', 'B',     ntree_api.tree.toggle_no_buffer_filter,      opts('Toggle No Buffer'))
+vim.keymap.set('n', 'c',     ntree_api.fs.copy.node,                      opts('Copy'))
+vim.keymap.set('n', 'C',     ntree_api.tree.toggle_git_clean_filter,      opts('Toggle Git Clean'))
+vim.keymap.set('n', '[c',    ntree_api.node.navigate.git.prev,            opts('Prev Git'))
+vim.keymap.set('n', ']c',    ntree_api.node.navigate.git.next,            opts('Next Git'))
+vim.keymap.set('n', 'd',     ntree_api.fs.remove,                         opts('Delete'))
+vim.keymap.set('n', 'D',     ntree_api.fs.trash,                          opts('Trash'))
+vim.keymap.set('n', 'E',     ntree_api.tree.expand_all,                   opts('Expand All'))
+vim.keymap.set('n', 'e',     ntree_api.fs.rename_basename,                opts('Rename: Basename'))
+vim.keymap.set('n', ']e',    ntree_api.node.navigate.diagnostics.next,    opts('Next Diagnostic'))
+vim.keymap.set('n', '[e',    ntree_api.node.navigate.diagnostics.prev,    opts('Prev Diagnostic'))
+vim.keymap.set('n', 'F',     ntree_api.live_filter.clear,                 opts('Clean Filter'))
+vim.keymap.set('n', 'f',     ntree_api.live_filter.start,                 opts('Filter'))
+vim.keymap.set('n', 'g?',    ntree_api.tree.toggle_help,                  opts('Help'))
+vim.keymap.set('n', 'gy',    ntree_api.fs.copy.absolute_path,             opts('Copy Absolute Path'))
+vim.keymap.set('n', 'H',     ntree_api.tree.toggle_hidden_filter,         opts('Toggle Dotfiles'))
+vim.keymap.set('n', 'J',     ntree_api.node.navigate.sibling.last,        opts('Last Sibling'))
+vim.keymap.set('n', 'K',     ntree_api.node.navigate.sibling.first,       opts('First Sibling'))
+vim.keymap.set('n', 'm',     ntree_api.marks.toggle,                      opts('Toggle Bookmark'))
+vim.keymap.set('n', 'o',     ntree_api.node.open.edit,                    opts('Open'))
+vim.keymap.set('n', 'O',     ntree_api.node.open.no_window_picker,        opts('Open: No Window Picker'))
+vim.keymap.set('n', 'p',     ntree_api.fs.paste,                          opts('Paste'))
+vim.keymap.set('n', 'P',     ntree_api.node.navigate.parent,              opts('Parent Directory'))
+vim.keymap.set('n', 'q',     ntree_api.tree.close,                        opts('Close'))
+vim.keymap.set('n', 'r',     ntree_api.fs.rename,                         opts('Rename'))
+vim.keymap.set('n', 'R',     ntree_api.tree.reload,                       opts('Refresh'))
+vim.keymap.set('n', 's',     ntree_api.node.run.system,                   opts('Run System'))
+vim.keymap.set('n', 'S',     ntree_api.tree.search_node,                  opts('Search'))
+vim.keymap.set('n', 'U',     ntree_api.tree.toggle_custom_filter,         opts('Toggle Hidden'))
+vim.keymap.set('n', 'W',     ntree_api.tree.collapse_all,                 opts('Collapse'))
+vim.keymap.set('n', 'x',     ntree_api.fs.cut,                            opts('Cut'))
+vim.keymap.set('n', 'y',     ntree_api.fs.copy.filename,                  opts('Copy Name'))
+vim.keymap.set('n', 'Y',     ntree_api.fs.copy.relative_path,             opts('Copy Relative Path'))
+vim.keymap.set('n', '<2-LeftMouse>',  ntree_api.node.open.edit,           opts('Open'))
+vim.keymap.set('n', '<2-RightMouse>', ntree_api.tree.change_root_to_node, opts('CD'))
+vim.keymap.set('n', 'u', ntree_api.tree.change_root_to_parent, opts('Up'))
 
 end
 
@@ -1291,17 +1291,17 @@ end
 -- {{{ nvim-tree setup
 
 require("nvim-tree").setup({
-  sort_by = "case_sensitive",
-  on_attach = on_attach,
-  view = {
-    width = 30
-  },
-  renderer = {
-    group_empty = true
-  },
-  filters = {
-    dotfiles = false
-  }
+sort_by = "case_sensitive",
+on_attach = on_attach,
+view = {
+  width = 30
+},
+renderer = {
+  group_empty = true
+},
+filters = {
+  dotfiles = false
+}
 })
 
 -- }}}
@@ -1327,34 +1327,34 @@ let g:grepper.dir = 'repo,file'
 lua << EOF
 
 require("trouble").setup({
-  position = 'bottom',
-  height = 15,
-  width = 50,
-  icons = true,
-  mode = 'workspace_diagnostics',
-  severity = nil,
-  fold_open = '',
-  fold_closed = '',
-  group = true,
-  padding = true,
-  cycle_results = true,
-  multiline = true,
-  indent_lines = true,
-  win_config = { border = 'single' },
-  auto_open = false,
-  auto_close = true,
-  auto_preview = true,
-  auto_fold = false,
-  auto_jump = { 'lsp_definitions' },
-  include_declaration = { 'lsp_references', 'lsp_implementations', 'lsp_definitions' },
-  signs = {
-    error = '',
-    warning = '',
-    hint = '',
-    information = '',
-    other = '',
-  },
-  use_diagnostic_signs = true
+position = 'bottom',
+height = 15,
+width = 50,
+icons = true,
+mode = 'workspace_diagnostics',
+severity = nil,
+fold_open = '',
+fold_closed = '',
+group = true,
+padding = true,
+cycle_results = true,
+multiline = true,
+indent_lines = true,
+win_config = { border = 'single' },
+auto_open = false,
+auto_close = true,
+auto_preview = true,
+auto_fold = false,
+auto_jump = { 'lsp_definitions' },
+include_declaration = { 'lsp_references', 'lsp_implementations', 'lsp_definitions' },
+signs = {
+  error = '',
+  warning = '',
+  hint = '',
+  information = '',
+  other = '',
+},
+use_diagnostic_signs = true
 })
 
 EOF
@@ -1367,47 +1367,47 @@ nnoremap <silent> <leader>D :TroubleToggle<cr>
 lua << EOF
 
 require'nvim-treesitter.configs'.setup {
-  sync_install = false,
-  auto_install = true,
-  highlight = {
-    enable = true,
-  },
+sync_install = false,
+auto_install = true,
+highlight = {
+  enable = true,
+},
 
-  indent = {
-    enable = false,
-  },
+indent = {
+  enable = false,
+},
 
-  yati = {
-    enable = true,
-    default_lazy = true,
+yati = {
+  enable = true,
+  default_lazy = true,
 
-    -- Determine the fallback method used when we cannot calculate indent by tree-sitter
-    --   'auto': fallback to vim auto indent
-    --   'asis': use current indent as-is
-    --   'cindent': see `:h cindent()`
-    -- Or a custom function return the final indent result.
-    default_fallback = 'auto'
-  },
+  -- Determine the fallback method used when we cannot calculate indent by tree-sitter
+  --   'auto': fallback to vim auto indent
+  --   'asis': use current indent as-is
+  --   'cindent': see `:h cindent()`
+  -- Or a custom function return the final indent result.
+  default_fallback = 'auto'
+},
 
-  autotag = {
-    enable = true,
-  },
+autotag = {
+  enable = true,
+},
 
-  rainbow = {
-    enable = true,
-    extended_mode = true,
-    max_file_lines = nil
-  },
+rainbow = {
+  enable = true,
+  extended_mode = true,
+  max_file_lines = nil
+},
 
-  textsubjects = {
-    enable = true,
-    prev_selection = ',',
-    keymaps = {
-      ['.'] = 'textsubjects-smart',
-      [';'] = 'textsubjects-container-outer',
-      ['i;'] = 'textsubjects-container-inner'
-    }
+textsubjects = {
+  enable = true,
+  prev_selection = ',',
+  keymaps = {
+    ['.'] = 'textsubjects-smart',
+    [';'] = 'textsubjects-container-outer',
+    ['i;'] = 'textsubjects-container-inner'
   }
+}
 }
 
 EOF
@@ -1425,18 +1425,18 @@ lua << EOF
 local tabnine = require('cmp_tabnine.config')
 
 tabnine:setup({
-	max_lines = 1000,
-	max_num_results = 20,
-	sort = true,
-	run_on_every_keystroke = true,
-	snippet_placeholder = '..',
-	ignored_file_types = {
-		-- default is not to ignore
-		-- uncomment to ignore in lua:
-		-- lua = true
-	},
-	show_prediction_strength = false,
-	min_percent = 0
+max_lines = 1000,
+max_num_results = 20,
+sort = true,
+run_on_every_keystroke = true,
+snippet_placeholder = '..',
+ignored_file_types = {
+  -- default is not to ignore
+  -- uncomment to ignore in lua:
+  -- lua = true
+},
+show_prediction_strength = false,
+min_percent = 0
 })
 
 EOF
@@ -1452,72 +1452,72 @@ local cmp = require('cmp')
 local lspkind = require('lspkind')
 
 cmp.setup({
-  formatting = {
-    format = lspkind.cmp_format({
-      mode = "symbol_text",
-      menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
-        nvim_lua = "[Lua]"
-      }),
+formatting = {
+  format = lspkind.cmp_format({
+    mode = "symbol_text",
+    menu = ({
+      buffer = "[Buffer]",
+      nvim_lsp = "[LSP]",
+      nvim_lua = "[Lua]"
+    }),
 
-      maxwidth = 50,
-      ellipsis_char = '...',
+    maxwidth = 50,
+    ellipsis_char = '...',
 
-      before = function (entry, vim_item)
-        return vim_item
-      end
-    })
-  },
-
-  snippet = {
-    expand = function(args)
-      vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-    end,
-  },
-
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
-
-  mapping = cmp.mapping.preset.insert({
-    ['<C-J>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-K>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-k>'] = cmp.mapping.select_next_item(),
-    ['<C-j>'] = cmp.mapping.select_prev_item()
-  }),
-
-  sources = cmp.config.sources({
-    { name = 'ultisnips' },
-    { name = 'nvim_lsp' },
-    { name = 'bufname' },
-    { name = 'buffer-lines' },
-    { name = 'cmp_tabnine' },
-    { name = 'cmp-tw2css' },
-    { name = 'nvim_lsp_document_symbol' },
-    { name = 'nvim_lsp_signature_help' },
-    { name = 'tabnine', ignore_pattern = "[(|,]" },
-    {
-      name = "diag-codes",
-      option = { in_comment = true }
-    },
-    { name = 'emoji' },
-    {
-      name = 'spell',
-      option = {
-          keep_all_entries = false,
-          enable_in_context = function()
-              return true
-          end,
-      }
-    }
-  }, {
-    { name = 'buffer' },
+    before = function (entry, vim_item)
+      return vim_item
+    end
   })
+},
+
+snippet = {
+  expand = function(args)
+    vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+  end,
+},
+
+window = {
+  completion = cmp.config.window.bordered(),
+  documentation = cmp.config.window.bordered(),
+},
+
+mapping = cmp.mapping.preset.insert({
+  ['<C-J>'] = cmp.mapping.scroll_docs(-4),
+  ['<C-K>'] = cmp.mapping.scroll_docs(4),
+  ['<C-Space>'] = cmp.mapping.complete(),
+  ['<C-e>'] = cmp.mapping.abort(),
+  ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  ['<C-k>'] = cmp.mapping.select_next_item(),
+  ['<C-j>'] = cmp.mapping.select_prev_item()
+}),
+
+sources = cmp.config.sources({
+  { name = 'ultisnips' },
+  { name = 'nvim_lsp' },
+  { name = 'bufname' },
+  { name = 'buffer-lines' },
+  { name = 'cmp_tabnine' },
+  { name = 'cmp-tw2css' },
+  { name = 'nvim_lsp_document_symbol' },
+  { name = 'nvim_lsp_signature_help' },
+  { name = 'tabnine', ignore_pattern = "[(|,]" },
+  {
+    name = "diag-codes",
+    option = { in_comment = true }
+  },
+  { name = 'emoji' },
+  {
+    name = 'spell',
+    option = {
+        keep_all_entries = false,
+        enable_in_context = function()
+            return true
+        end,
+    }
+  }
+}, {
+  { name = 'buffer' },
+})
 })
 
 EOF
@@ -1529,18 +1529,18 @@ lua << EOF
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local handlers = {
-  function (server_name)
-    require("lspconfig")[server_name].setup({
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        require("lsp-status").on_attach(client, bufnr)
-      end
-    })
-  end
+function (server_name)
+  require("lspconfig")[server_name].setup({
+    capabilities = capabilities,
+    on_attach = function(client, bufnr)
+      require("lsp-status").on_attach(client, bufnr)
+    end
+  })
+end
 }
 
 require('mason-lspconfig').setup({
-  handlers = handlers
+handlers = handlers
 })
 
 require('mason-lspconfig').setup_handlers(handlers)
@@ -1551,13 +1551,13 @@ EOF
 " {{{ ultisnips
 
 augroup UltiSnipsAddFiletypes
-  autocmd!
-  autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
+autocmd!
+autocmd FileType js,javascript UltiSnipsAddFiletypes javascript-jsdoc
 augroup END
 
 augroup ultisnips_no_auto_expansion
-    au!
-    au VimEnter * au! UltiSnips_AutoTrigger
+  au!
+  au VimEnter * au! UltiSnips_AutoTrigger
 augroup END
 
 let g:UltiSnipsEnableSnipMate = 0
@@ -1571,8 +1571,8 @@ let g:UltiSnipsSnippetDirectories = [s:GetUserSnippetsDirPath() . '/ultisnips']
 " {{{ nvim-lightbulb
 
 augroup lightbulb
-  autocmd!
-  autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+autocmd!
+autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
 augroup END
 
 " }}}
@@ -1596,7 +1596,7 @@ lua require('Comment').setup()
 lua << EOF
 
 require('tabby.tabline').use_preset('active_wins_at_tail', {
-  nerdfont = true,
+nerdfont = true,
 })
 
 EOF
@@ -1611,8 +1611,8 @@ lua require("neoscroll").setup()
 
 call wilder#setup({'modes': [':', '/', '?']})
 call wilder#set_option('renderer', wilder#popupmenu_renderer({
-      \ 'highlighter': wilder#basic_highlighter(),
-      \ }))
+    \ 'highlighter': wilder#basic_highlighter(),
+    \ }))
 
 " }}}
 " {{{ nvim-surround
@@ -1635,10 +1635,10 @@ lua require("foldsigns").setup()
 lua << EOF
 
 require("gomove").setup({
-  map_defaults = true,
-  reindent = true,
-  undojoin = true,
-  move_past_end_col = false
+map_defaults = true,
+reindent = true,
+undojoin = true,
+move_past_end_col = false
 })
 
 EOF
@@ -1664,11 +1664,11 @@ lua require("bufresize").setup()
 lua << EOF
 
 require('smart-splits').setup({
-  resize_mode = {
-    hooks = {
-      on_leave = require('bufresize').register,
-    },
+resize_mode = {
+  hooks = {
+    on_leave = require('bufresize').register,
   },
+},
 })
 
 EOF
@@ -1698,79 +1698,79 @@ local glance = require('glance')
 local actions = glance.actions
 
 glance.setup({
-  height = 18, -- Height of the window
-  zindex = 45,
+height = 18, -- Height of the window
+zindex = 45,
 
-  -- By default glance will open preview "embedded" within your active window
-  -- when `detached` is enabled, glance will render above all existing windows
-  -- and won't be restiricted by the width of your active window
-  detached = true,
+-- By default glance will open preview "embedded" within your active window
+-- when `detached` is enabled, glance will render above all existing windows
+-- and won't be restiricted by the width of your active window
+detached = true,
 
-  -- Or use a function to enable `detached` only when the active window is too small
-  -- (default behavior)
-  detached = function(winid)
-    return vim.api.nvim_win_get_width(winid) < 100
-  end,
+-- Or use a function to enable `detached` only when the active window is too small
+-- (default behavior)
+detached = function(winid)
+  return vim.api.nvim_win_get_width(winid) < 100
+end,
 
-  preview_win_opts = { -- Configure preview window options
-    cursorline = true,
-    number = true,
-    wrap = true,
-  },
-  border = {
-    enable = false, -- Show window borders. Only horizontal borders allowed
-    top_char = '―',
-    bottom_char = '―',
-  },
+preview_win_opts = { -- Configure preview window options
+  cursorline = true,
+  number = true,
+  wrap = true,
+},
+border = {
+  enable = false, -- Show window borders. Only horizontal borders allowed
+  top_char = '―',
+  bottom_char = '―',
+},
+list = {
+  position = 'right', -- Position of the list window 'left'|'right'
+  width = 0.33, -- 33% width relative to the active window, min 0.1, max 0.5
+},
+theme = { -- This feature might not work properly in nvim-0.7.2
+  enable = true, -- Will generate colors for the plugin based on your current colorscheme
+  mode = 'auto', -- 'brighten'|'darken'|'auto', 'auto' will set mode based on the brightness of your colorscheme
+},
+mappings = {
   list = {
-    position = 'right', -- Position of the list window 'left'|'right'
-    width = 0.33, -- 33% width relative to the active window, min 0.1, max 0.5
+    ['j'] = actions.next, -- Bring the cursor to the next item in the list
+    ['k'] = actions.previous, -- Bring the cursor to the previous item in the list
+    ['<Down>'] = actions.next,
+    ['<Up>'] = actions.previous,
+    ['<Tab>'] = actions.next_location, -- Bring the cursor to the next location skipping groups in the list
+    ['<S-Tab>'] = actions.previous_location, -- Bring the cursor to the previous location skipping groups in the list
+    ['<C-u>'] = actions.preview_scroll_win(2),
+    ['<C-d>'] = actions.preview_scroll_win(-2),
+    ['v'] = actions.jump_vsplit,
+    ['s'] = actions.jump_split,
+    ['t'] = actions.jump_tab,
+    ['<CR>'] = actions.jump,
+    ['o'] = actions.jump,
+    ['<leader>l'] = actions.enter_win('preview'), -- Focus preview window
+    ['q'] = actions.close,
+    ['Q'] = actions.close,
+    ['<Esc>'] = actions.close,
+    -- ['<Esc>'] = false -- disable a mapping
   },
-  theme = { -- This feature might not work properly in nvim-0.7.2
-    enable = true, -- Will generate colors for the plugin based on your current colorscheme
-    mode = 'auto', -- 'brighten'|'darken'|'auto', 'auto' will set mode based on the brightness of your colorscheme
+  preview = {
+    ['Q'] = actions.close,
+    ['<Tab>'] = actions.next_location,
+    ['<S-Tab>'] = actions.previous_location,
+    ['<leader>l'] = actions.enter_win('list'), -- Focus list window
   },
-  mappings = {
-    list = {
-      ['j'] = actions.next, -- Bring the cursor to the next item in the list
-      ['k'] = actions.previous, -- Bring the cursor to the previous item in the list
-      ['<Down>'] = actions.next,
-      ['<Up>'] = actions.previous,
-      ['<Tab>'] = actions.next_location, -- Bring the cursor to the next location skipping groups in the list
-      ['<S-Tab>'] = actions.previous_location, -- Bring the cursor to the previous location skipping groups in the list
-      ['<C-u>'] = actions.preview_scroll_win(2),
-      ['<C-d>'] = actions.preview_scroll_win(-2),
-      ['v'] = actions.jump_vsplit,
-      ['s'] = actions.jump_split,
-      ['t'] = actions.jump_tab,
-      ['<CR>'] = actions.jump,
-      ['o'] = actions.jump,
-      ['<leader>l'] = actions.enter_win('preview'), -- Focus preview window
-      ['q'] = actions.close,
-      ['Q'] = actions.close,
-      ['<Esc>'] = actions.close,
-      -- ['<Esc>'] = false -- disable a mapping
-    },
-    preview = {
-      ['Q'] = actions.close,
-      ['<Tab>'] = actions.next_location,
-      ['<S-Tab>'] = actions.previous_location,
-      ['<leader>l'] = actions.enter_win('list'), -- Focus list window
-    },
-  },
-  hooks = {},
-  folds = {
-    fold_closed = '',
-    fold_open = '',
-    folded = true, -- Automatically fold list on startup
-  },
-  indent_lines = {
-    enable = true,
-    icon = '│',
-  },
-  winbar = {
-    enable = true, -- Available starting from nvim-0.8+
-  },
+},
+hooks = {},
+folds = {
+  fold_closed = '',
+  fold_open = '',
+  folded = true, -- Automatically fold list on startup
+},
+indent_lines = {
+  enable = true,
+  icon = '│',
+},
+winbar = {
+  enable = true, -- Available starting from nvim-0.8+
+},
 })
 
 EOF
@@ -1781,26 +1781,26 @@ EOF
 lua << EOF
 
 require('illuminate').configure({
-    providers = {
-        'lsp',
-        'treesitter',
-        'regex',
-    },
-    delay = 100,
-    filetype_overrides = {},
-    filetypes_denylist = {
-        'dirvish',
-        'fugitive',
-    },
-    filetypes_allowlist = {},
-    modes_denylist = {},
-    modes_allowlist = {},
-    providers_regex_syntax_denylist = {},
-    providers_regex_syntax_allowlist = {},
-    under_cursor = true,
-    large_file_cutoff = nil,
-    large_file_overrides = nil,
-    min_count_to_highlight = 1,
+  providers = {
+      'lsp',
+      'treesitter',
+      'regex',
+  },
+  delay = 100,
+  filetype_overrides = {},
+  filetypes_denylist = {
+      'dirvish',
+      'fugitive',
+  },
+  filetypes_allowlist = {},
+  modes_denylist = {},
+  modes_allowlist = {},
+  providers_regex_syntax_denylist = {},
+  providers_regex_syntax_allowlist = {},
+  under_cursor = true,
+  large_file_cutoff = nil,
+  large_file_overrides = nil,
+  min_count_to_highlight = 1,
 })
 
 EOF
@@ -1816,7 +1816,7 @@ lua require("smartcolumn").setup()
 lua << EOF
 
 require'eyeliner'.setup {
-  highlight_on_key = true
+highlight_on_key = true
 }
 
 EOF
@@ -1833,29 +1833,29 @@ local ignore_buftypes = { 'nofile', 'prompt', 'popup' }
 local augroup = vim.api.nvim_create_augroup('FocusDisable', { clear = true })
 
 vim.api.nvim_create_autocmd('WinEnter', {
-   group = augroup,
-   callback = function()
-       if vim.tbl_contains(ignore_buftypes, vim.bo.buftype)
-       then
-           vim.w.focus_disable = true
-       else
-           vim.w.focus_disable = false
-       end
-   end,
-   desc = 'Disable focus autoresize for BufType',
+ group = augroup,
+ callback = function()
+     if vim.tbl_contains(ignore_buftypes, vim.bo.buftype)
+     then
+         vim.w.focus_disable = true
+     else
+         vim.w.focus_disable = false
+     end
+ end,
+ desc = 'Disable focus autoresize for BufType',
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-   group = augroup,
-   desc = 'Disable focus autoresize for FileType',
-   callback = function()
-       if vim.tbl_contains(ignore_filetypes, vim.bo.filetype)
-       then
-           vim.b.focus_disable = true
-       else
-           vim.b.focus_disable = false
-       end
-   end
+ group = augroup,
+ desc = 'Disable focus autoresize for FileType',
+ callback = function()
+     if vim.tbl_contains(ignore_filetypes, vim.bo.filetype)
+     then
+         vim.b.focus_disable = true
+     else
+         vim.b.focus_disable = false
+     end
+ end
 })
 
 EOF
@@ -1871,7 +1871,7 @@ lua require('dressing').setup()
 lua << EOF
 
 require('glance').setup({
-  height = 20
+height = 20
 })
 
 EOF
@@ -1883,10 +1883,10 @@ let g:lexical#spelllang = ['en_us']
 let g:lexical#thesaurus = [$HOME . '.src/github/f3rno64/dotfiles/moby_wordlist']
 
 augroup lexical
-  autocmd!
-  autocmd FileType markdown,md,mkd call lexical#init()
-  autocmd FileType textile call lexical#init()
-  autocmd FileType text call lexical#init({ 'spell': 0 })
+autocmd!
+autocmd FileType markdown,md,mkd call lexical#init()
+autocmd FileType textile call lexical#init()
+autocmd FileType text call lexical#init({ 'spell': 0 })
 augroup END
 
 " }}}
@@ -1918,21 +1918,21 @@ lua require('sort-import').setup()
 lua << EOF
 
 require("buffer-closer").setup({
-	min_remaining_buffers = 2,
-	retirement_minutes = 3,
-	check_when_buffer_adding = true,
-	check_after_minutes = {
-		enabled = true,
-		interval_minutes = 1,
-	},
+min_remaining_buffers = 2,
+retirement_minutes = 3,
+check_when_buffer_adding = true,
+check_after_minutes = {
+  enabled = true,
+  interval_minutes = 1,
+},
 
-	excluded = {
-		filetypes = { "lazy", "NvimTree" },
-		buftypes = { "terminal", "nofile", "quickfix", "prompt", "help" },
-		filenames = {},
-	},
+excluded = {
+  filetypes = { "lazy", "NvimTree" },
+  buftypes = { "terminal", "nofile", "quickfix", "prompt", "help" },
+  filenames = {},
+},
 
-	ignore_working_windows = true
+ignore_working_windows = true
 })
 
 EOF
@@ -1943,13 +1943,13 @@ EOF
 lua << EOF
 
 require('template-string').setup({
-  filetypes = { 'html', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
-  jsx_brackets = true,
-  remove_template_string = true,
-  restore_quotes = {
-    normal = [[']],
-    jsx = [["]],
-  },
+filetypes = { 'html', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
+jsx_brackets = true,
+remove_template_string = true,
+restore_quotes = {
+  normal = [[']],
+  jsx = [["]],
+},
 })
 
 EOF
@@ -1980,24 +1980,24 @@ lua require('nvim-toggler').setup()
 lua << EOF
 
 require('tabout').setup {
-  tabkey = '<Tab>', -- key to trigger tabout, set to an empty string to disable
-  backwards_tabkey = '<S-Tab>', -- key to trigger backwards tabout, set to an empty string to disable
-  act_as_tab = true, -- shift content if tab out is not possible
-  act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
-  default_tab = '<C-t>', -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
-  default_shift_tab = '<C-d>', -- reverse shift default action,
-  enable_backwards = true, -- well ...
-  completion = true, -- if the tabkey is used in a completion pum
-  tabouts = {
-    {open = "'", close = "'"},
-    {open = '"', close = '"'},
-    {open = '`', close = '`'},
-    {open = '(', close = ')'},
-    {open = '[', close = ']'},
-    {open = '{', close = '}'}
-  },
-  ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
-  exclude = {} -- tabout will ignore these filetypes
+tabkey = '<Tab>', -- key to trigger tabout, set to an empty string to disable
+backwards_tabkey = '<S-Tab>', -- key to trigger backwards tabout, set to an empty string to disable
+act_as_tab = true, -- shift content if tab out is not possible
+act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
+default_tab = '<C-t>', -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
+default_shift_tab = '<C-d>', -- reverse shift default action,
+enable_backwards = true, -- well ...
+completion = true, -- if the tabkey is used in a completion pum
+tabouts = {
+  {open = "'", close = "'"},
+  {open = '"', close = '"'},
+  {open = '`', close = '`'},
+  {open = '(', close = ')'},
+  {open = '[', close = ']'},
+  {open = '{', close = '}'}
+},
+ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
+exclude = {} -- tabout will ignore these filetypes
 }
 
 EOF
@@ -2061,11 +2061,11 @@ lua require'hop'.setup {}
 let g:x#wiki#fold#header_depth_regex = '/^#\+/'
 let g:x#wiki#fold#blank_line_regex = '/\v^\s*$/'
 let g:x#wiki#state#fold#valid = maktaba#enum#Create([
-  \   'INITIAL',
-  \   'EXPANDED',
-  \   'COLLAPSED',
-  \   'DIRTY',
-  \ ])
+\   'INITIAL',
+\   'EXPANDED',
+\   'COLLAPSED',
+\   'DIRTY',
+\ ])
 
 let g:x#wiki#state#fold#default = g:x#wiki#state#fold#valid.INITIAL
 let g:x#wiki#state#fold = v:null
@@ -2074,43 +2074,43 @@ let g:x#wiki#state#fold = v:null
 " {{{   - configuration
 
 augroup xf_vimwiki
-  au BufEnter *.wiki :syntax sync fromstart
-  au BufEnter *.wiki :e!
+au BufEnter *.wiki :syntax sync fromstart
+au BufEnter *.wiki :e!
 augroup END
 
 let g:vimwiki_list = [{
-  \ 'name': 'Personal Wiki',
-  \ 'path': $HOME . '/.src/github/f3rno64/vim-wiki/src',
-  \ 'path_html': $HOME . '/.src/github/f3rno64/vim-wiki/html',
-  \ 'ext': '.wiki',
-  \ 'links_space_char': '_',
-  \ 'cycle_bullets': 1,
-  \ 'diary_rel_path': 'journal/',
-  \ 'diary_index': 'index',
-  \ 'diary_header': 'Journal',
-  \ 'diary_caption_level': 1,
-  \ 'list_margin': 0,
-  \ 'index': 'index',
-  \ 'auto_toc': 1,
-  \ 'auto_tags': 1,
-  \ 'auto_export': 1,
-  \ 'auto_diary_index': 1,
-  \ 'auto_generate_links': 1,
-  \ 'auto_generate_tags': 1,
-  \ 'html_filename_parameterization': 0,
-  \ 'maxhi': 1,
-  \ 'nested_syntaxes': {
-  \   'ruby': 'ruby',
-  \   'python': 'python',
-  \   'css': 'css',
-  \   'scss': 'scss',
-  \   'go': 'go',
-  \   'js': 'javascript',
-  \   'json': 'json',
-  \   'c++': 'cpp',
-  \   'sh': 'sh',
-  \   'racket': 'racket',
-  \ }}]
+\ 'name': 'Personal Wiki',
+\ 'path': $HOME . '/.src/github/f3rno64/vim-wiki/src',
+\ 'path_html': $HOME . '/.src/github/f3rno64/vim-wiki/html',
+\ 'ext': '.wiki',
+\ 'links_space_char': '_',
+\ 'cycle_bullets': 1,
+\ 'diary_rel_path': 'journal/',
+\ 'diary_index': 'index',
+\ 'diary_header': 'Journal',
+\ 'diary_caption_level': 1,
+\ 'list_margin': 0,
+\ 'index': 'index',
+\ 'auto_toc': 1,
+\ 'auto_tags': 1,
+\ 'auto_export': 1,
+\ 'auto_diary_index': 1,
+\ 'auto_generate_links': 1,
+\ 'auto_generate_tags': 1,
+\ 'html_filename_parameterization': 0,
+\ 'maxhi': 1,
+\ 'nested_syntaxes': {
+\   'ruby': 'ruby',
+\   'python': 'python',
+\   'css': 'css',
+\   'scss': 'scss',
+\   'go': 'go',
+\   'js': 'javascript',
+\   'json': 'json',
+\   'c++': 'cpp',
+\   'sh': 'sh',
+\   'racket': 'racket',
+\ }}]
 
 let g:vimwiki_auto_chdir = 0
 let g:vimwiki_listsyms = '.oOX'
@@ -2154,26 +2154,26 @@ let g:switch_mapping = '-'
 lua << EOF
 
 require("jester").setup({
-  cmd = "jest -t '$result' -- $file", -- run command
-  identifiers = {"test", "it"}, -- used to identify tests
-  prepend = {"describe"}, -- prepend describe blocks
-  expressions = {"call_expression"}, -- tree-sitter object used to scan for tests/describe blocks
-  path_to_jest_run = 'jest', -- used to run tests
-  path_to_jest_debug = './node_modules/.bin/jest', -- used for debugging
-  terminal_cmd = ":vsplit | terminal", -- used to spawn a terminal for running tests, for debugging refer to nvim-dap's config
-  dap = { -- debug adapter configuration
-    type = 'node2',
-    request = 'launch',
-    cwd = vim.fn.getcwd(),
-    runtimeArgs = {'--inspect-brk', '$path_to_jest', '--no-coverage', '-t', '$result', '--', '$file'},
-    args = { '--no-cache' },
-    sourceMaps = false,
-    protocol = 'inspector',
-    skipFiles = {'<node_internals>/**/*.js'},
-    console = 'integratedTerminal',
-    port = 9229,
-    disableOptimisticBPs = true
-  }
+cmd = "jest -t '$result' -- $file", -- run command
+identifiers = {"test", "it"}, -- used to identify tests
+prepend = {"describe"}, -- prepend describe blocks
+expressions = {"call_expression"}, -- tree-sitter object used to scan for tests/describe blocks
+path_to_jest_run = 'jest', -- used to run tests
+path_to_jest_debug = './node_modules/.bin/jest', -- used for debugging
+terminal_cmd = ":vsplit | terminal", -- used to spawn a terminal for running tests, for debugging refer to nvim-dap's config
+dap = { -- debug adapter configuration
+  type = 'node2',
+  request = 'launch',
+  cwd = vim.fn.getcwd(),
+  runtimeArgs = {'--inspect-brk', '$path_to_jest', '--no-coverage', '-t', '$result', '--', '$file'},
+  args = { '--no-cache' },
+  sourceMaps = false,
+  protocol = 'inspector',
+  skipFiles = {'<node_internals>/**/*.js'},
+  console = 'integratedTerminal',
+  port = 9229,
+  disableOptimisticBPs = true
+}
 })
 
 EOF
@@ -2184,10 +2184,10 @@ EOF
 lua << EOF
 
 function quickfix()
-    vim.lsp.buf.code_action({
-        filter = function(a) return a.isPreferred end,
-        apply = true
-    })
+  vim.lsp.buf.code_action({
+      filter = function(a) return a.isPreferred end,
+      apply = true
+  })
 end
 
 EOF
@@ -2254,81 +2254,81 @@ let g:strip_whitespace_on_save=1
 lua << EOF
 
 require('true-zen').setup({
-	modes = { -- configurations per mode
-		ataraxis = {
-			shade = "dark", -- if `dark` then dim the padding windows, otherwise if it's `light` it'll brighten said windows
-			backdrop = 0.25, -- percentage by which padding windows should be dimmed/brightened. Must be a number between 0 and 1. Set to 0 to keep the same background color
-			minimum_writing_area = { -- minimum size of main window
-				width = 81,
-				height = 40,
-			},
-			quit_untoggles = true, -- type :q or :qa to quit Ataraxis mode
-			padding = { -- padding windows
-				left = 52,
-				right = 52,
-				top = 0,
-				bottom = 0,
-			},
-			callbacks = { -- run functions when opening/closing Ataraxis mode
-				open_pre = nil,
-				open_pos = nil,
-				close_pre = nil,
-				close_pos = nil
-			},
-		},
-		minimalist = {
-			ignored_buf_types = { "nofile" }, -- save current options from any window except ones displaying these kinds of buffers
-			options = { -- options to be disabled when entering Minimalist mode
-				number = false,
-				relativenumber = false,
-				showtabline = 0,
-				signcolumn = "no",
-				statusline = "",
-				cmdheight = 1,
-				laststatus = 0,
-				showcmd = false,
-				showmode = false,
-				ruler = true,
-				numberwidth = 1
-			},
-			callbacks = { -- run functions when opening/closing Minimalist mode
-				open_pre = nil,
-				open_pos = nil,
-				close_pre = nil,
-				close_pos = nil
-			},
-		},
-		narrow = {
-			-- change the style of the fold lines. Set it to:
-			-- `informative`: to get nice pre-baked folds
-			-- `invisible`: hide them
-			-- function() end: pass a custom func with your fold lines. See :h foldtext
-			folds_style = "informative",
-			run_ataraxis = true, -- display narrowed text in a Ataraxis session
-			callbacks = { -- run functions when opening/closing Narrow mode
-				open_pre = nil,
-				open_pos = nil,
-				close_pre = nil,
-				close_pos = nil
-			},
-		},
-		focus = {
-			callbacks = { -- run functions when opening/closing Focus mode
-				open_pre = nil,
-				open_pos = nil,
-				close_pre = nil,
-				close_pos = nil
-			},
-		}
-	},
-	integrations = {
-		tmux = true,
-		kitty = {
-			enabled = false,
-			font = "+3"
-		},
-		lualine = true
-	},
+modes = { -- configurations per mode
+  ataraxis = {
+    shade = "dark", -- if `dark` then dim the padding windows, otherwise if it's `light` it'll brighten said windows
+    backdrop = 0.25, -- percentage by which padding windows should be dimmed/brightened. Must be a number between 0 and 1. Set to 0 to keep the same background color
+    minimum_writing_area = { -- minimum size of main window
+      width = 81,
+      height = 40,
+    },
+    quit_untoggles = true, -- type :q or :qa to quit Ataraxis mode
+    padding = { -- padding windows
+      left = 52,
+      right = 52,
+      top = 0,
+      bottom = 0,
+    },
+    callbacks = { -- run functions when opening/closing Ataraxis mode
+      open_pre = nil,
+      open_pos = nil,
+      close_pre = nil,
+      close_pos = nil
+    },
+  },
+  minimalist = {
+    ignored_buf_types = { "nofile" }, -- save current options from any window except ones displaying these kinds of buffers
+    options = { -- options to be disabled when entering Minimalist mode
+      number = false,
+      relativenumber = false,
+      showtabline = 0,
+      signcolumn = "no",
+      statusline = "",
+      cmdheight = 1,
+      laststatus = 0,
+      showcmd = false,
+      showmode = false,
+      ruler = true,
+      numberwidth = 1
+    },
+    callbacks = { -- run functions when opening/closing Minimalist mode
+      open_pre = nil,
+      open_pos = nil,
+      close_pre = nil,
+      close_pos = nil
+    },
+  },
+  narrow = {
+    -- change the style of the fold lines. Set it to:
+    -- `informative`: to get nice pre-baked folds
+    -- `invisible`: hide them
+    -- function() end: pass a custom func with your fold lines. See :h foldtext
+    folds_style = "informative",
+    run_ataraxis = true, -- display narrowed text in a Ataraxis session
+    callbacks = { -- run functions when opening/closing Narrow mode
+      open_pre = nil,
+      open_pos = nil,
+      close_pre = nil,
+      close_pos = nil
+    },
+  },
+  focus = {
+    callbacks = { -- run functions when opening/closing Focus mode
+      open_pre = nil,
+      open_pos = nil,
+      close_pre = nil,
+      close_pos = nil
+    },
+  }
+},
+integrations = {
+  tmux = true,
+  kitty = {
+    enabled = false,
+    font = "+3"
+  },
+  lualine = true
+},
 })
 
 EOF
@@ -2361,22 +2361,22 @@ let g:vsnip_filetypes.typescriptreact = ['typescript']
 lua << EOF
 
 require('tsc').setup({
-  auto_open_qflist = false,
-  auto_close_qflist = false,
-  auto_focus_qflist = false,
-  auto_start_watch_mode = true,
-  bin_path = require('tsc/utils').find_tsc_bin(),
-  enable_progress_notifications = false,
-  flags = {
-    noEmit = true,
-    project = function()
-      return require('tsc/utils').find_nearest_tsconfig()
-    end,
-    watch = true,
-  },
-  hide_progress_notifications_from_history = true,
-  spinner = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
-  pretty_errors = true,
+auto_open_qflist = false,
+auto_close_qflist = false,
+auto_focus_qflist = false,
+auto_start_watch_mode = true,
+bin_path = require('tsc/utils').find_tsc_bin(),
+enable_progress_notifications = false,
+flags = {
+  noEmit = true,
+  project = function()
+    return require('tsc/utils').find_nearest_tsconfig()
+  end,
+  watch = true,
+},
+hide_progress_notifications_from_history = true,
+spinner = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
+pretty_errors = true,
 })
 
 EOF
@@ -2404,31 +2404,31 @@ let g:bookmark_location_list = 1
 lua << EOF
 
 require("actions-preview").setup({
-  diff = {
-    ctxlen = 3,
-  },
+diff = {
+  ctxlen = 3,
+},
 
-  highlight_command = {
-    -- require("actions-preview.highlight").delta(),
-    require("actions-preview.highlight").diff_so_fancy(),
-    -- require("actions-preview.highlight").diff_highlight(),
-  },
+highlight_command = {
+  -- require("actions-preview.highlight").delta(),
+  require("actions-preview.highlight").diff_so_fancy(),
+  -- require("actions-preview.highlight").diff_highlight(),
+},
 
-  backend = { "telescope" },
+backend = { "telescope" },
 
-  telescope = {
-    sorting_strategy = "ascending",
-    layout_strategy = "vertical",
-    layout_config = {
-      width = 0.8,
-      height = 0.9,
-      prompt_position = "top",
-      preview_cutoff = 20,
-      preview_height = function(_, _, max_lines)
-        return max_lines - 15
-      end,
-    },
+telescope = {
+  sorting_strategy = "ascending",
+  layout_strategy = "vertical",
+  layout_config = {
+    width = 0.8,
+    height = 0.9,
+    prompt_position = "top",
+    preview_cutoff = 20,
+    preview_height = function(_, _, max_lines)
+      return max_lines - 15
+    end,
   },
+},
 })
 
 EOF
@@ -2439,31 +2439,31 @@ EOF
 lua << EOF
 
 vim.diagnostic.config({
-  update_in_insert = true,
-  severity_sort = true,
-  float = {
-    border = 'rounded',
+update_in_insert = true,
+severity_sort = true,
+float = {
+  border = 'rounded',
+},
+signs = {
+  text = {
+    [vim.diagnostic.severity.ERROR] = '✘',
+    [vim.diagnostic.severity.WARN] = '▲',
+    [vim.diagnostic.severity.HINT] = '⚑',
+    [vim.diagnostic.severity.INFO] = '»',
   },
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = '✘',
-      [vim.diagnostic.severity.WARN] = '▲',
-      [vim.diagnostic.severity.HINT] = '⚑',
-      [vim.diagnostic.severity.INFO] = '»',
-    },
-  },
+},
 })
 
 vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = {'n:i', 'v:s'},
-  desc = 'Disable diagnostics in insert and select mode',
-  callback = function(e) vim.diagnostic.disable(e.buf) end
+pattern = {'n:i', 'v:s'},
+desc = 'Disable diagnostics in insert and select mode',
+callback = function(e) vim.diagnostic.disable(e.buf) end
 })
 
 vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = 'i:n',
-  desc = 'Enable diagnostics when leaving insert mode',
-  callback = function(e) vim.diagnostic.enable(e.buf) end
+pattern = 'i:n',
+desc = 'Enable diagnostics when leaving insert mode',
+callback = function(e) vim.diagnostic.enable(e.buf) end
 })
 
 EOF
@@ -2485,7 +2485,7 @@ vim.lsp.handlers.signature_help,
 
 local function hide_semantic_highlights()
 for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-  vim.api.nvim_set_hl(0, group, {})
+vim.api.nvim_set_hl(0, group, {})
 end
 end
 
@@ -2504,7 +2504,7 @@ local function highlight_symbol(event)
 local id = vim.tbl_get(event, 'data', 'client_id')
 local client = id and vim.lsp.get_client_by_id(id)
 if client == nil or not client.supports_method('textDocument/documentHighlight') then
-  return
+return
 end
 
 local group = vim.api.nvim_create_augroup('highlight_symbol', {clear = false})
@@ -2541,78 +2541,78 @@ lua require('markdown').setup()
 
 if !has('nvim')
 augroup MKDX
-  au!
-  au FileType markdown so $HOME/.vim/pack/plugins/start/mkdx/ftplugin/markdown.vim
+au!
+au FileType markdown so $HOME/.vim/pack/plugins/start/mkdx/ftplugin/markdown.vim
 augroup END
 endif
 
 let g:mkdx#settings = {
-    \ 'image_extension_pattern': 'a\?png\|jpe\?g\|gif',
-    \ 'insert_indent_mappings':  1,
-    \ 'gf_on_steroids':          1,
-    \ 'restore_visual':          1,
-    \ 'enter':                   { 'enable': 1, 'shift': 1, 'o': 1,
-    \                              'shifto': 1, 'malformed': 1 },
-    \ 'tab':                     { 'enable': 1 },
-    \ 'map':                     { 'prefix': '<leader>', 'enable': 1 },
-    \ 'tokens':                  { 'enter':  ['-', '*', '>'],
-    \                              'bold':   '**', 'italic': '*',
-    \                              'strike': '',
-    \                              'list':   '-',  'fence':  '',
-    \                              'header': '#' },
-    \ 'checkbox':                { 'toggles': [' ', '_', 'o', 'O', 'X'],
-    \                              'update_tree': 2,
-    \                              'initial_state': ' ',
-    \                              'match_attrs': {
-    \                                 'mkdxCheckboxEmpty': 'conceal cchar=1',
-    \                                 'mkdxCheckboxPending': 'conceal cchar=2',
-    \                                 'mkdxCheckboxComplete': 'conceal cchar=3',
-    \                               }, },
-    \ 'toc':                     { 'text':       'TOC',
-    \                              'list_token': '-',
-    \                              'position':   0,
-    \                              'update_on_write':   1,
-    \                              'details':    {
-    \                                 'enable':  1,
-    \                                 'summary': '{{toc.text}}',
-    \                                 'nesting_level': 3,
-    \                                 'child_count': 5,
-    \                                 'child_summary': 'show {{count}} items'
-    \                              }
-    \                            },
-    \ 'table':                   { 'divider': '|',
-    \                              'header_divider': '-',
-    \                              'align': {
-    \                                 'left':    [],
-    \                                 'right':   [],
-    \                                 'center':  [],
-    \                                 'default': 'center'
-    \                              }
-    \                            },
-    \ 'links':                   { 'external': {
-    \                                 'enable':     1,
-    \                                 'timeout':    3,
-    \                                 'host':       '',
-    \                                 'relative':   1,
-    \                                 'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/9001.0.0000.000 vim-mkdx/1.10.0'
-    \                              },
-    \                              'fragment': {
-    \                                 'jumplist': 1,
-    \                                 'complete': 1
-    \                              },
-    \                              'conceal': 1
-    \                            },
-    \ 'highlight':               {
-    \                              'enable': 1,
-    \                              'frontmatter': {
-    \                                'yaml': 1,
-    \                                'toml': 0,
-    \                                'json': 0
-    \                              }
-    \                            },
-    \ 'auto_update':             { 'enable': 1 },
-    \ 'fold':                    { 'enable': 1, 'components': ['toc', 'fence'] }
-    \ }
+  \ 'image_extension_pattern': 'a\?png\|jpe\?g\|gif',
+  \ 'insert_indent_mappings':  1,
+  \ 'gf_on_steroids':          1,
+  \ 'restore_visual':          1,
+  \ 'enter':                   { 'enable': 1, 'shift': 1, 'o': 1,
+  \                              'shifto': 1, 'malformed': 1 },
+  \ 'tab':                     { 'enable': 1 },
+  \ 'map':                     { 'prefix': '<leader>', 'enable': 1 },
+  \ 'tokens':                  { 'enter':  ['-', '*', '>'],
+  \                              'bold':   '**', 'italic': '*',
+  \                              'strike': '',
+  \                              'list':   '-',  'fence':  '',
+  \                              'header': '#' },
+  \ 'checkbox':                { 'toggles': [' ', '_', 'o', 'O', 'X'],
+  \                              'update_tree': 2,
+  \                              'initial_state': ' ',
+  \                              'match_attrs': {
+  \                                 'mkdxCheckboxEmpty': 'conceal cchar=1',
+  \                                 'mkdxCheckboxPending': 'conceal cchar=2',
+  \                                 'mkdxCheckboxComplete': 'conceal cchar=3',
+  \                               }, },
+  \ 'toc':                     { 'text':       'TOC',
+  \                              'list_token': '-',
+  \                              'position':   0,
+  \                              'update_on_write':   1,
+  \                              'details':    {
+  \                                 'enable':  1,
+  \                                 'summary': '{{toc.text}}',
+  \                                 'nesting_level': 3,
+  \                                 'child_count': 5,
+  \                                 'child_summary': 'show {{count}} items'
+  \                              }
+  \                            },
+  \ 'table':                   { 'divider': '|',
+  \                              'header_divider': '-',
+  \                              'align': {
+  \                                 'left':    [],
+  \                                 'right':   [],
+  \                                 'center':  [],
+  \                                 'default': 'center'
+  \                              }
+  \                            },
+  \ 'links':                   { 'external': {
+  \                                 'enable':     1,
+  \                                 'timeout':    3,
+  \                                 'host':       '',
+  \                                 'relative':   1,
+  \                                 'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/9001.0.0000.000 vim-mkdx/1.10.0'
+  \                              },
+  \                              'fragment': {
+  \                                 'jumplist': 1,
+  \                                 'complete': 1
+  \                              },
+  \                              'conceal': 1
+  \                            },
+  \ 'highlight':               {
+  \                              'enable': 1,
+  \                              'frontmatter': {
+  \                                'yaml': 1,
+  \                                'toml': 0,
+  \                                'json': 0
+  \                              }
+  \                            },
+  \ 'auto_update':             { 'enable': 1 },
+  \ 'fold':                    { 'enable': 1, 'components': ['toc', 'fence'] }
+  \ }
 
 " }}}
 " {{{ github-preview.nvim
@@ -2620,24 +2620,24 @@ let g:mkdx#settings = {
 lua << EOF
 
 require("github-preview").setup({
-  host = "localhost",
-  port = 6666,
-  single_file = false,
-  theme = {
-      name = "system",
-      high_contrast = false,
-  },
-  details_tags_open = true,
-  cursor_line = {
-      disable = false,
-      color = "#c86414",
-      opacity = 0.2,
-  },
-  scroll = {
-      disable = false,
-      top_offset_pct = 35,
-  },
-  log_level = nil,
+host = "localhost",
+port = 6666,
+single_file = false,
+theme = {
+    name = "system",
+    high_contrast = false,
+},
+details_tags_open = true,
+cursor_line = {
+    disable = false,
+    color = "#c86414",
+    opacity = 0.2,
+},
+scroll = {
+    disable = false,
+    top_offset_pct = 35,
+},
+log_level = nil,
 })
 
 EOF
@@ -2656,13 +2656,13 @@ let g:gitgutter_sign_modified_removed = emoji#for('red_circle')
 lua << EOF
 
 require('tabnine').setup({
-  disable_auto_comment=true,
-  accept_keymap="<Tab>",
-  dismiss_keymap = "<C-]>",
-  debounce_ms = 300,
-  suggestion_color = {gui = "#808080", cterm = 244},
-  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-  log_file_path = nil
+disable_auto_comment=true,
+accept_keymap="<Tab>",
+dismiss_keymap = "<C-]>",
+debounce_ms = 300,
+suggestion_color = {gui = "#808080", cterm = 244},
+exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+log_file_path = nil
 })
 
 EOF
@@ -2673,17 +2673,17 @@ EOF
 lua << EOF
 
 require("wtf").setup({
-    popup_type = "popup",
-    openai_api_key = vim.env.OPENAI_API_KEY,
-    openai_model_id = "gpt-3.5-turbo",
-    context = true,
-    language = "english",
-    search_engine = "google",
-    hooks = {
-        request_started = nil,
-        request_finished = nil,
-    },
-    winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+  popup_type = "popup",
+  openai_api_key = vim.env.OPENAI_API_KEY,
+  openai_model_id = "gpt-3.5-turbo",
+  context = true,
+  language = "english",
+  search_engine = "google",
+  hooks = {
+      request_started = nil,
+      request_finished = nil,
+  },
+  winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
 })
 
 EOF
@@ -2699,15 +2699,15 @@ EOF
 lua << EOF
 
 require("backseat").setup({
-    openai_api_key = vim.env.OPENAI_API_KEY,
-    openai_model_id = 'gpt-4',
-    language = 'english',
-    split_threshold = 100,
-    additional_instruction = "Respond precisely",
-    highlight = {
-      icon = '', -- ''
-      group = 'Comment',
-    }
+  openai_api_key = vim.env.OPENAI_API_KEY,
+  openai_model_id = 'gpt-4',
+  language = 'english',
+  split_threshold = 100,
+  additional_instruction = "Respond precisely",
+  highlight = {
+    icon = '', -- ''
+    group = 'Comment',
+  }
 })
 
 EOF
@@ -2735,14 +2735,14 @@ inoremap <silent> <C-l> <C-o>:nohlsearch<cr>
 " {{{ profiling
 
 function! s:StartProfiling()
-    execute 'profile start profile.log'
-    execute 'profile func *'
-    execute 'profile file *'
+  execute 'profile start profile.log'
+  execute 'profile func *'
+  execute 'profile file *'
 endfunction
 
 function! s:StopProfiling()
-    execute 'profile pause'
-    noautocmd qall!
+  execute 'profile pause'
+  noautocmd qall!
 endfunction
 
 nnoremap PR :call <SID>StartProfiling()<cr>
@@ -2811,9 +2811,9 @@ nnoremap <silent> tbf :Telescope vim_bookmarks current_file<cr>
 " {{{ edit vim/nvim config
 
 if has('nvim')
-  nnoremap <silent> <leader>rr :e ~/.config/nvim/init.vim<cr>
+nnoremap <silent> <leader>rr :e ~/.config/nvim/init.vim<cr>
 else
-  nnoremap <silent> <leader>rr :e ~/.vimrc<cr>
+nnoremap <silent> <leader>rr :e ~/.vimrc<cr>
 endif
 
 " }}}
@@ -2830,11 +2830,11 @@ nnoremap <silent> EE :e!<cr>
 " {{{ toggle quickfix
 
 function! ToggleQuickFix()
-    if empty(filter(getwininfo(), 'v:val.quickfix'))
-        copen
-    else
-        cclose
-    endif
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+      copen
+  else
+      cclose
+  endif
 endfunction
 
 nnoremap <silent> QF :call ToggleQuickFix()<cr>
@@ -2843,9 +2843,9 @@ nnoremap <silent> QF :call ToggleQuickFix()<cr>
 " {{{ sort lines
 
 function! SortLines() range
-  execute a:firstline . ',' . a:lastline . 's/^\(.*\)$/\=strdisplaywidth( submatch(0) ) . " " . submatch(0)/'
-  execute a:firstline . ',' . a:lastline . 'sort n'
-  execute a:firstline . ',' . a:lastline . 's/^\d\+\s//'
+execute a:firstline . ',' . a:lastline . 's/^\(.*\)$/\=strdisplaywidth( submatch(0) ) . " " . submatch(0)/'
+execute a:firstline . ',' . a:lastline . 'sort n'
+execute a:firstline . ',' . a:lastline . 's/^\d\+\s//'
 endfunction
 
 vnoremap <silent> SS :'<,'> call SortLines()<cr><cr>
@@ -2859,7 +2859,7 @@ nnoremap <silent> VB viB
 " {{{ insert dynamic class name in react
 
 function! MakeClassNameAttributeDynamic()
-  execute "normal! :s/className=\"\\(.*\\)\"/className={cn('\\1')}/\r"
+execute "normal! :s/className=\"\\(.*\\)\"/className={cn('\\1')}/\r"
 endfunction
 
 nnoremap <silent> <leader>cn :call MakeClassNameAttributeDynamic()<cr>
@@ -2873,14 +2873,14 @@ nnoremap <silent> <leader>RR :source $MYVIMRC<cr>
 " {{{ insert snippet folds
 
 function! s:GetFoldShortcutExecString(fold_str)
-  return <SID>GetCommentString() . ' ' . a:fold_str
+return <SID>GetCommentString() . ' ' . a:fold_str
 endfunction
 
 function! s:InsertFoldEndAndStart()
-  execute 'normal! o' . <SID>GetFoldShortcutExecString('}}}')
-  execute 'normal! o' . <SID>GetFoldShortcutExecString('{{{ ')
-  execute 'normal! o'
-  execute 'normal! k'
+execute 'normal! o' . <SID>GetFoldShortcutExecString('}}}')
+execute 'normal! o' . <SID>GetFoldShortcutExecString('{{{ ')
+execute 'normal! o'
+execute 'normal! k'
 endfunction
 
 nnoremap <silent> FFS :put=(<SID>GetFoldShortcutExecString('{{{ '))<cr>kddA
@@ -2931,9 +2931,9 @@ nnoremap <silent> <leader>rud :s/typeof \(\w*\) !== 'undefined'/!_isUndefined(\1
 " {{{ insert emoji list
 
 function s:InsertEmojiList()
-  for e in emoji#list()
-    call append(line('$'), printf('%s (%s)', emoji#for(e), e))
-  endfor
+for e in emoji#list()
+  call append(line('$'), printf('%s (%s)', emoji#for(e), e))
+endfor
 endfunction
 
 nnoremap <silent> IEL :call s:InsertEmojiList()<cr>
@@ -2945,11 +2945,11 @@ let s:ts_snippets_path = s:GetUserSnippetFilePath('typescript')
 let s:tsreact_snippets_path = s:GetUserSnippetFilePath('typescriptreact')
 
 if !empty(s:ts_snippets_path)
-  execute 'nnoremap <silent> est :e ' . s:ts_snippets_path . '<cr>'
+execute 'nnoremap <silent> est :e ' . s:ts_snippets_path . '<cr>'
 endif
 
 if !empty(s:tsreact_snippets_path)
-  execute 'nnoremap <silent> estr :e ' . s:tsreact_snippets_path . '<cr>'
+execute 'nnoremap <silent> estr :e ' . s:tsreact_snippets_path . '<cr>'
 endif
 
 " }}}
@@ -3014,25 +3014,25 @@ nnoremap <silent><leader>SS<CR>
 " {{{ s:CloseAllFolds
 
 function! s:CloseAllFolds() abort
-  let &foldlevel = 0
+let &foldlevel = 0
 endfunction
 
 " }}}
 " {{{ s:OpenAllFolds
 
 function! s:OpenAllFolds() abort
-  let &foldlevel = 99
+let &foldlevel = 99
 endfunction
 
 " }}}
 " {{{ s:ToggleFolds
 
 function! s:ToggleFolds() abort
-  if &foldlevel > 0
-    call <SID>CloseAllFolds()
-  else
-    call <SID>OpenAllFolds()
-  endif
+if &foldlevel > 0
+  call <SID>CloseAllFolds()
+else
+  call <SID>OpenAllFolds()
+endif
 endfunction
 
 " }}}
@@ -3137,7 +3137,7 @@ nnoremap <silent> <leader><leader>l :lua require('smart-splits').swap_buf_right(
 lua << EOF
 
 vim.keymap.set("n", "<leader>rn", function()
-  return ":IncRename " .. vim.fn.expand("<cword>")
+return ":IncRename " .. vim.fn.expand("<cword>")
 end, { expr = true })
 
 EOF
