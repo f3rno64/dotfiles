@@ -97,7 +97,7 @@ Plug 'amarakon/nvim-cmp-buffer-lines'
 Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'JMarkin/cmp-diag-codes'
-Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+" Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'jcha0713/cmp-tw2css'
 Plug 'hrsh7th/nvim-cmp'
 
@@ -140,8 +140,8 @@ Plug 'wallpants/github-preview.nvim'
 " }}}
 " {{{ tags
 
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'skywind3000/gutentags_plus'
+" Plug 'ludovicchabant/vim-gutentags'
+" Plug 'skywind3000/gutentags_plus'
 
 " }}}
 " {{{ wiki
@@ -167,6 +167,10 @@ Plug 'madox2/vim-ai'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'Exafunction/codeium.vim'
+Plug 'dmmulroy/tsc.nvim'
+Plug 'pmizio/typescript-tools.nvim'
+Plug 'sbdchd/neoformat'
 Plug 'dstein64/vim-startuptime'
 Plug 'junegunn/goyo.vim'
 Plug 'liangxianzhe/floating-input.nvim'
@@ -175,7 +179,7 @@ Plug 'james1236/backseat.nvim'
 Plug 'nvim-lua/lsp-status.nvim'
 " Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 Plug 'piersolenski/wtf.nvim'
-Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+" Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/vim-emoji'
@@ -560,7 +564,7 @@ endif
 " }}}
 " {{{ colorschemes
 
-set background=dark
+set background=light
 
 " {{{ colorscheme configs
 
@@ -588,7 +592,7 @@ let g:material_style = 'deep ocean'
 " colorscheme base16-mexico-light
 " colorscheme base16-still-alive
 " colorscheme base16-unikitty-light
-" colorscheme newpaper
+colorscheme newpaper
 
 " }}}
 " {{{ light and dark colorschemes
@@ -609,7 +613,7 @@ let g:material_style = 'deep ocean'
 " colorscheme base16-colors
 " colorscheme tundra
 " colorscheme base16-railscasts
-colorscheme tequila-sunrise
+" colorscheme tequila-sunrise
 " colorscheme melange
 " colorscheme base16-blueish
 " colorscheme lucid
@@ -959,88 +963,21 @@ lua require("mason").setup()
 lua require("mason-update-all").setup()
 
 " }}}
-" {{{ null-ls
-
-lua << EOF
-
-local null_ls = require("null-ls")
-
-null_ls.setup({
-debounce = 200,
-sources = {
-  null_ls.builtins.diagnostics.actionlint,
-  null_ls.builtins.diagnostics.tsc,
-  null_ls.builtins.diagnostics.jsonlint,
-  null_ls.builtins.diagnostics.markdownlint,
-  null_ls.builtins.diagnostics.shellcheck,
-  null_ls.builtins.diagnostics.pylint,
-  null_ls.builtins.diagnostics.mypy,
-  -- null_ls.builtins.diagnostics.alex,
-  -- null_ls.builtins.diagnostics.codespell,
-  null_ls.builtins.diagnostics.commitlint,
-  null_ls.builtins.diagnostics.dotenv_linter,
-  null_ls.builtins.diagnostics.erb_lint,
-  null_ls.builtins.diagnostics.gitlint,
-  -- null_ls.builtins.diagnostics.jshint,
-  null_ls.builtins.diagnostics.misspell,
-  null_ls.builtins.diagnostics.pycodestyle,
-  null_ls.builtins.diagnostics.pydocstyle,
-  null_ls.builtins.diagnostics.rubocop,
-  null_ls.builtins.diagnostics.shellcheck,
-  -- null_ls.builtins.diagnostics.stylelint,
-  null_ls.builtins.diagnostics.stylint,
-  null_ls.builtins.diagnostics.tidy,
-  null_ls.builtins.diagnostics.todo_comments,
-  -- null_ls.builtins.diagnostics.vint,
-  -- null_ls.builtins.diagnostics.deno_lint,
-  null_ls.builtins.diagnostics.yamllint,
-
-  -- null_ls.builtins.completion.spell,
-  null_ls.builtins.completion.tags,
-  null_ls.builtins.completion.vsnip,
-
-  -- null_ls.builtins.code_actions.cspell,
-  -- null_ls.builtins.code_actions.refactoring,
-  -- null_ls.builtins.code_actions.shellcheck,
-
-  null_ls.builtins.formatting.blackd,
-  -- null_ls.builtins.formatting.codespell,
-  null_ls.builtins.formatting.prettierd,
-  null_ls.builtins.formatting.fixjson,
-  null_ls.builtins.formatting.htmlbeautifier,
-  -- null_ls.builtins.formatting.isort,
-  null_ls.builtins.formatting.jq,
-  null_ls.builtins.formatting.markdownlint,
-  null_ls.builtins.formatting.ocdc,
-  null_ls.builtins.formatting.rubocop,
-  null_ls.builtins.formatting.shellharden,
-  null_ls.builtins.formatting.shfmt,
-  -- null_ls.builtins.formatting.stylelint,
-  null_ls.builtins.formatting.yamlfix,
-
-  -- null_ls.builtins.hover.dictionary,
-  null_ls.builtins.hover.printenv
-},
-})
-
-EOF
-
-" }}}
 " {{{ tabnine-nvim
 
-lua << EOF
-
-require('tabnine').setup({
-disable_auto_comment=true,
-accept_keymap="<C-t>",
-dismiss_keymap = "<C-]>",
-debounce_ms = 800,
-suggestion_color = {gui = "#808080", cterm = 244},
-exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-log_file_path = nil, -- absolute path to Tabnine log file
-})
-
-EOF
+" lua << EOF
+"
+" require('tabnine').setup({
+" disable_auto_comment=true,
+" accept_keymap="<C-t>",
+" dismiss_keymap = "<C-]>",
+" debounce_ms = 800,
+" suggestion_color = {gui = "#808080", cterm = 244},
+" exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+" log_file_path = nil, -- absolute path to Tabnine log file
+" })
+"
+" EOF
 
 " }}}
 " {{{ lualine
@@ -1078,7 +1015,7 @@ sections = {
     },
     "require('lsp-progress').progress()"
   },
-  lualine_x = {"tabnine", wtf.get_status, "fileformat", "filetype"},
+  lualine_x = {wtf.get_status, "fileformat", "filetype"},
   lualine_y = {"progress"},
   lualine_z = {"location"}
 },
@@ -1420,26 +1357,26 @@ lua require("hlargs").setup()
 " }}}
 " {{{ cmp-tabnine
 
-lua << EOF
-
-local tabnine = require('cmp_tabnine.config')
-
-tabnine:setup({
-max_lines = 1000,
-max_num_results = 20,
-sort = true,
-run_on_every_keystroke = true,
-snippet_placeholder = '..',
-ignored_file_types = {
-  -- default is not to ignore
-  -- uncomment to ignore in lua:
-  -- lua = true
-},
-show_prediction_strength = false,
-min_percent = 0
-})
-
-EOF
+" lua << EOF
+"
+" local tabnine = require('cmp_tabnine.config')
+"
+" tabnine:setup({
+" max_lines = 1000,
+" max_num_results = 20,
+" sort = true,
+" run_on_every_keystroke = true,
+" snippet_placeholder = '..',
+" ignored_file_types = {
+"   -- default is not to ignore
+"   -- uncomment to ignore in lua:
+"   -- lua = true
+" },
+" show_prediction_strength = false,
+" min_percent = 0
+" })
+"
+" EOF
 
 " }}}
 " {{{ cmp
@@ -1496,11 +1433,11 @@ sources = cmp.config.sources({
   { name = 'nvim_lsp' },
   { name = 'bufname' },
   { name = 'buffer-lines' },
-  { name = 'cmp_tabnine' },
+  -- { name = 'cmp_tabnine' },
   { name = 'cmp-tw2css' },
   { name = 'nvim_lsp_document_symbol' },
   { name = 'nvim_lsp_signature_help' },
-  { name = 'tabnine', ignore_pattern = "[(|,]" },
+  { ignore_pattern = "[(|,]" },
   {
     name = "diag-codes",
     option = { in_comment = true }
@@ -2653,19 +2590,19 @@ let g:gitgutter_sign_modified_removed = emoji#for('red_circle')
 " }}}
 " {{{ tabnine-nvim
 
-lua << EOF
-
-require('tabnine').setup({
-disable_auto_comment=true,
-accept_keymap="<Tab>",
-dismiss_keymap = "<C-]>",
-debounce_ms = 300,
-suggestion_color = {gui = "#808080", cterm = 244},
-exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-log_file_path = nil
-})
-
-EOF
+" lua << EOF
+"
+" require('tabnine').setup({
+" disable_auto_comment=true,
+" accept_keymap="<Tab>",
+" dismiss_keymap = "<C-]>",
+" debounce_ms = 300,
+" suggestion_color = {gui = "#808080", cterm = 244},
+" exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+" log_file_path = nil
+" })
+"
+" EOF
 
 " }}}
 " {{{ vim-wtf
@@ -2715,12 +2652,71 @@ EOF
 " }}}
 " {{{ gutentags
 
-let g:gutentags_modules = ['ctags']
-let g:gutentags_project_root = ['.root']
-let g:gutentags_cache_dir = expand($HOME . '/.cache/tags')
-let g:gutentags_plus_switch = 1
-let g:gutentags_file_list_command = 'fd -e c -e h'
+" let g:gutentags_modules = ['ctags']
+" let g:gutentags_project_root = ['.root']
+" let g:gutentags_cache_dir = expand($HOME . '/.cache/tags')
+" let g:gutentags_plus_switch = 1
+" let g:gutentags_file_list_command = 'fd -e c -e h'
 
+" }}}
+" {{{ typescript-tools.nvim
+
+lua << EOF
+
+require("typescript-tools").setup {
+  settings = {
+    -- spawn additional tsserver instance to calculate diagnostics on it
+    separate_diagnostic_server = true,
+    -- "change"|"insert_leave" determine when the client asks the server about diagnostic
+    publish_diagnostic_on = "insert_leave",
+    -- array of strings("fix_all"|"add_missing_imports"|"remove_unused"|
+    -- "remove_unused_imports"|"organize_imports") -- or string "all"
+    -- to include all supported code actions
+    -- specify commands exposed as code_actions
+    expose_as_code_action = {},
+    -- string|nil - specify a custom path to `tsserver.js` file, if this is nil or file under path
+    -- not exists then standard path resolution strategy is applied
+    tsserver_path = nil,
+    -- specify a list of plugins to load by tsserver, e.g., for support `styled-components`
+    -- (see 💅 `styled-components` support section)
+    tsserver_plugins = {},
+    -- this value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
+    -- memory limit in megabytes or "auto"(basically no limit)
+    tsserver_max_memory = "auto",
+    -- described below
+    tsserver_format_options = {},
+    tsserver_file_preferences = {},
+    -- locale of all tsserver messages, supported locales you can find here:
+    -- https://github.com/microsoft/TypeScript/blob/3c221fc086be52b19801f6e8d82596d04607ede6/src/compiler/utilitiesPublic.ts#L620
+    tsserver_locale = "en",
+    -- mirror of VSCode's `typescript.suggest.completeFunctionCalls`
+    complete_function_calls = true,
+    include_completions_with_insert_text = true,
+    -- CodeLens
+    -- WARNING: Experimental feature also in VSCode, because it might hit performance of server.
+    -- possible values: ("off"|"all"|"implementations_only"|"references_only")
+    code_lens = "off",
+    -- by default code lenses are displayed on all referancable values and for some of you it can
+    -- be too much this option reduce count of them by removing member references from lenses
+    disable_member_code_lens = true,
+    -- JSXCloseTag
+    -- WARNING: it is disabled by default (maybe you configuration or distro already uses nvim-ts-autotag,
+    -- that maybe have a conflict if enable this feature. )
+    jsx_close_tag = {
+        enable = false,
+        filetypes = { "javascriptreact", "typescriptreact" },
+    }
+  },
+}
+
+EOF
+
+" }}}
+" {{{ tsc.nvim
+
+lua require('tsc').setup()
+
+"
 " }}}
 
 " }}}
