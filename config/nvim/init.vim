@@ -167,6 +167,7 @@ Plug 'madox2/vim-ai'
 
 " let g:polyglot_disabled = ['markdown']
 
+Plug 'ActivityWatch/aw-watcher-vim'
 Plug 'Exafunction/codeium.vim'
 Plug 'dmmulroy/tsc.nvim'
 Plug 'pmizio/typescript-tools.nvim'
@@ -219,7 +220,7 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'axelvc/template-string.nvim'
 Plug 'sontungexpt/buffer-closer'
 Plug 'jamestthompson3/sort-import.nvim'
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 Plug 'tomiis4/hypersonic.nvim'
 Plug 'mvllow/modes.nvim'
 Plug 'preservim/vim-wheel'

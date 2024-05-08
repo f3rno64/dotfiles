@@ -60,3 +60,4 @@ npmrc
 !.yarn/versions
 wakatime.cfg
 /local/pipx
+/local/opt

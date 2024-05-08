@@ -15,4 +15,4 @@
 	url = https://github.com/f3rno64/powerline-shell-theme.git
 [submodule "modules-dotfiles/alacritty-themes"]
 	path = modules-dotfiles/alacritty-themes
-	url = https://github.com/rajasegar/alacritty-themes.git
+	url = https://github.com/f3rno64/alacritty-themes.git
