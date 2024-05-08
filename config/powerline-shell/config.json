@@ -14,11 +14,6 @@
     "format": "%H:%M"
   },
 
-  "battery": {
-    "always_show_percentage": true,
-    "low_threshold": 0.2
-  },
-
   "vcs": {
     "show_symbol": true
   },

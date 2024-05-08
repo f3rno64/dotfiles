@@ -2,7 +2,6 @@
   "theme": "/home/f3rno64/.powerline-shell-theme/theme/datsusara.py",
   "segments": [
     "time",
-    "battery",
     "virtual_env",
     "hostname",
     "username",
@@ -13,11 +12,6 @@
 
   "time": {
     "format": "%H:%M"
-  },
-
-  "battery": {
-    "always_show_percentage": true,
-    "low_threshold": 0.2
   },
 
   "vcs": {
